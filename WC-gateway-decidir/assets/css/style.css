@@ -1,0 +1,97 @@
+ decidir_form {
+          width: 100%;
+          position: relative;
+          display: table;
+          margin: 0px auto;
+          max-width: 300px;
+        }
+        .payment_method_decidir_gateway p {
+            padding: 10px;
+        }
+        .card-wrapper {
+            margin: 10px 0px;
+        }
+        .payment_method_decidir_gateway input {
+            width: 100%;
+            margin: 5px 0px;
+            max-width: 300px;
+            clear: both;
+            float: left;
+        }
+        .payment_method_decidir_gateway .jp-card-name {
+            font-size: 15px !important;
+        }
+        .payment_method_decidir_gateway img {
+            max-width: 110px !important;
+            float: right;
+        }
+        input#decidir_cvc {
+            width: 80px;
+            clear: none;
+        }
+        input#card_expiration {
+            width: 100px;
+            float: left;
+            clear: left;
+        }
+        #payment_method_decidir_gateway {
+          width: auto;
+          clear: none;
+          float: inherit;
+        }
+
+        #checkout-radio{
+          display: none;
+        }
+             
+
+        .jp-card .jp-card-front, .jp-card .jp-card-back {
+                background: #6f5353 !important;
+            }
+              #decidir_installments{   
+                float: left;
+                position: relative;
+                margin: 3px 0 14px;
+                font-family: inherit;
+                font-size: 15px;
+                line-height: 18px;
+                font-weight: inherit;
+                color: #717171;
+                background-color: #fff;
+                border: 1px solid #e6e6e6;
+                outline: 0;
+                -webkit-appearance: none;
+                box-sizing: border-box;
+                border-radius: 0;
+                width: 100%;
+                text-align: center;
+              }
+                #decidir_tarjeta_tipo {
+                position: relative;
+                width: 100%;
+               
+                margin: 3px 0 14px;
+                font-family: inherit;
+                font-size: 15px;
+                line-height: 18px;
+                font-weight: inherit;
+                color: #717171;
+                background-color: #fff;
+                border: 1px solid #e6e6e6;
+                outline: 0;
+                -webkit-appearance: none;
+                box-sizing: border-box;
+                border-radius: 0;
+                }
+
+                #errorcard{
+                  margin: auto;
+                  text-align: center;
+                  color: #a94442;
+                  background-color: #f2dede;
+                  border-color: #ebccd1;
+                  border-left: solid 5px;
+                  width: 100%;
+                  max-height: 25px;
+                  overflow: hidden;
+                }
