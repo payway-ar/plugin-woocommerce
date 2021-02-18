@@ -1,0 +1,31 @@
+[
+    {
+        "name": "decidir2/php-sdk",
+        "version": "V1.4.0",
+        "version_normalized": "1.4.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/decidir/sdk-php-v2.git",
+            "reference": "d065c216cf0beb6ae436dd658c769e63a08b439c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/decidir/sdk-php-v2/zipball/d065c216cf0beb6ae436dd658c769e63a08b439c",
+            "reference": "d065c216cf0beb6ae436dd658c769e63a08b439c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3"
+        },
+        "time": "2018-07-17 18:32:01",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Decidir\\": "Decidir/lib"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "description": "SDK para Decidir"
+    }
+]
