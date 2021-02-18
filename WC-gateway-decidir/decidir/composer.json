@@ -1,0 +1,5 @@
+{
+    "require": {
+        "decidir2/php-sdk": "~1.4"
+    }
+}
