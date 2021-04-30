@@ -1,44 +1,55 @@
 <?php
 /**
- * Plugin Name: WooCommerce DECIDIR 1.0 Gateway
+ * Plugin Name: WooCommerce DECIDIR 2.0 Gateway
  
  *
  * @package   WC-Gateway-DECIDIR
  * @author    Iurco
  * @category  Admin
  * @copyright Copyright (c) 2021 IURCO SAS
- * 
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  *
  */
  
-
+/*
+ * This action hook registers our PHP class as a WooCommerce payment gateway
+ */
 add_filter( 'woocommerce_payment_gateways', 'decidir_add_gateway_class' );
 function decidir_add_gateway_class( $gateways ) {
     $gateways[] = 'WC_Decidir_Gateway'; // your class name is here
     return $gateways;
 }
  
-
+/*
+ * The class itself, please note that it is inside plugins_loaded action hook
+ */
 add_action( 'plugins_loaded', 'decidir_init_gateway_class' );
 function decidir_init_gateway_class() {
  
     class WC_Decidir_Gateway extends WC_Payment_Gateway {
  
-       
+        /**
+         * Class constructor, more about it in Step 3
+         */
         public function __construct() {
          
-            $this->id = 'decidir_gateway'; 
-            $this->icon = apply_filters( 'woocommerce_decidir_icon', plugins_url( 'WC-gateway-decidir/assets/images/logos-tarjetas.png', plugin_dir_path( __FILE__ ) ) );            
-            $this->has_fields = true; 
+            $this->id = 'decidir_gateway'; // payment gateway plugin ID
+            $this->icon = apply_filters( 'woocommerce_decidir_icon', plugins_url( 'WC-gateway-decidir/img/logos-tarjetas.png', plugin_dir_path( __FILE__ ) ) );            
+            $this->has_fields = true; // in case you need a custom credit card form
             $this->method_title = 'DECIDIR';
-            $this->method_description = 'El Sistema de Pago Seguro DECIDIR (SPS) descripcion completa';
-           
+            $this->method_description = 'El Sistema de Pago Seguro DECIDIR (SPS) ddescripcion completa';
+            // will be displayed on the options page
+         
+            // gateways can support subscriptions, refunds, saved payment methods,
+            // but in this tutorial we begin with simple payments
             $this->supports = array(
                 'products'
             );
          
+            // Method with all the options fields
             $this->init_form_fields();
          
+            // Load the settings.
             $this->init_settings();
             $this->title = $this->get_option( 'title' );
             $this->description = $this->get_option( 'description' );
@@ -47,17 +58,21 @@ function decidir_init_gateway_class() {
             $this->private_key = $this->testmode ? $this->get_option( 'test_private_key' ) : $this->get_option( 'private_key' );
             $this->publishable_key = $this->testmode ? $this->get_option( 'test_publishable_key' ) : $this->get_option( 'publishable_key' );
          
-            
+            // This action hook saves the settings
             add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-                   
+         
+            // We need custom JavaScript to obtain a token
             add_action( 'wp_enqueue_scripts', array( $this, 'payment_scripts' ) );
 
             add_action( 'woocommerce_api_decidir', array( $this, 'webhook' ) );
 
-            
+            // You can also register a webhook here
+            // add_action( 'woocommerce_api_{webhook name}', array( $this, 'webhook' ) );
          }
  
-       
+        /**
+         * Plugin options, we deal with it in Step 3 too
+         */
          public function init_form_fields(){
          
             $this->form_fields = array(
@@ -119,67 +134,146 @@ function decidir_init_gateway_class() {
                   'description' => __( 'Selecciones máxima cantidad de cuotas', 'wc-gateway-decidir' ),
                   'default'     => __( '', 'wc-gateway-decidir' ),
                   'options' => array(
-                            '1' => ' 1 CUOTA',
-                            '3' => ' 3 CUOTAS',
-                            '6' => ' 6 CUOTAS',
-                            '12' => '12 CUOTAS',
+                            '001' => ' 1 CUOTA',
+                            '003' => ' 3 CUOTAS',
+                            '006' => ' 6 CUOTAS',
+                            '012' => '12 CUOTAS',
                        ), // ,   
                       'desc_tip'    => true,
                       ),
 
                 'option_name' => array(
                  'title' => 'Tarjetas Habilitadas',
-                 'description' => 'Ctrl + Click para habilitar la tarjeta',
+                 'description' => 'Ctrl+ Click para habilitar la tarjeta',
                  'type' => 'multiselect',
                  'options' => array(
                       '001' => 'VISA',
                       '002' => 'VISA DEBITO',
                       '104' => 'MASTERCARD',
-                 ) 
-              )
+                 ) // array of options for select/multiselects only
+)
 
-            
+             /*'financiacion' => array(
+                  'title'       => __( 'Recargo por financiacion', 'wc-gateway-decidir' ),
+                  'type'        => 'text',
+                  'description' => __( 'Ingresar Cantidad de Cuotas y recargo: 12-30, 18-45', 'wc-gateway-decidir' ),
+                  'default'     => __( '', 'wc-gateway-decidir' ),
+                  'desc_tip'    => true,
+                ),*/
             );
         }
-        
+        /**
+         * You will need it if you want your custom credit card form, Step 4 is about it
+         */
         public function payment_fields() {
          
-          
+            // ok, let's display some description before the payment form
             if ( $this->description ) {
-                
+                // you can instructions for test mode, I mean test card numbers etc.
                 if ( $this->testmode ) {
-                    $this->description .= ' TEST MODE ENABLED. In test mode, No orders will be fulfilled.';
+                    $this->description .= ' TEST MODE ENABLED. In test mode, you can use the card numbers listed in <a href="#" target="_blank" rel="noopener noreferrer">documentation</a>.';
                     $this->description  = trim( $this->description );
                 }
-                
+                // display the description with <p> tags etc.
                 echo wpautop( wp_kses_post( $this->description ) );
             }
-?>
-            <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
-<?php
+
             $_SESSION['publishable_key'] = $this->settings['publishable_key'];
-             $_SESSION['testmode'] = $this->settings['testmode'];
-            
-             if($this->settings['testmode'] == 'no'){
+            if($this->settings['testmode'] == 'no'){
                $_SESSION['urlSandbox'] = "https://live.decidir.com/api/v2"; 
             } else {
                $_SESSION['urlSandbox'] = "https://developers.decidir.com/api/v2"; 
             }
-          
-            
-           require( plugin_dir_path( __FILE__ ) . 'template/form-checkout.php');
-
-           ?>
-           <script type="text/javascript">
+            ?>
+          <!--     <div class='card-wrapper'></div>
+       
+                ,<?php echo $_SESSION['publishable_key'] ?>CSS is included via this JavaScript file -->
+             <decidir_form>
+                <div id="errorcard"></div> 
+                <input type="text" id="nombre_titular" name="card_holder_name" placeholder="NOMBRE COMPLETO"/>
+                <input type="text" id="dni_titular" name="dni_titular" placeholder="DNI"/>
+                <select id="decidir_tarjeta_tipo" class="input-text wc-credit-card-form-card-name" name="decidir-tarjeta-tipo">
+                  <option value="">Tipo Tarjeta</option>
+                  <option value="1" cuotas="1.3.6.12">VISA</option>
+                  <option value="31" cuotas="1">VISA DEBITO</option>
+                  <option value="104" cuotas="1.3.6.12">MASTERCARD</option>
+                  <option value="65" cuotas="1.3.6.12">AMERICAN EXPRESS</option>
+                 
+                  
+                  
+              </select>
+                <input type="text" id="decidir_numero" name="number" placeholder="NUMERO DE TARJETA">
+                <input type="text" id="card_expiration" name="expiry" placeholder="MM/AA"/>
+                <input type="text" id="decidir_cvc" name="cvc" placeholder="CVC"/>
+              <select id="decidir_installments" class="input-text wc-credit-card-form-card-name" name="decidir-cuotas">
+              <option value="0">Seleccione cantidad de cuotas</option>
+               
+               </select>
+             
            
-          jQuery(document).on("focusout","#dni_titular",function(){
+              <fieldset id="<?php echo $this->id; ?>-cc-form"  style="display:none;" >
+              
+              <li>
+                <label for="decidir-card-tipo">Seleccione su tarjeta <span class="required">*</span></label>
+                <select id="decidir-card-tipo" class="input-text wc-credit-card-form-card-name" name="decidir-card-tipo">
+     
+                </select>
+              </li>
+              <li>
+                  <input type="text" id="card_number" name="card_number" data-decidir="card_number" placeholder="Card Number"/>
+              </li>     
+              <li>
+                <label for="card_expiration_month">Mes de vencimiento:</label>
+                <input type="text" id="card_expiration_month"  data-decidir="card_expiration_month" placeholder="MM" value=""/>
+              </li>
+              <li>
+                <label for="card_expiration_year">Año de vencimiento:</label>
+                <input type="text" id="card_expiration_year"  data-decidir="card_expiration_year" placeholder="AA" value=""/>
+              </li>
+              <li>
+                  <input type="text" id="security_code" name="security_code" data-decidir="security_code" placeholder="CVC"/>
+              </li>
+              <li>
+                <label for="card_holder_name">Nombre del titular:</label>
+                <input type="text" id="card_holder_name" data-decidir="card_holder_name" placeholder="TITULAR" value=""/>
+              </li>
+              <li>
+                <label for="card_holder_doc_type">Tipo de documento:</label>
+                <select data-decidir="card_holder_doc_type">
+                  <option value="dni">DNI</option>
+                </select>
+              </li>
+              <li>
+                <label for="card_holder_doc_type">Numero de documento:</label>
+                <input id="card_holder_doc_number" type="text"data-decidir="card_holder_doc_number" placeholder="" value=""/>
+              </li>
+               
+              <div class="clear"></div>
+            </fieldset>
+        
+            <input type="hidden" id="total_result_decidir" value="<?php echo WC()->cart->cart_contents_total ; ?>" />
+            <input type="hidden" id="result_decidir"/>
+
+            
+
+            </decidir_form>
+
+         
+
+              
+           
+      
+      <script type="text/javascript">
+
+    
+        jQuery(document).on("focusout","#dni_titular",function(){
           jQuery('#card_holder_doc_number').val(jQuery('#dni_titular').val());
         });  
  
 
      
 
-            jQuery(document).on('updated_checkout', function() {
+        jQuery(document).on('updated_checkout', function() {
              
             jQuery('#decidir_tarjeta_tipo' ).on('change', function (e) {
             jQuery('#decidir_installments').html('');
@@ -232,7 +326,7 @@ function decidir_init_gateway_class() {
           
           jQuery('#decidir_cvc').focusout(function () {
             jQuery('#security_code').val(jQuery('#decidir_cvc').val());
-          });      
+          });     
           
           jQuery('#decidir_numero').focusout(function () {
             jQuery('#card_number').val(jQuery('#decidir_numero').val());
@@ -258,16 +352,15 @@ function decidir_init_gateway_class() {
           
           const publicApiKey = "<?php echo $_SESSION['publishable_key']; ?>";
           const urlSandbox = "<?php echo $_SESSION['urlSandbox']; ?>";
-          const testmode = "<?php echo $_SESSION['testmode']; ?>";
-
-         
+        
           const decidir = new Decidir(urlSandbox,true);
           decidir.setPublishableKey(publicApiKey);
-          decidir.setTimeout(0);
+          decidir.setTimeout(5000);
           
           jQuery('#place_order').on('click', function(e) {
 
             if(jQuery('#payment_method_decidir_gateway').is(':checked')) { 
+               // alert("Hola");
               e.preventDefault();
               var element = document.querySelectorAll('#decidir_gateway-cc-form');
               for (var i=0; element.length > i; i++) {
@@ -279,12 +372,7 @@ function decidir_init_gateway_class() {
           });
           
           function sdkResponseHandler(status, response) {
-             console.log(publicApiKey);
-             console.log(urlSandbox);
-             console.log(testmode);
-        
             if (status != 200 && status != 201) {
-              
              document.getElementById("nombre_titular").focus();
              jQuery("#errorcard").append("<strong>Verificar Datos Tarjeta</strong><br>");
              
@@ -296,49 +384,158 @@ function decidir_init_gateway_class() {
             }
           }
         });     
-           </script>
-           <?php
+      </script>
+
+        <style type="text/css">
+        decidir_form {
+          width: 100%;
+          position: relative;
+          display: table;
+          margin: 0px auto;
+          max-width: 300px;
+        }
+        .payment_method_decidir_gateway p {
+            padding: 10px;
+        }
+        .card-wrapper {
+            margin: 10px 0px;
+        }
+        .payment_method_decidir_gateway input {
+            width: 100%;
+            margin: 5px 0px;
+            max-width: 300px;
+            clear: both;
+            float: left;
+        }
+        .payment_method_decidir_gateway .jp-card-name {
+            font-size: 15px !important;
+        }
+        .payment_method_decidir_gateway img {
+            max-width: 110px !important;
+            float: right;
+        }
+        input#decidir_cvc {
+            width: 80px;
+            clear: none;
+        }
+        input#card_expiration {
+            width: 100px;
+            float: left;
+            clear: left;
+        }
+        #payment_method_decidir_gateway {
+          width: auto;
+          clear: none;
+          float: inherit;
+        }
+
+        #checkout-radio{
+          display: none;
+        }
+             
+
+        .jp-card .jp-card-front, .jp-card .jp-card-back {
+                background: #6f5353 !important;
+            }
+              #decidir_installments{   
+                float: left;
+                position: relative;
+                margin: 3px 0 14px;
+                font-family: inherit;
+                font-size: 15px;
+                line-height: 18px;
+                font-weight: inherit;
+                color: #717171;
+                background-color: #fff;
+                border: 1px solid #e6e6e6;
+                outline: 0;
+                -webkit-appearance: none;
+                box-sizing: border-box;
+                border-radius: 0;
+                width: 100%;
+                text-align: center;
+              }
+                #decidir_tarjeta_tipo {
+                  position: relative;
+                width: 100%;
+               
+                margin: 3px 0 14px;
+                font-family: inherit;
+                font-size: 15px;
+                line-height: 18px;
+                font-weight: inherit;
+                color: #717171;
+                background-color: #fff;
+                border: 1px solid #e6e6e6;
+                outline: 0;
+                -webkit-appearance: none;
+                box-sizing: border-box;
+                /* height: 50px; */
+                border-radius: 0;
+                }
+
+                #errorcard{
+                  margin: auto;
+                  text-align: center;
+                  color: #a94442;
+                  background-color: #f2dede;
+                  border-color: #ebccd1;
+                  border-left: solid 5px;
+                  width: 100%;
+                  max-height: 25px;
+                  overflow: hidden;
+                }
+
+                .fee{
+                  /*display: none;*/
+                }
+            </style>
+
+            <?php
          
-        
+ 
          
         }
  
-        
+        /*
+         * Custom CSS and JS, in most cases required only when you decided to go with a custom credit card form
+         */
         public function payment_scripts() {
          
-           
+            // we need JavaScript to process a token only on cart/checkout pages, right?
             if ( ! is_cart() && ! is_checkout() && ! isset( $_GET['pay_for_order'] ) ) {
                 return;
             }
          
-            
+            // if our payment gateway is disabled, we do not have to enqueue JS too
             if ( 'no' === $this->enabled ) {
                 return;
             }
          
-            
+            // no reason to enqueue JavaScript if API keys are not set
             if ( empty( $this->private_key ) || empty( $this->publishable_key ) ) {
                 return;
             }
          
-            
+            // do not work with card detailes without SSL unless your website is in a test mode
             if ( ! $this->testmode && ! is_ssl() ) {
                 return;
             }
          
-            
+            // let's suppose it is our payment processor JavaScript that allows to obtain a token
             wp_enqueue_script( 'decidir_js', 'https://live.decidir.com/static/v2/decidir.js' );
-            wp_register_script( 'woocommerce_decidir', plugins_url( 'assets/js/card.js', __FILE__ ), array( 'jquery', 'decidir_js' ) );
+         
+            // and this is our custom JS in your plugin directory that works with token.js
+            wp_register_script( 'woocommerce_decidirb', plugins_url( 'dist/card.js', __FILE__ ), array( 'jquery', 'decidir_js' ) );
+         
             wp_enqueue_script( 'woocommerce_decidir' );
-            wp_enqueue_script( 'form_js', plugins_url( 'assets/js/form.js', __FILE__ ));
-
-            wp_register_style('woocommerce_decidir', plugins_url('assets/css/style.css',__FILE__ ));
-            wp_enqueue_style('woocommerce_decidir');
-            
+            wp_enqueue_script( 'woocommerce_decidirb' );
          
         }
  
-       
+        /*
+         * Fields validation, more in Step 5
+         */
         public function validate_fields(){
          
             if( empty( $_POST[ 'billing_first_name' ]) ) {
@@ -349,7 +546,15 @@ function decidir_init_gateway_class() {
          
         }
  
-      
+        /* add fee payment mode */
+
+
+
+
+
+        /*
+         * We're processing the payments here, everything about it is in Step 5
+         */
         public function process_payment( $order_id ) {
          
             global $woocommerce;
@@ -403,7 +608,7 @@ function decidir_init_gateway_class() {
                                 ),
                     "payment_method_id" => (int)$tarjeta_tipo,
                     "bin" => $result_decidir->bin,
-                    "amount" =>(int)$psp_Amount,
+                    "amount" => $psp_Amount,
                     "currency" => "ARS",
                     "installments" => (int)$psp_NumPayments,
                     "description" => $this->settings['establishment_name'],
@@ -415,7 +620,6 @@ function decidir_init_gateway_class() {
          
 
               try {
-
                 $response = $connector->payment()->ExecutePayment($data);
                 $status = $response->getStatus();
                 if($status == 'approved'){
@@ -430,13 +634,13 @@ function decidir_init_gateway_class() {
                     )
                   );    
          
-                 
+                  // Reduce stock levels
                   $order->reduce_order_stock();
 
-                 
+                  // Remove cart
                   WC()->cart->empty_cart();
 
-                 
+                  // Return thankyou redirect
                   return array(
                     'result'  => 'success',
                     'redirect'  => $this->get_return_url( $order )
@@ -445,7 +649,7 @@ function decidir_init_gateway_class() {
                 } else {
                   
                   $details = json_encode($response->getStatus_details());
-                       
+                  //$order->update_status( 'on-hold', __( 'TRANSACCION ID: ' . $response->getId(), 'wc-gateway-decidir' ) );        
                   $order->add_order_note(
                     sprintf(
                       "Detalle pago: '%s'", $status
@@ -457,7 +661,8 @@ function decidir_init_gateway_class() {
                     )
                   );          
                   
-                
+                  // Remove cart
+                  //WC()->cart->empty_cart();
                   wc_add_notice( __( $status ), 'error' ); 
                         
                   
@@ -465,6 +670,7 @@ function decidir_init_gateway_class() {
            
           
                } catch( \Exception $e ) {
+                
                 $resultado = json_encode($e->getData());
                 
                 $order->add_order_note(
@@ -486,6 +692,12 @@ function decidir_init_gateway_class() {
         }
   
 
+
+
+
+        /*
+         * In case you need a webhook, like PayPal IPN etc
+         */
         public function webhook() {
          
             $order = wc_get_order( $_GET['id'] );
