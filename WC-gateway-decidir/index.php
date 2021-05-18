@@ -4,9 +4,9 @@
  
  *
  * @package   WC-Gateway-DECIDIR
- * @author    Iurco
+ * @author    IURCO - Prisma SA
  * @category  Admin
- * @copyright Copyright (c) 2021 IURCO SAS
+ * @copyright Copyright (c) 2021 IURCO SAS - Primas SA
  * 
  *
  */
@@ -14,7 +14,7 @@
 
 add_filter( 'woocommerce_payment_gateways', 'decidir_add_gateway_class' );
 function decidir_add_gateway_class( $gateways ) {
-    $gateways[] = 'WC_Decidir_Gateway'; // your class name is here
+    $gateways[] = 'WC_Decidir_Gateway';  
     return $gateways;
 }
  
@@ -31,7 +31,7 @@ function decidir_init_gateway_class() {
             $this->icon = apply_filters( 'woocommerce_decidir_icon', plugins_url( 'WC-gateway-decidir/assets/images/logos-tarjetas.png', plugin_dir_path( __FILE__ ) ) );            
             $this->has_fields = true; 
             $this->method_title = 'DECIDIR';
-            $this->method_description = 'El Sistema de Pago Seguro DECIDIR (SPS) descripcion completa';
+            $this->method_description = 'El Sistema de Pago Seguro DECIDIR (SPS)';
            
             $this->supports = array(
                 'products'
@@ -89,40 +89,71 @@ function decidir_init_gateway_class() {
                     'default'     => 'yes',
                     'desc_tip'    => true,
                 ),
-                'test_publishable_key' => array(
-                    'title'       => 'Test Publishable Key',
-                    'type'        => 'text'
+                 'usecybersource' => array(
+                    'title'       => 'Use Cybersource',
+                    'label'       => 'Enable Cybersource',
+                    'type'        => 'checkbox',
+                    'description' => 'Use Cybersource for transaction.',
+                    'default'     => 'yes',
+                    'desc_tip'    => true,
                 ),
-                'test_private_key' => array(
-                    'title'       => 'Test Private Key',
-                    'type'        => 'password',
-                ),
-                'publishable_key' => array(
-                    'title'       => 'Live Publishable Key',
-                    'type'        => 'text'
-                ),
-                'private_key' => array(
-                    'title'       => 'Live Private Key',
-                    'type'        => 'password'
-                ),
-                'establishment_name' => array(
-                  'title'       => __( 'Establishment Name', 'wc-gateway-decidir' ),
+                'sandbox_site_id' => array(
+                  'title'       => __( 'Sandbox Site Id', 'wc-gateway-decidir' ),
                   'type'        => 'text',
-                  'description' => __( 'Enter your Establishment Name', 'wc-gateway-decidir' ),
+                  'description' => __( 'Enter your Sandbox Site Id', 'wc-gateway-decidir' ),
                   'default'     => __( '', 'wc-gateway-decidir' ),
                   'desc_tip'    => true,
                 ),
+
+
+                'test_publishable_key' => array(
+                    'title'       => 'Sandbox Public Key',
+                    'type'        => 'text'
+                ),
+                'test_private_key' => array(
+                    'title'       => 'Sandbox Private Key',
+                    'type'        => 'password',
+                ), 
+
+                'production_site_id' => array(
+                  'title'       => __( 'Production Site Id', 'wc-gateway-decidir' ),
+                  'type'        => 'text',
+                  'description' => __( 'Enter your roduction Site Id', 'wc-gateway-decidir' ),
+                  'default'     => __( '', 'wc-gateway-decidir' ),
+                  'desc_tip'    => true,
+                ),
+
+             
+                'publishable_key' => array(
+                    'title'       => 'Production Public Key',
+                    'type'        => 'text'
+                ),
+                'private_key' => array(
+                    'title'       => 'Production Private Key',
+                    'type'        => 'password'
+                ),
+               
+                
                 
                 'cuotas' => array(
-                  'title'       => __( 'Maxima Cantidad de Cuotas', 'wc-gateway-decidir' ),
-                  'type'        => 'select',
-                  'description' => __( 'Selecciones máxima cantidad de cuotas', 'wc-gateway-decidir' ),
+                  'title'       => __( 'Avaliable Installments', 'wc-gateway-decidir' ),
+                  'type'        => 'multiselect',
+                  'description' => __( 'Select Installments', 'wc-gateway-decidir' ),
                   'default'     => __( '', 'wc-gateway-decidir' ),
                   'options' => array(
                             '1' => ' 1 CUOTA',
+                            '2' => ' 2 CUOTAS',
                             '3' => ' 3 CUOTAS',
+                            '4' => ' 4 CUOTAS',
+                            '5' => ' 5 CUOTAS',
                             '6' => ' 6 CUOTAS',
+                            '7' => ' 7 CUOTAS',
+                            '8' => ' 8 CUOTAS',
+                            '9' => ' 9 CUOTAS',
+                            '10' => ' 10 CUOTAS',
+                            '11' => ' 11 CUOTAS',
                             '12' => '12 CUOTAS',
+                            '18' => '18 CUOTAS',
                        ), // ,   
                       'desc_tip'    => true,
                       ),
@@ -154,10 +185,10 @@ function decidir_init_gateway_class() {
                 
                 echo wpautop( wp_kses_post( $this->description ) );
             }
-?>
+          ?>
             <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
-<?php
-            $_SESSION['publishable_key'] = $this->settings['publishable_key'];
+          <?php
+             $_SESSION['publishable_key'] = $this->settings['publishable_key'];
              $_SESSION['testmode'] = $this->settings['testmode'];
             
              if($this->settings['testmode'] == 'no'){
@@ -174,7 +205,7 @@ function decidir_init_gateway_class() {
            
           jQuery(document).on("focusout","#dni_titular",function(){
           jQuery('#card_holder_doc_number').val(jQuery('#dni_titular').val());
-        });  
+          });  
  
 
      
@@ -279,10 +310,7 @@ function decidir_init_gateway_class() {
           });
           
           function sdkResponseHandler(status, response) {
-             console.log(publicApiKey);
-             console.log(urlSandbox);
-             console.log(testmode);
-        
+                     
             if (status != 200 && status != 201) {
               
              document.getElementById("nombre_titular").focus();
@@ -330,7 +358,7 @@ function decidir_init_gateway_class() {
             wp_enqueue_script( 'decidir_js', 'https://live.decidir.com/static/v2/decidir.js' );
             wp_register_script( 'woocommerce_decidir', plugins_url( 'assets/js/card.js', __FILE__ ), array( 'jquery', 'decidir_js' ) );
             wp_enqueue_script( 'woocommerce_decidir' );
-            wp_enqueue_script( 'form_js', plugins_url( 'assets/js/form.js', __FILE__ ));
+            //wp_enqueue_script( 'form_js', plugins_url( 'assets/js/form.js', __FILE__ ));
 
             wp_register_style('woocommerce_decidir', plugins_url('assets/css/style.css',__FILE__ ));
             wp_enqueue_style('woocommerce_decidir');
@@ -368,10 +396,10 @@ function decidir_init_gateway_class() {
                  $ambient = "test"; 
               }
               
-              $connector = new \Decidir\Connector($keys_data, $ambient);
+              $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);
             
               $decidir_MerchOrderIdnewdate = date("his");
-              $site_transaction_id = $order_id .'-'. $decidir_MerchOrderIdnewdate ;
+              $site_transaction_id = $order_id ;
               $psp_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
               $amount = str_replace('.', '', $psp_Amount);  
                     
@@ -412,7 +440,11 @@ function decidir_init_gateway_class() {
                     "payment_type" => "single",
                     "sub_payments" => array()
                   );
-         
+             
+               $service = "SDK-PHP"; 
+               $developer ="IURCO - Prisma SA";
+               $grouper = "WC-Gateway-DECIDIR";
+       
 
               try {
 
