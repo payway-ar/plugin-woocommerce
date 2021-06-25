@@ -8,16 +8,15 @@ class Retail extends AbstractData
 {
 	protected $dataSet = array();
 	protected $products_data = null;
-	protected $products_keys = array("csitproductcode", "csitproductdescription", "csitproductname", "csitproductsku", "csittotalamount", "csitquantity", "csitunitprice");
 
 	public function __construct($retailData, $productsData) {
 
 		$this->setRequiredFields(array(
 			"send_to_cs" => array(
-				"name" => "setSendToCs"
+				"name" => "setChannel"
 			),
 			"channel" => array(
-				"name" => "setChannel"
+				"name" => "setSendToCs"
 			),
 			"bill_to" => array(
 				"name" => "setBillTo"
@@ -69,40 +68,18 @@ class Retail extends AbstractData
 			)
 		));
 
-		$optionalFields = array();
-		for($i = 17; $i <= 34; $i++){
-		    $csmdd = "csmdd" . $i;
-		    $optionalField = array(
-		        "name" => "SetCsmdd" . $i
-            );
-		    $optionalFields[$csmdd] = $optionalField;
-        }
-        for($i = 43; $i <= 99; $i++){
-            $csmdd = "csmdd" . $i;
-            $optionalField = array(
-                "name" => "SetCsmdd" . $i
-            );
-            $optionalFields[$csmdd] = $optionalField;
-        }
-
-        $this->setOptionalFields($optionalFields);
-
 		parent::__construct($retailData);
 
-		$products = array();
 		foreach($productsData as $index => $product) {
 			foreach($product as $idProd => $value){
 				if($idProd == 'csittotalamount' || $idProd == 'csitunitprice'){
 					$product[$idProd] = ($product[$idProd]*100);
 				}
-                if(in_array($idProd, $this->products_keys)) {
-                    $products[$index][$this->convertKeyProduct($idProd)] = $product[$idProd];
-                }
 			}
 			$this->products_data[] = new Product($product);
 		}
 		$this->setCSMDDS($retailData);
-		$this->setProducts($products);
+		$this->setProducts($this->products_data);
 	}
 
 	public function CsmddsList($data){
@@ -217,31 +194,5 @@ class Retail extends AbstractData
 	public function getData(){
 		return $this->dataSet;
 	}
-
-	public function convertKeyProduct($key){
-	    switch ($key){
-            case "csitproductcode":
-                return "code";
-                break;
-            case "csitproductdescription":
-                return "description";
-                break;
-            case "csitproductname":
-                return "name";
-                break;
-            case "csitproductsku":
-                return "sku";
-                break;
-            case "csittotalamount":
-                return "total_amount";
-                break;
-            case "csitquantity":
-                return "quantity";
-                break;
-            case "csitunitprice":
-                return "unit_price";
-                break;
-        }
-    }
 	
 }
