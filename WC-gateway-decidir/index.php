@@ -400,23 +400,23 @@ function decidir_init_gateway_class() {
             
               $decidir_MerchOrderIdnewdate = date("his");
               $site_transaction_id = $order_id."-".$decidir_MerchOrderIdnewdate;
-              $psp_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
-              $amount = str_replace('.', '', $psp_Amount);  
+              $dec_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
+              $amount = str_replace('.', '', $dec_Amount);  
                     
               $newdate = date("Y-m-d H:i:s");
-              $psp_MerchTxRef = $order->customer_id .'-'. $decidir_MerchOrderIdnewdate;
-              $psp_CardFirstName = $_POST['decidir_gateway-card-first-name'];
-              $psp_CardLastName = $_POST['decidir_gateway-card-last-name'];
-              $psp_Product = $_POST['decidir_gateway-card-tipo'];
-              $psp_CardNumber = str_replace(' ', '', $_POST['decidir_gateway-card-number']);
+              $dec_MerchTxRef = $order->customer_id .'-'. $decidir_MerchOrderIdnewdate;
+              $dec_CardFirstName = $_POST['decidir_gateway-card-first-name'];
+              $dec_CardLastName = $_POST['decidir_gateway-card-last-name'];
+              $dec_Product = $_POST['decidir_gateway-card-tipo'];
+              $dec_CardNumber = str_replace(' ', '', $_POST['decidir_gateway-card-number']);
               $data = $_POST['decidir_gateway-card-expiry'];
               $year = substr($data, strpos($data, "/") + 1);
               $month = str_split($data, 2); 
-              $psp_CardExpDate = $year . $month[0];
-              $psp_CardExpDate = str_replace(' ', '', $psp_CardExpDate);  
-              $psp_CardSecurityCode = str_replace(' ', '', $_POST['decidir_gateway-card-cvc']);
-              $psp_CustomerMail = $_POST['billing_email'];
-              $psp_NumPayments = str_replace(' ', '', $_POST['decidir-cuotas']);   
+              $dec_CardExpDate = $year . $month[0];
+              $dec_CardExpDate = str_replace(' ', '', $dec_CardExpDate);  
+              $dec_CardSecurityCode = str_replace(' ', '', $_POST['decidir_gateway-card-cvc']);
+              $dec_CustomerMail = $_POST['billing_email'];
+              $dec_NumPayments = str_replace(' ', '', $_POST['decidir-cuotas']);   
               $tarjeta_tipo = str_replace(' ', '', $_POST['decidir-tarjeta-tipo']);
               $decidir_card_tipo = intval($_POST['decidir-card-tipo']);
               
