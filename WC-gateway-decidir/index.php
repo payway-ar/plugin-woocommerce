@@ -399,7 +399,7 @@ function decidir_init_gateway_class() {
               $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);
             
               $decidir_MerchOrderIdnewdate = date("his");
-              $site_transaction_id = $order_id ;
+              $site_transaction_id = $order_id."-".$decidir_MerchOrderIdnewdate;
               $psp_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
               $amount = str_replace('.', '', $psp_Amount);  
                     
