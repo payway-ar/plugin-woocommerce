@@ -292,7 +292,7 @@ function decidir_init_gateway_class() {
           const testmode = "<?php echo $_SESSION['testmode']; ?>";
 
          
-          const decidir = new Decidir(urlSandbox,true);
+          const decidir = new Decidir(urlSandbox,false);
           decidir.setPublishableKey(publicApiKey);
           decidir.setTimeout(0);
           
@@ -395,8 +395,106 @@ function decidir_init_gateway_class() {
               } else {
                  $ambient = "test"; 
               }
-              
-              $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);
+
+        //     var_dump($ambient);
+
+        //     var_dump($result_decidir);              
+
+
+               $service = "SDK-PHP"; 
+               $developer ="IURCO - Prisma SA";
+               $grouper = "WC-Gateway-DECIDIR";
+       
+        
+           
+            /**/
+
+
+  $cs_data = array(
+        "send_to_cs" => true,
+        "channel" => "Web",
+        "bill_to" => array(
+          "city" => "Buenos Aires",
+          "country" => "AR",
+          "customer_id" => "martinid",
+          "email" => "accept@decidir.com.ar",
+          "first_name" => "martin",
+          "last_name" => "perez",
+          "phone_number" => "1547766111",
+          "postal_code" => "1768",
+          "state" => "BA",
+          "street1" => "GARCIA DEL RIO 3333",
+          "street2" => "GARCIA DEL RIO 3333",
+        ),
+        "ship_to" => array(
+          "city" => "Buenos Aires",
+          "country" => "AR",
+          "customer_id" => "martinid",
+          "email" => "accept@decidir.com.ar",
+          "first_name" => "martin",
+          "last_name" => "perez",
+          "phone_number" => "1547766111",
+          "postal_code" => "1768",
+          "state" => "BA",
+          "street1" => "GARCIA DEL RIO 3333",
+          "street2" => "GARCIA DEL RIO 3333",
+        ),
+        "currency" => "ARS",
+        "amount" => 12.00,
+        "days_in_site" => 243,
+        "is_guest" => false,
+        "password" => "password",
+        "num_of_transactions" => 1,
+        "cellphone_number" => "12121",
+        "date_of_birth" => "129412",
+        "street" => "RIO 4041",
+        "days_to_delivery" => "55",
+        "dispatch_method" => "storepickup",
+        "tax_voucher_required" => true,
+        "customer_loyality_number" => "123232",
+        "coupon_code" => "cupon22",
+        "csmdd17" => "17"
+      );
+
+  //Datos de productos, array con los diferentes productos involucrados.
+  $cs_products = array(
+        array(
+          "csitproductcode" => "electronic_product", //Código de producto. MANDATORIO.
+          "csitproductdescription" => "NOTEBOOK L845 SP4304LA DF TOSHIBA", //Descripción del producto. MANDATORIO.
+          "csitproductname" => "NOTEBOOK L845 SP4304LA DF TOSHIBA",  //Nombre del producto. MANDATORIO.
+          "csitproductsku" => "LEVJNSL36GN", //Código identificador del producto. MANDATORIO.
+          "csittotalamount" => 6.00, //MANDATORIO
+          "csitquantity" => 1,//Cantidad del producto. MANDATORIO.
+          "csitunitprice" => 6.00 //Formato Idem CSITTOTALAMOUNT. MANDATORIO 
+          ),
+        array(
+          "csitproductcode" => "default", //Código de producto. MANDATORIO.
+          "csitproductdescription" => "PENDRIVE 2GB KINGSTON", //Descripción del producto. MANDATORIO.
+          "csitproductname" => "PENDRIVE 2GB", //Nombre del producto. MANDATORIO.
+          "csitproductsku" => "KSPDRV2g", //Código identificador del producto. MANDATORIO.
+          "csittotalamount" => 6.00, //MANDATORIO
+          "csitquantity" => 1, //Cantidad del producto. MANDATORIO.
+          "csitunitprice" => 6.00 //Formato Idem CSITTOTALAMOUNT. MANDATORIO 
+        )
+      );   
+
+      
+
+
+            $cybersource = new Decidir\Cybersource\Retail(
+                                $cs_data,  // Datos de la operación
+                                $cs_productos, // Datos de los productos
+              );
+
+            $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);      
+
+
+
+            $connector->payment()->setCybersource($cybersource->getData());
+            //var_dump(  $connector);
+            /**/
+
+             
             
               $decidir_MerchOrderIdnewdate = date("his");
               $site_transaction_id = $order_id."-".$decidir_MerchOrderIdnewdate;
@@ -431,20 +529,16 @@ function decidir_init_gateway_class() {
                                 ),
                     "payment_method_id" => (int)$tarjeta_tipo,
                     "bin" => $result_decidir->bin,
-                    "amount" =>(int)$psp_Amount,
+                    "amount" =>(int)$dec_Amount,
                     "currency" => "ARS",
-                    "installments" => (int)$psp_NumPayments,
-                    "description" => $this->settings['establishment_name'],
+                    "installments" => (int)$dec_NumPayments,
+                    "description" => $this->settings['description'],
                     "fraud_detection" => array(),
                     "establishment_name" => $this->settings['establishment_name'],
                     "payment_type" => "single",
                     "sub_payments" => array()
                   );
-             
-               $service = "SDK-PHP"; 
-               $developer ="IURCO - Prisma SA";
-               $grouper = "WC-Gateway-DECIDIR";
-       
+                        
 
               try {
 
