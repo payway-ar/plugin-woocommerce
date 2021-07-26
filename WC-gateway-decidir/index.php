@@ -467,15 +467,7 @@ function decidir_init_gateway_class() {
           "csitquantity" => 1,//Cantidad del producto. MANDATORIO.
           "csitunitprice" => 6.00 //Formato Idem CSITTOTALAMOUNT. MANDATORIO 
           ),
-        array(
-          "csitproductcode" => "default", //Código de producto. MANDATORIO.
-          "csitproductdescription" => "PENDRIVE 2GB KINGSTON", //Descripción del producto. MANDATORIO.
-          "csitproductname" => "PENDRIVE 2GB", //Nombre del producto. MANDATORIO.
-          "csitproductsku" => "KSPDRV2g", //Código identificador del producto. MANDATORIO.
-          "csittotalamount" => 6.00, //MANDATORIO
-          "csitquantity" => 1, //Cantidad del producto. MANDATORIO.
-          "csitunitprice" => 6.00 //Formato Idem CSITTOTALAMOUNT. MANDATORIO 
-        )
+       
       );   
 
       
