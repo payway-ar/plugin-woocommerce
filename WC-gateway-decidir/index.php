@@ -535,6 +535,10 @@ function decidir_init_gateway_class() {
               try {
 
                 $response = $connector->payment()->ExecutePayment($data);
+
+                var_dump($response);
+
+
                 $status = $response->getStatus();
                 if($status == 'approved'){
                   
