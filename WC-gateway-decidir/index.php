@@ -416,38 +416,38 @@ function decidir_init_gateway_class() {
         "bill_to" => array(
           "city" => "Buenos Aires",
           "country" => "AR",
-          "customer_id" => "martinid",
+          "customer_id" => "juan-21",
           "email" => "accept@decidir.com.ar",
-          "first_name" => "martin",
+          "first_name" => "Juan",
           "last_name" => "perez",
           "phone_number" => "1547766111",
           "postal_code" => "1768",
           "state" => "BA",
-          "street1" => "GARCIA DEL RIO 3333",
-          "street2" => "GARCIA DEL RIO 3333",
+          "street1" => "Avellaneda 2050",
+          "street2" => "Avellaneda 2050",
         ),
         "ship_to" => array(
           "city" => "Buenos Aires",
           "country" => "AR",
-          "customer_id" => "martinid",
+          "customer_id" => "juan-21",
           "email" => "accept@decidir.com.ar",
-          "first_name" => "martin",
+          "first_name" => "Juan",
           "last_name" => "perez",
           "phone_number" => "1547766111",
           "postal_code" => "1768",
           "state" => "BA",
-          "street1" => "GARCIA DEL RIO 3333",
-          "street2" => "GARCIA DEL RIO 3333",
+          "street1" => "Avellaneda 2050",
+          "street2" => "Avellaneda 2050",
         ),
         "currency" => "ARS",
         "amount" => 12.00,
         "days_in_site" => 243,
         "is_guest" => false,
         "password" => "password",
-        "num_of_transactions" => 1,
+        "num_of_transactions" => 21,
         "cellphone_number" => "12121",
         "date_of_birth" => "129412",
-        "street" => "RIO 4041",
+        "street" => "Avellaneda 2050",
         "days_to_delivery" => "55",
         "dispatch_method" => "storepickup",
         "tax_voucher_required" => true,
@@ -459,13 +459,13 @@ function decidir_init_gateway_class() {
   //Datos de productos, array con los diferentes productos involucrados.
   $cs_products = array(
         array(
-          "csitproductcode" => "electronic_product", //Código de producto. MANDATORIO.
-          "csitproductdescription" => "NOTEBOOK L845 SP4304LA DF TOSHIBA", //Descripción del producto. MANDATORIO.
-          "csitproductname" => "NOTEBOOK L845 SP4304LA DF TOSHIBA",  //Nombre del producto. MANDATORIO.
-          "csitproductsku" => "LEVJNSL36GN", //Código identificador del producto. MANDATORIO.
-          "csittotalamount" => 6.00, //MANDATORIO
-          "csitquantity" => 1,//Cantidad del producto. MANDATORIO.
-          "csitunitprice" => 6.00 //Formato Idem CSITTOTALAMOUNT. MANDATORIO 
+          "csitproductcode" => "electronic_product", 
+          "csitproductdescription" => "NOTEBOOK L845 SP4304LA DF TOSHIBA", 
+          "csitproductname" => "NOTEBOOK L845 SP4304LA DF TOSHIBA",  
+          "csitproductsku" => "LEVJNSL36GN",
+          "csittotalamount" => 6.00, 
+          "csitquantity" => 1,
+          "csitunitprice" => 6.00 
           ),
        
       );   
@@ -475,15 +475,17 @@ function decidir_init_gateway_class() {
 
             $cybersource = new Decidir\Cybersource\Retail(
                                 $cs_data,  // Datos de la operación
-                                $cs_productos, // Datos de los productos
+                                $cs_products, // Datos de los productos
               );
+
+            // var_dump( $cybersource);
 
             $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);      
 
 
 
             $connector->payment()->setCybersource($cybersource->getData());
-            //var_dump(  $connector);
+           // var_dump(  $connector);
             /**/
 
              
