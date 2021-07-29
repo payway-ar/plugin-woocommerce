@@ -190,6 +190,9 @@ function decidir_init_gateway_class() {
           <?php
              $_SESSION['publishable_key'] = $this->settings['publishable_key'];
              $_SESSION['testmode'] = $this->settings['testmode'];
+             $_SESSION['cybersource'] = $this->settings['usecybersource'];
+
+             //echo $this->settings['usecybersource']."Seccion" ;
             
              if($this->settings['testmode'] == 'no'){
                $_SESSION['urlSandbox'] = "https://live.decidir.com/api/v2"; 
@@ -266,7 +269,7 @@ function decidir_init_gateway_class() {
           });      
           
           jQuery('#decidir_numero').focusout(function () {
-            jQuery('#card_number').val(jQuery('#decidir_numero').val());
+          jQuery('#card_number').val(jQuery('#decidir_numero').val());
             
              var num = jQuery('#decidir_numero').val();
              num = num.replace(/[^\d]/g,'');
@@ -290,11 +293,24 @@ function decidir_init_gateway_class() {
           const publicApiKey = "<?php echo $_SESSION['publishable_key']; ?>";
           const urlSandbox = "<?php echo $_SESSION['urlSandbox']; ?>";
           const testmode = "<?php echo $_SESSION['testmode']; ?>";
+          const useCS = "<?php echo $_SESSION['cybersource']; ?>";
 
-         
-          const decidir = new Decidir(urlSandbox,false);
+          console.log(useCS);
+        
+          if (useCS=="yes") {
+
+        var decidir = new Decidir(urlSandbox,false);
+
           decidir.setPublishableKey(publicApiKey);
           decidir.setTimeout(0);
+                  }else{
+             var decidir = new Decidir(urlSandbox,true);    
+
+          decidir.setPublishableKey(publicApiKey);
+          decidir.setTimeout(0);
+
+              }
+        
           
           jQuery('#place_order').on('click', function(e) {
 
@@ -380,13 +396,15 @@ function decidir_init_gateway_class() {
       
         public function process_payment( $order_id ) {
          
-            global $woocommerce;
+              global $woocommerce;
          
               require_once __DIR__ . '/decidir/vendor/autoload.php';    
               $clear_slashes = stripslashes($_COOKIE['result_decidir']);
               $result_decidir= json_decode($clear_slashes);
-                   
+              $useCybersource="false";     
               $order = wc_get_order( $order_id );
+              echo $this->settings['usecybersource']."-----".$this->publishable_key;
+              //die();
 
               $keys_data = array('public_key' => $this->publishable_key, 'private_key' => $this->private_key);
 
@@ -396,107 +414,123 @@ function decidir_init_gateway_class() {
                  $ambient = "test"; 
               }
 
-        //     var_dump($ambient);
+           //   var_dump($order);
+             
 
         //     var_dump($result_decidir);              
 
 
-               $service = "SDK-PHP"; 
-               $developer ="IURCO - Prisma SA";
-               $grouper = "WC-Gateway-DECIDIR";
-       
+              $service = "SDK-PHP"; 
+              $developer ="IURCO - Prisma SA";
+              $grouper = "WC-Gateway-DECIDIR";
+              $cs_city =$_POST['billing_city'];
+              $cs_country=$_POST['billing_country'];
+              $cs_address=$_POST['billing_city'];
+              $cs_postal_code=$_POST['billing_postcode'];
+              $cs_state=$_POST['billing_state'];
+              $cs_first_name=$_POST['billing_first_name'];
+              $cs_last_name=$_POST['billing_last_name'];
+              $cs_street1=$_POST['billing_address_1'];
+              $cs_street2=$_POST['billing_address_2'];
+              $cs_phone=$_POST['billing_phone'];
+              $cs_email=$_POST['billing_email'];
+
+              $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);      
+
+          
         
-           
-            /**/
+         if ( $this->settings['usecybersource'] =="yes") {
+              $useCybersource="true";  
+              $cs_data = array(
+                    "send_to_cs" => true,
+                    "channel" => "Web",
+                    "bill_to" => array(
+                      "city" => $cs_city,
+                      "country" => $cs_country,
+                      "customer_id" => "juan-21",
+                      "email" =>  $cs_email,
+                      "first_name" => $cs_first_name,
+                      "last_name" => $cs_last_name,
+                      "phone_number" =>  $cs_phone,
+                      "postal_code" =>$cs_postal_code,
+                      "state" => $cs_state,
+                      "street1" => $cs_street1,
+                      "street2" => $cs_street2,
+                    ),
+                    "ship_to" => array(
+                      "city" => $cs_city,
+                      "country" => $cs_country,
+                      "customer_id" => "juan-21",
+                      "email" =>  $cs_email,
+                      "first_name" => $cs_first_name,
+                      "last_name" => $cs_last_name,
+                      "phone_number" =>  $cs_phone,
+                      "postal_code" =>$cs_postal_code,
+                      "state" => $cs_state,
+                      "street1" => $cs_street1,
+                      "street2" => $cs_street2,
+                    ),
+                    "currency" => "ARS",
+                    "amount" => 12.00,
+                    "days_in_site" => 243,
+                    "is_guest" => false,
+                    "password" => "password",
+                    "num_of_transactions" => 21,
+                    "cellphone_number" => "12121",
+                    "date_of_birth" => "129412",
+                    "street" => "Avellaneda 2050",
+                    "days_to_delivery" => "55",
+                    "dispatch_method" => "storepickup",
+                    "tax_voucher_required" => true,
+                    "customer_loyality_number" => "123232",
+                    "coupon_code" => "cupon22",
+                    "csmdd17" => "17"
+                  );
 
-
-  $cs_data = array(
-        "send_to_cs" => true,
-        "channel" => "Web",
-        "bill_to" => array(
-          "city" => "Buenos Aires",
-          "country" => "AR",
-          "customer_id" => "juan-21",
-          "email" => "accept@decidir.com.ar",
-          "first_name" => "Juan",
-          "last_name" => "perez",
-          "phone_number" => "1547766111",
-          "postal_code" => "1768",
-          "state" => "BA",
-          "street1" => "Avellaneda 2050",
-          "street2" => "Avellaneda 2050",
-        ),
-        "ship_to" => array(
-          "city" => "Buenos Aires",
-          "country" => "AR",
-          "customer_id" => "juan-21",
-          "email" => "accept@decidir.com.ar",
-          "first_name" => "Juan",
-          "last_name" => "perez",
-          "phone_number" => "1547766111",
-          "postal_code" => "1768",
-          "state" => "BA",
-          "street1" => "Avellaneda 2050",
-          "street2" => "Avellaneda 2050",
-        ),
-        "currency" => "ARS",
-        "amount" => 12.00,
-        "days_in_site" => 243,
-        "is_guest" => false,
-        "password" => "password",
-        "num_of_transactions" => 21,
-        "cellphone_number" => "12121",
-        "date_of_birth" => "129412",
-        "street" => "Avellaneda 2050",
-        "days_to_delivery" => "55",
-        "dispatch_method" => "storepickup",
-        "tax_voucher_required" => true,
-        "customer_loyality_number" => "123232",
-        "coupon_code" => "cupon22",
-        "csmdd17" => "17"
-      );
-
-  //Datos de productos, array con los diferentes productos involucrados.
-  $cs_products = array(
-        array(
-          "csitproductcode" => "electronic_product", 
-          "csitproductdescription" => "NOTEBOOK L845 SP4304LA DF TOSHIBA", 
-          "csitproductname" => "NOTEBOOK L845 SP4304LA DF TOSHIBA",  
-          "csitproductsku" => "LEVJNSL36GN",
-          "csittotalamount" => 6.00, 
-          "csitquantity" => 1,
-          "csitunitprice" => 6.00 
-          ),
-       
-      );   
+              //Datos de productos, array con los diferentes productos involucrados.
+              $cs_products = array(
+                    array(
+                      "csitproductcode" => "electronic_product", 
+                      "csitproductdescription" => "NOTEBOOK L845 SP4304LA DF TOSHIBA", 
+                      "csitproductname" => "NOTEBOOK L845 SP4304LA DF TOSHIBA",  
+                      "csitproductsku" => "LEVJNSL36GN",
+                      "csittotalamount" => 6.00, 
+                      "csitquantity" => 1,
+                      "csitunitprice" => 6.00 
+                      ),
+                   
+                  );   
 
       
 
 
-            $cybersource = new Decidir\Cybersource\Retail(
+             $cybersource = new Decidir\Cybersource\Retail(
                                 $cs_data,  // Datos de la operación
                                 $cs_products, // Datos de los productos
               );
 
             // var_dump( $cybersource);
 
-            $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);      
-
-
+           
 
             $connector->payment()->setCybersource($cybersource->getData());
-           // var_dump(  $connector);
+            var_dump(  $connector);
             /**/
+          }     
 
+          //  var_dump($order);
+
+
+              $dec_total=$order->get_total();
+              $dec_customer=$order->get_customer_id();
              
             
               $decidir_MerchOrderIdnewdate = date("his");
               $site_transaction_id = $order_id."-".$decidir_MerchOrderIdnewdate;
-              $dec_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
+              $dec_Amount = preg_replace( '#[^\d.]#', '', $dec_total );
               $amount = str_replace('.', '', $dec_Amount);  
-                    
               $newdate = date("Y-m-d H:i:s");
-              $dec_MerchTxRef = $order->customer_id .'-'. $decidir_MerchOrderIdnewdate;
+              $dec_MerchTxRef =  $dec_customer.'-'. $decidir_MerchOrderIdnewdate;
               $dec_CardFirstName = $_POST['decidir_gateway-card-first-name'];
               $dec_CardLastName = $_POST['decidir_gateway-card-last-name'];
               $dec_Product = $_POST['decidir_gateway-card-tipo'];
@@ -511,6 +545,7 @@ function decidir_init_gateway_class() {
               $dec_NumPayments = str_replace(' ', '', $_POST['decidir-cuotas']);   
               $tarjeta_tipo = str_replace(' ', '', $_POST['decidir-tarjeta-tipo']);
               $decidir_card_tipo = intval($_POST['decidir-card-tipo']);
+             
               
          
               $data = array(
@@ -538,7 +573,7 @@ function decidir_init_gateway_class() {
 
                 $response = $connector->payment()->ExecutePayment($data);
 
-                var_dump($response);
+               var_dump($response);
 
 
                 $status = $response->getStatus();
