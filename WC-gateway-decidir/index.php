@@ -404,8 +404,7 @@ function decidir_init_gateway_class() {
               $useCybersource="false";     
               $order = wc_get_order( $order_id );
               echo $this->settings['usecybersource']."-----".$this->publishable_key;
-              //die();
-
+            
               $keys_data = array('public_key' => $this->publishable_key, 'private_key' => $this->private_key);
 
               if($this->settings['testmode'] == 'no'){
@@ -414,10 +413,7 @@ function decidir_init_gateway_class() {
                  $ambient = "test"; 
               }
 
-           //   var_dump($order);
-             
-
-        //     var_dump($result_decidir);              
+          
 
 
               $service = "SDK-PHP"; 
@@ -437,56 +433,36 @@ function decidir_init_gateway_class() {
 
               $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);      
 
-              // Get an instance of the WC_Order object
-$order = wc_get_order($order_id);
 
-// Iterating through each WC_Order_Item_Product objects
-foreach ($order->get_items() as $item_key => $item ):
+              $order = wc_get_order($order_id);
 
-    ## Using WC_Order_Item methods ##
+                
+                foreach ($order->get_items() as $item_key => $item ):
 
-    // Item ID is directly accessible from the $item_key in the foreach loop or
-    $item_id = $item->get_id();
+                    $item_id = $item->get_id();
+                    $item_name    = $item->get_name();
+                    $item_description    = $item->get_description();
+                    $line_total        = $item->get_total();
+                    $quantity     = $item->get_quantity(); 
+                    $product        = $item->get_product();  
+                    $product_type   = $product->get_type();
+                    $product_sku    = $product->get_sku();
+                    $product_price  = $product->get_price();
+                    $stock_quantity = $product->get_stock_quantity();
 
-    ## Using WC_Order_Item_Product methods ##
 
-    $product      = $item->get_product(); // Get the WC_Product object
+                     $items[] = [
+                                'code' =>  $item_id  ,
+                                'description' => $item_description ,
+                                'name' => $item_name ,
+                                'sku' =>    $product_sku ,
+                                'total_amount' => $line_total ,
+                                'quantity' => $item->get_quantity() ,
+                                'unit_price' =>  $product_price 
+                            ];
 
-    $product_id   = $item->get_product_id(); // the Product id
-    $variation_id = $item->get_variation_id(); // the Variation id
-
-    $item_type    = $item->get_type(); // Type of the order item ("line_item")
-
-    $item_name    = $item->get_name(); // Name of the product
-    $quantity     = $item->get_quantity();  
-    $tax_class    = $item->get_tax_class();
-    $line_subtotal     = $item->get_subtotal(); // Line subtotal (non discounted)
-    $line_subtotal_tax = $item->get_subtotal_tax(); // Line subtotal tax (non discounted)
-    $line_total        = $item->get_total(); // Line total (discounted)
-    $line_total_tax    = $item->get_total_tax(); // Line total tax (discounted)
-
-    ## Access Order Items data properties (in an array of values) ##
-    $item_data    = $item->get_data();
-
-    $product_name = $item_data['name'];
-    $product_id   = $item_data['product_id'];
-    $variation_id = $item_data['variation_id'];
-    $quantity     = $item_data['quantity'];
-    $tax_class    = $item_data['tax_class'];
-    $line_subtotal     = $item_data['subtotal'];
-    $line_subtotal_tax = $item_data['subtotal_tax'];
-    $line_total        = $item_data['total'];
-    $line_total_tax    = $item_data['total_tax'];
-
-    // Get data from The WC_product object using methods (examples)
-    $product        = $item->get_product(); // Get the WC_Product object
-
-    $product_type   = $product->get_type();
-    $product_sku    = $product->get_sku();
-    $product_price  = $product->get_price();
-    $stock_quantity = $product->get_stock_quantity();
-
-endforeach;
+    
+                        endforeach;
 
           
         
@@ -532,19 +508,8 @@ endforeach;
                   
                   );
 
-              //Datos de productos, array con los diferentes productos involucrados.
-              $cs_products = array(
-                    array(
-                      "csitproductcode" => "electronic_product", 
-                      "csitproductdescription" => "NOTEBOOK L845 SP4304LA DF TOSHIBA", 
-                      "csitproductname" => "NOTEBOOK L845 SP4304LA DF TOSHIBA",  
-                      "csitproductsku" => "LEVJNSL36GN",
-                      "csittotalamount" => 6.00, 
-                      "csitquantity" => 1,
-                      "csitunitprice" => 6.00 
-                      ),
-                   
-                  );   
+           
+              $cs_products = $items[] ;   
 
       
 
@@ -554,16 +519,12 @@ endforeach;
                                 $cs_products, // Datos de los productos
               );
 
-            // var_dump( $cybersource);
-
+            
            
 
             $connector->payment()->setCybersource($cybersource->getData());
-            //var_dump(  $connector);
-            /**/
+           
           }     
-
-          var_dump($order);
 
 
               $dec_total=$order->get_total();
