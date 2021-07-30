@@ -437,6 +437,57 @@ function decidir_init_gateway_class() {
 
               $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);      
 
+              // Get an instance of the WC_Order object
+$order = wc_get_order($order_id);
+
+// Iterating through each WC_Order_Item_Product objects
+foreach ($order->get_items() as $item_key => $item ):
+
+    ## Using WC_Order_Item methods ##
+
+    // Item ID is directly accessible from the $item_key in the foreach loop or
+    $item_id = $item->get_id();
+
+    ## Using WC_Order_Item_Product methods ##
+
+    $product      = $item->get_product(); // Get the WC_Product object
+
+    $product_id   = $item->get_product_id(); // the Product id
+    $variation_id = $item->get_variation_id(); // the Variation id
+
+    $item_type    = $item->get_type(); // Type of the order item ("line_item")
+
+    $item_name    = $item->get_name(); // Name of the product
+    $quantity     = $item->get_quantity();  
+    $tax_class    = $item->get_tax_class();
+    $line_subtotal     = $item->get_subtotal(); // Line subtotal (non discounted)
+    $line_subtotal_tax = $item->get_subtotal_tax(); // Line subtotal tax (non discounted)
+    $line_total        = $item->get_total(); // Line total (discounted)
+    $line_total_tax    = $item->get_total_tax(); // Line total tax (discounted)
+
+    ## Access Order Items data properties (in an array of values) ##
+    $item_data    = $item->get_data();
+
+    $product_name = $item_data['name'];
+    $product_id   = $item_data['product_id'];
+    $variation_id = $item_data['variation_id'];
+    $quantity     = $item_data['quantity'];
+    $tax_class    = $item_data['tax_class'];
+    $line_subtotal     = $item_data['subtotal'];
+    $line_subtotal_tax = $item_data['subtotal_tax'];
+    $line_total        = $item_data['total'];
+    $line_total_tax    = $item_data['total_tax'];
+
+    // Get data from The WC_product object using methods (examples)
+    $product        = $item->get_product(); // Get the WC_Product object
+
+    $product_type   = $product->get_type();
+    $product_sku    = $product->get_sku();
+    $product_price  = $product->get_price();
+    $stock_quantity = $product->get_stock_quantity();
+
+endforeach;
+
           
         
          if ( $this->settings['usecybersource'] =="yes") {
@@ -471,20 +522,14 @@ function decidir_init_gateway_class() {
                       "street2" => $cs_street2,
                     ),
                     "currency" => "ARS",
-                    "amount" => 12.00,
-                    "days_in_site" => 243,
-                    "is_guest" => false,
+                    "amount" => (int)$dec_Amount,
+                    "days_in_site" => 0,
+                    "is_guest" => true,
                     "password" => "password",
-                    "num_of_transactions" => 21,
-                    "cellphone_number" => "12121",
-                    "date_of_birth" => "129412",
-                    "street" => "Avellaneda 2050",
-                    "days_to_delivery" => "55",
-                    "dispatch_method" => "storepickup",
-                    "tax_voucher_required" => true,
-                    "customer_loyality_number" => "123232",
-                    "coupon_code" => "cupon22",
-                    "csmdd17" => "17"
+                    "num_of_transactions" => $order_id,
+                    "cellphone_number" =>$cs_phone,                    
+                    "street" => $cs_street1,
+                  
                   );
 
               //Datos de productos, array con los diferentes productos involucrados.
@@ -514,11 +559,11 @@ function decidir_init_gateway_class() {
            
 
             $connector->payment()->setCybersource($cybersource->getData());
-            var_dump(  $connector);
+            //var_dump(  $connector);
             /**/
           }     
 
-          //  var_dump($order);
+          var_dump($order);
 
 
               $dec_total=$order->get_total();
