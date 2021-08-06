@@ -97,6 +97,14 @@ function decidir_init_gateway_class() {
                     'default'     => 'yes',
                     'desc_tip'    => true,
                 ),
+                  'uselogmode' => array(
+                    'title'       => 'Use Log Mode',
+                    'label'       => 'Enable Log Mode',
+                    'type'        => 'checkbox',
+                    'description' => 'Use Log mode for debug.',
+                    'default'     => 'yes',
+                    'desc_tip'    => true,
+                ),
                 'sandbox_site_id' => array(
                   'title'       => __( 'Sandbox Site Id', 'wc-gateway-decidir' ),
                   'type'        => 'text',
@@ -295,7 +303,7 @@ function decidir_init_gateway_class() {
           const testmode = "<?php echo $_SESSION['testmode']; ?>";
           const useCS = "<?php echo $_SESSION['cybersource']; ?>";
 
-          console.log(useCS);
+        //  console.log(useCS);
         
           if (useCS=="yes") {
 
@@ -403,7 +411,7 @@ function decidir_init_gateway_class() {
               $result_decidir= json_decode($clear_slashes);
               $useCybersource="false";     
               $order = wc_get_order( $order_id );
-              echo $this->settings['usecybersource']."-----".$this->publishable_key;
+             // echo $this->settings['usecybersource']."-----".$this->publishable_key;
             
               $keys_data = array('public_key' => $this->publishable_key, 'private_key' => $this->private_key);
 
@@ -413,8 +421,25 @@ function decidir_init_gateway_class() {
                  $ambient = "test"; 
               }
 
-          
 
+              if(is_user_logged_in()){ 
+
+                            $current_user = wp_get_current_user();
+                            $now = time(); 
+                            $your_date = strtotime($current_user->user_registered);
+                            $datediff = $now - $your_date;
+                            $csidayinsite=round(($datediff / (60 * 60 * 24)));
+                            $csuserid=$current_user->user_nicename."--".$current_user->ID;
+                            $csipass=$current_user->user_pass;
+                            $csiguest=false;
+
+
+                        }else{
+                            $csidayinsite=0;
+                            $csuserid="guest-user";
+                            $csipass="password";
+                            $csiguest=true; 
+                        }
 
               $service = "SDK-PHP"; 
               $developer ="IURCO - Prisma SA";
@@ -441,7 +466,7 @@ function decidir_init_gateway_class() {
 
                     $item_id = $item->get_id();
                     $item_name    = $item->get_name();
-                    $item_description    = $item->get_description();
+                    $item_description    = $item->get_name();
                     $line_total        = $item->get_total();
                     $quantity     = $item->get_quantity(); 
                     $product        = $item->get_product();  
@@ -449,22 +474,26 @@ function decidir_init_gateway_class() {
                     $product_sku    = $product->get_sku();
                     $product_price  = $product->get_price();
                     $stock_quantity = $product->get_stock_quantity();
+                    if ($product_sku =="") {
+                        $product_sku=$item_id."--".$item_name;
+                    }
 
 
                      $items[] = [
-                                'code' =>  $item_id  ,
-                                'description' => $item_description ,
-                                'name' => $item_name ,
-                                'sku' =>    $product_sku ,
-                                'total_amount' => $line_total ,
-                                'quantity' => $item->get_quantity() ,
-                                'unit_price' =>  $product_price 
-                            ];
+                        "csitproductcode" => $product_sku , 
+                        "csitproductdescription" => $item_name, 
+                        "csitproductname" => $item_description,  
+                        "csitproductsku" => $product_sku,
+                        "csittotalamount" => $product_price*$quantity, 
+                        "csitquantity" => $quantity,
+                        "csitunitprice" => $product_price   
+                        ];
 
     
-                        endforeach;
+                        endforeach; 
 
-          
+           
+
         
          if ( $this->settings['usecybersource'] =="yes") {
               $useCybersource="true";  
@@ -474,7 +503,7 @@ function decidir_init_gateway_class() {
                     "bill_to" => array(
                       "city" => $cs_city,
                       "country" => $cs_country,
-                      "customer_id" => "juan-21",
+                      "customer_id" => $csuserid,
                       "email" =>  $cs_email,
                       "first_name" => $cs_first_name,
                       "last_name" => $cs_last_name,
@@ -487,7 +516,7 @@ function decidir_init_gateway_class() {
                     "ship_to" => array(
                       "city" => $cs_city,
                       "country" => $cs_country,
-                      "customer_id" => "juan-21",
+                      "customer_id" => $csuserid,
                       "email" =>  $cs_email,
                       "first_name" => $cs_first_name,
                       "last_name" => $cs_last_name,
@@ -499,9 +528,9 @@ function decidir_init_gateway_class() {
                     ),
                     "currency" => "ARS",
                     "amount" => (int)$dec_Amount,
-                    "days_in_site" => 0,
-                    "is_guest" => true,
-                    "password" => "password",
+                    "days_in_site" => $csidayinsite,
+                    "is_guest" => $csipass,
+                    "password" => $csipass,
                     "num_of_transactions" => $order_id,
                     "cellphone_number" =>$cs_phone,                    
                     "street" => $cs_street1,
@@ -509,9 +538,9 @@ function decidir_init_gateway_class() {
                   );
 
            
-              $cs_products = $items[] ;   
+              $cs_products = $items ;   
 
-      
+            
 
 
              $cybersource = new Decidir\Cybersource\Retail(
@@ -520,11 +549,12 @@ function decidir_init_gateway_class() {
               );
 
             
-           
+
 
             $connector->payment()->setCybersource($cybersource->getData());
+            //var_dump($connector);
            
-          }     
+            }     
 
 
               $dec_total=$order->get_total();
@@ -574,15 +604,44 @@ function decidir_init_gateway_class() {
                     "sub_payments" => array()
                   );
                         
+             
 
+              
               try {
 
-                $response = $connector->payment()->ExecutePayment($data);
+              $response = $connector->payment()->ExecutePayment($data);
 
-               var_dump($response);
+                $responsedecidir=json_encode($response);
 
+              
+                
 
                 $status = $response->getStatus();
+
+                 /* Add log  */
+
+                $filename = "Log-WC-gateway.log";
+        
+                //create a file pointer
+                $dir=plugin_dir_path( __FILE__ )."/log/" ;
+                $file = fopen($dir.$filename, 'a');
+                fwrite($file, "Order -> ".$order_id."-".$newdate.PHP_EOL);
+                 
+                fwrite($file, "Data CS" . PHP_EOL);
+                fwrite($file, json_encode($cs_data) . PHP_EOL);
+                fwrite($file, "Produsct CS" . PHP_EOL);
+                fwrite($file, json_encode($cs_products) . PHP_EOL);
+                fwrite($file, "Data Payment" . PHP_EOL);
+                fwrite($file, json_encode($data ). PHP_EOL);
+                fwrite($file, "Response Decidir" . PHP_EOL);
+                fwrite($file, "Hola".$responsedecidir . PHP_EOL);
+
+                fclose($file);
+
+
+                /* End log */ 
+
+
                 if($status == 'approved'){
                   
                   $json = json_encode($response);
@@ -596,7 +655,8 @@ function decidir_init_gateway_class() {
                   );    
          
                  
-                  $order->reduce_order_stock();
+                 // $order->reduce_order_stock_levels();
+                    $order->reduce_order_stock();
 
                  
                   WC()->cart->empty_cart();
