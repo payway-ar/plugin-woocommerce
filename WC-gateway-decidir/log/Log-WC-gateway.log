@@ -1,0 +1,36 @@
+Order -> 69-2021-08-05 20:43:25
+Data CS
+{"send_to_cs":true,"channel":"Web","bill_to":{"city":"caba","country":"AR","customer_id":"admin--1","email":"reject@decidir.com.ar","first_name":"Juan","last_name":"Perez","phone_number":"01158171040","postal_code":"1415","state":"H","street1":"Balcarce 60","street2":""},"ship_to":{"city":"caba","country":"AR","customer_id":"admin--1","email":"reject@decidir.com.ar","first_name":"Juan","last_name":"Perez","phone_number":"01158171040","postal_code":"1415","state":"H","street1":"Balcarce 60","street2":""},"currency":"ARS","amount":0,"days_in_site":98,"is_guest":"$P$BorA3byEkEd5PqBRdbVimDN9MtXPpZ.","password":"$P$BorA3byEkEd5PqBRdbVimDN9MtXPpZ.","num_of_transactions":69,"cellphone_number":"01158171040","street":"Balcarce 60"}
+Produsct CS
+[{"csitproductcode":"313--test","csitproductdescription":"test","csitproductname":"test","csitproductsku":"313--test","csittotalamount":45,"csitquantity":1,"csitunitprice":"45"}]
+Data Payment
+{"site_transaction_id":"69-084325","token":"315c0d85-3549-4e50-9cf5-86204cffd45b","customer":{"id":"customer","email":"reject@decidir.com.ar","ip_address":"172.27.0.1"},"payment_method_id":104,"bin":"529991","amount":45,"currency":"ARS","installments":1,"description":"Pay with your credit card via our super-cool payment gateway.","fraud_detection":[],"establishment_name":"Test CS","payment_type":"single","sub_payments":[]}
+Response Decidir
+{}
+Order -> 69-2021-08-05 20:51:23
+Data CS
+{"send_to_cs":true,"channel":"Web","bill_to":{"city":"caba","country":"AR","customer_id":"admin--1","email":"accept@decidir.com.ar","first_name":"Juan","last_name":"Perez","phone_number":"01158171040","postal_code":"1415","state":"H","street1":"Balcarce 60","street2":""},"ship_to":{"city":"caba","country":"AR","customer_id":"admin--1","email":"accept@decidir.com.ar","first_name":"Juan","last_name":"Perez","phone_number":"01158171040","postal_code":"1415","state":"H","street1":"Balcarce 60","street2":""},"currency":"ARS","amount":0,"days_in_site":98,"is_guest":"$P$BorA3byEkEd5PqBRdbVimDN9MtXPpZ.","password":"$P$BorA3byEkEd5PqBRdbVimDN9MtXPpZ.","num_of_transactions":69,"cellphone_number":"01158171040","street":"Balcarce 60"}
+Produsct CS
+[{"csitproductcode":"316--test","csitproductdescription":"test","csitproductname":"test","csitproductsku":"316--test","csittotalamount":45,"csitquantity":1,"csitunitprice":"45"}]
+Data Payment
+{"site_transaction_id":"69-085123","token":"c2c4db04-9160-43c5-8fb0-ecdc955c95bf","customer":{"id":"customer","email":"accept@decidir.com.ar","ip_address":"172.27.0.1"},"payment_method_id":104,"bin":"529991","amount":45,"currency":"ARS","installments":1,"description":"Pay with your credit card via our super-cool payment gateway.","fraud_detection":[],"establishment_name":"Test CS","payment_type":"single","sub_payments":[]}
+Response Decidir
+{}
+Order -> 70-2021-08-05 20:56:14
+Data CS
+{"send_to_cs":true,"channel":"Web","bill_to":{"city":"caba","country":"AR","customer_id":"admin--1","email":"accept@decidir.com.ar","first_name":"Juan","last_name":"Perez","phone_number":"01158171040","postal_code":"1415","state":"H","street1":"Balcarce 60","street2":""},"ship_to":{"city":"caba","country":"AR","customer_id":"admin--1","email":"accept@decidir.com.ar","first_name":"Juan","last_name":"Perez","phone_number":"01158171040","postal_code":"1415","state":"H","street1":"Balcarce 60","street2":""},"currency":"ARS","amount":0,"days_in_site":98,"is_guest":"$P$BorA3byEkEd5PqBRdbVimDN9MtXPpZ.","password":"$P$BorA3byEkEd5PqBRdbVimDN9MtXPpZ.","num_of_transactions":70,"cellphone_number":"01158171040","street":"Balcarce 60"}
+Produsct CS
+[{"csitproductcode":"319--test","csitproductdescription":"test","csitproductname":"test","csitproductsku":"319--test","csittotalamount":45,"csitquantity":1,"csitunitprice":"45"}]
+Data Payment
+{"site_transaction_id":"70-085614","token":"79ca60d8-c924-4542-9b54-34a2745a53fe","customer":{"id":"customer","email":"accept@decidir.com.ar","ip_address":"172.27.0.1"},"payment_method_id":104,"bin":"529991","amount":45,"currency":"ARS","installments":1,"description":"Pay with your credit card via our super-cool payment gateway.","fraud_detection":[],"establishment_name":"Test CS","payment_type":"single","sub_payments":[]}
+Response Decidir
+Hola{}
+Order -> 71-2021-08-05 20:59:33
+Data CS
+{"send_to_cs":true,"channel":"Web","bill_to":{"city":"caba","country":"AR","customer_id":"admin--1","email":"accept@decidir.com.ar","first_name":"Juan","last_name":"Perez","phone_number":"01158171040","postal_code":"1415","state":"H","street1":"Balcarce 60","street2":""},"ship_to":{"city":"caba","country":"AR","customer_id":"admin--1","email":"accept@decidir.com.ar","first_name":"Juan","last_name":"Perez","phone_number":"01158171040","postal_code":"1415","state":"H","street1":"Balcarce 60","street2":""},"currency":"ARS","amount":0,"days_in_site":98,"is_guest":"$P$BorA3byEkEd5PqBRdbVimDN9MtXPpZ.","password":"$P$BorA3byEkEd5PqBRdbVimDN9MtXPpZ.","num_of_transactions":71,"cellphone_number":"01158171040","street":"Balcarce 60"}
+Produsct CS
+[{"csitproductcode":"322--test","csitproductdescription":"test","csitproductname":"test","csitproductsku":"322--test","csittotalamount":45,"csitquantity":1,"csitunitprice":"45"}]
+Data Payment
+{"site_transaction_id":"71-085933","token":"10aa6294-0400-45da-8ef7-f6babdf1ec07","customer":{"id":"customer","email":"accept@decidir.com.ar","ip_address":"172.27.0.1"},"payment_method_id":104,"bin":"529991","amount":45,"currency":"ARS","installments":1,"description":"Pay with your credit card via our super-cool payment gateway.","fraud_detection":[],"establishment_name":"Test CS","payment_type":"single","sub_payments":[]}
+Response Decidir
+Hola{}
