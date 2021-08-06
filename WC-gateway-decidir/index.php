@@ -4,9 +4,9 @@
  
  *
  * @package   WC-Gateway-DECIDIR
- * @author    Iurco
+ * @author    IURCO - Prisma SA
  * @category  Admin
- * @copyright Copyright (c) 2021 IURCO SAS
+ * @copyright Copyright (c) 2021 IURCO SAS - Primas SA
  * 
  *
  */
@@ -14,7 +14,7 @@
 
 add_filter( 'woocommerce_payment_gateways', 'decidir_add_gateway_class' );
 function decidir_add_gateway_class( $gateways ) {
-    $gateways[] = 'WC_Decidir_Gateway'; // your class name is here
+    $gateways[] = 'WC_Decidir_Gateway';  
     return $gateways;
 }
  
@@ -31,7 +31,7 @@ function decidir_init_gateway_class() {
             $this->icon = apply_filters( 'woocommerce_decidir_icon', plugins_url( 'WC-gateway-decidir/assets/images/logos-tarjetas.png', plugin_dir_path( __FILE__ ) ) );            
             $this->has_fields = true; 
             $this->method_title = 'DECIDIR';
-            $this->method_description = 'El Sistema de Pago Seguro DECIDIR (SPS) descripcion completa';
+            $this->method_description = 'El Sistema de Pago Seguro DECIDIR (SPS)';
            
             $this->supports = array(
                 'products'
@@ -89,47 +89,86 @@ function decidir_init_gateway_class() {
                     'default'     => 'yes',
                     'desc_tip'    => true,
                 ),
-                'test_publishable_key' => array(
-                    'title'       => 'Test Publishable Key',
-                    'type'        => 'text'
+                 'usecybersource' => array(
+                    'title'       => 'Use Cybersource',
+                    'label'       => 'Enable Cybersource',
+                    'type'        => 'checkbox',
+                    'description' => 'Use Cybersource for transaction.',
+                    'default'     => 'yes',
+                    'desc_tip'    => true,
                 ),
-                'test_private_key' => array(
-                    'title'       => 'Test Private Key',
-                    'type'        => 'password',
+                  'uselogmode' => array(
+                    'title'       => 'Use Log Mode',
+                    'label'       => 'Enable Log Mode',
+                    'type'        => 'checkbox',
+                    'description' => 'Use Log mode for debug.',
+                    'default'     => 'yes',
+                    'desc_tip'    => true,
                 ),
-                'publishable_key' => array(
-                    'title'       => 'Live Publishable Key',
-                    'type'        => 'text'
-                ),
-                'private_key' => array(
-                    'title'       => 'Live Private Key',
-                    'type'        => 'password'
-                ),
-                'establishment_name' => array(
-                  'title'       => __( 'Establishment Name', 'wc-gateway-decidir' ),
+                'sandbox_site_id' => array(
+                  'title'       => __( 'Sandbox Site Id', 'wc-gateway-decidir' ),
                   'type'        => 'text',
-                  'description' => __( 'Enter your Establishment Name', 'wc-gateway-decidir' ),
+                  'description' => __( 'Enter your Sandbox Site Id', 'wc-gateway-decidir' ),
                   'default'     => __( '', 'wc-gateway-decidir' ),
                   'desc_tip'    => true,
                 ),
+
+
+                'test_publishable_key' => array(
+                    'title'       => 'Sandbox Public Key',
+                    'type'        => 'text'
+                ),
+                'test_private_key' => array(
+                    'title'       => 'Sandbox Private Key',
+                    'type'        => 'password',
+                ), 
+
+                'production_site_id' => array(
+                  'title'       => __( 'Production Site Id', 'wc-gateway-decidir' ),
+                  'type'        => 'text',
+                  'description' => __( 'Enter your roduction Site Id', 'wc-gateway-decidir' ),
+                  'default'     => __( '', 'wc-gateway-decidir' ),
+                  'desc_tip'    => true,
+                ),
+
+             
+                'publishable_key' => array(
+                    'title'       => 'Production Public Key',
+                    'type'        => 'text'
+                ),
+                'private_key' => array(
+                    'title'       => 'Production Private Key',
+                    'type'        => 'password'
+                ),
+               
+                
                 
                 'cuotas' => array(
-                  'title'       => __( 'Maxima Cantidad de Cuotas', 'wc-gateway-decidir' ),
-                  'type'        => 'select',
-                  'description' => __( 'Selecciones máxima cantidad de cuotas', 'wc-gateway-decidir' ),
+                  'title'       => __( 'Avaliable Installments', 'wc-gateway-decidir' ),
+                  'type'        => 'multiselect',
+                  'description' => __( 'Select Installments', 'wc-gateway-decidir' ),
                   'default'     => __( '', 'wc-gateway-decidir' ),
                   'options' => array(
                             '1' => ' 1 CUOTA',
+                            '2' => ' 2 CUOTAS',
                             '3' => ' 3 CUOTAS',
+                            '4' => ' 4 CUOTAS',
+                            '5' => ' 5 CUOTAS',
                             '6' => ' 6 CUOTAS',
+                            '7' => ' 7 CUOTAS',
+                            '8' => ' 8 CUOTAS',
+                            '9' => ' 9 CUOTAS',
+                            '10' => ' 10 CUOTAS',
+                            '11' => ' 11 CUOTAS',
                             '12' => '12 CUOTAS',
+                            '18' => '18 CUOTAS',
                        ), // ,   
                       'desc_tip'    => true,
                       ),
 
                 'option_name' => array(
                  'title' => 'Tarjetas Habilitadas',
-                 'description' => 'Ctrl+ Click para habilitar la tarjeta',
+                 'description' => 'Ctrl + Click para habilitar la tarjeta',
                  'type' => 'multiselect',
                  'options' => array(
                       '001' => 'VISA',
@@ -154,8 +193,15 @@ function decidir_init_gateway_class() {
                 
                 echo wpautop( wp_kses_post( $this->description ) );
             }
+          ?>
+            <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
+          <?php
+             $_SESSION['publishable_key'] = $this->settings['publishable_key'];
+             $_SESSION['testmode'] = $this->settings['testmode'];
+             $_SESSION['cybersource'] = $this->settings['usecybersource'];
 
-            $_SESSION['publishable_key'] = $this->settings['publishable_key'];
+             //echo $this->settings['usecybersource']."Seccion" ;
+            
              if($this->settings['testmode'] == 'no'){
                $_SESSION['urlSandbox'] = "https://live.decidir.com/api/v2"; 
             } else {
@@ -170,12 +216,12 @@ function decidir_init_gateway_class() {
            
           jQuery(document).on("focusout","#dni_titular",function(){
           jQuery('#card_holder_doc_number').val(jQuery('#dni_titular').val());
-        });  
+          });  
  
 
      
 
-jQuery(document).on('updated_checkout', function() {
+            jQuery(document).on('updated_checkout', function() {
              
             jQuery('#decidir_tarjeta_tipo' ).on('change', function (e) {
             jQuery('#decidir_installments').html('');
@@ -228,10 +274,10 @@ jQuery(document).on('updated_checkout', function() {
           
           jQuery('#decidir_cvc').focusout(function () {
             jQuery('#security_code').val(jQuery('#decidir_cvc').val());
-          });     
+          });      
           
           jQuery('#decidir_numero').focusout(function () {
-            jQuery('#card_number').val(jQuery('#decidir_numero').val());
+          jQuery('#card_number').val(jQuery('#decidir_numero').val());
             
              var num = jQuery('#decidir_numero').val();
              num = num.replace(/[^\d]/g,'');
@@ -254,10 +300,25 @@ jQuery(document).on('updated_checkout', function() {
           
           const publicApiKey = "<?php echo $_SESSION['publishable_key']; ?>";
           const urlSandbox = "<?php echo $_SESSION['urlSandbox']; ?>";
+          const testmode = "<?php echo $_SESSION['testmode']; ?>";
+          const useCS = "<?php echo $_SESSION['cybersource']; ?>";
+
+        //  console.log(useCS);
         
-          const decidir = new Decidir(urlSandbox,true);
+          if (useCS=="yes") {
+
+        var decidir = new Decidir(urlSandbox,false);
+
           decidir.setPublishableKey(publicApiKey);
-          decidir.setTimeout(5000);
+          decidir.setTimeout(0);
+                  }else{
+             var decidir = new Decidir(urlSandbox,true);    
+
+          decidir.setPublishableKey(publicApiKey);
+          decidir.setTimeout(0);
+
+              }
+        
           
           jQuery('#place_order').on('click', function(e) {
 
@@ -273,7 +334,9 @@ jQuery(document).on('updated_checkout', function() {
           });
           
           function sdkResponseHandler(status, response) {
+                     
             if (status != 200 && status != 201) {
+              
              document.getElementById("nombre_titular").focus();
              jQuery("#errorcard").append("<strong>Verificar Datos Tarjeta</strong><br>");
              
@@ -319,7 +382,7 @@ jQuery(document).on('updated_checkout', function() {
             wp_enqueue_script( 'decidir_js', 'https://live.decidir.com/static/v2/decidir.js' );
             wp_register_script( 'woocommerce_decidir', plugins_url( 'assets/js/card.js', __FILE__ ), array( 'jquery', 'decidir_js' ) );
             wp_enqueue_script( 'woocommerce_decidir' );
-            wp_enqueue_script( 'form_js', plugins_url( 'assets/js/form.js', __FILE__ ));
+            //wp_enqueue_script( 'form_js', plugins_url( 'assets/js/form.js', __FILE__ ));
 
             wp_register_style('woocommerce_decidir', plugins_url('assets/css/style.css',__FILE__ ));
             wp_enqueue_style('woocommerce_decidir');
@@ -341,14 +404,15 @@ jQuery(document).on('updated_checkout', function() {
       
         public function process_payment( $order_id ) {
          
-            global $woocommerce;
+              global $woocommerce;
          
               require_once __DIR__ . '/decidir/vendor/autoload.php';    
               $clear_slashes = stripslashes($_COOKIE['result_decidir']);
               $result_decidir= json_decode($clear_slashes);
-                   
+              $useCybersource="false";     
               $order = wc_get_order( $order_id );
-
+             // echo $this->settings['usecybersource']."-----".$this->publishable_key;
+            
               $keys_data = array('public_key' => $this->publishable_key, 'private_key' => $this->private_key);
 
               if($this->settings['testmode'] == 'no'){
@@ -356,30 +420,168 @@ jQuery(document).on('updated_checkout', function() {
               } else {
                  $ambient = "test"; 
               }
-              
-              $connector = new \Decidir\Connector($keys_data, $ambient);
+
+
+              if(is_user_logged_in()){ 
+
+                            $current_user = wp_get_current_user();
+                            $now = time(); 
+                            $your_date = strtotime($current_user->user_registered);
+                            $datediff = $now - $your_date;
+                            $csidayinsite=round(($datediff / (60 * 60 * 24)));
+                            $csuserid=$current_user->user_nicename."--".$current_user->ID;
+                            $csipass=$current_user->user_pass;
+                            $csiguest=false;
+
+
+                        }else{
+                            $csidayinsite=0;
+                            $csuserid="guest-user";
+                            $csipass="password";
+                            $csiguest=true; 
+                        }
+
+              $service = "SDK-PHP"; 
+              $developer ="IURCO - Prisma SA";
+              $grouper = "WC-Gateway-DECIDIR";
+              $cs_city =$_POST['billing_city'];
+              $cs_country=$_POST['billing_country'];
+              $cs_address=$_POST['billing_city'];
+              $cs_postal_code=$_POST['billing_postcode'];
+              $cs_state=$_POST['billing_state'];
+              $cs_first_name=$_POST['billing_first_name'];
+              $cs_last_name=$_POST['billing_last_name'];
+              $cs_street1=$_POST['billing_address_1'];
+              $cs_street2=$_POST['billing_address_2'];
+              $cs_phone=$_POST['billing_phone'];
+              $cs_email=$_POST['billing_email'];
+
+              $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);      
+
+
+              $order = wc_get_order($order_id);
+
+                
+                foreach ($order->get_items() as $item_key => $item ):
+
+                    $item_id = $item->get_id();
+                    $item_name    = $item->get_name();
+                    $item_description    = $item->get_name();
+                    $line_total        = $item->get_total();
+                    $quantity     = $item->get_quantity(); 
+                    $product        = $item->get_product();  
+                    $product_type   = $product->get_type();
+                    $product_sku    = $product->get_sku();
+                    $product_price  = $product->get_price();
+                    $stock_quantity = $product->get_stock_quantity();
+                    if ($product_sku =="") {
+                        $product_sku=$item_id."--".$item_name;
+                    }
+
+
+                     $items[] = [
+                        "csitproductcode" => $product_sku , 
+                        "csitproductdescription" => $item_name, 
+                        "csitproductname" => $item_description,  
+                        "csitproductsku" => $product_sku,
+                        "csittotalamount" => $product_price*$quantity, 
+                        "csitquantity" => $quantity,
+                        "csitunitprice" => $product_price   
+                        ];
+
+    
+                        endforeach; 
+
+           
+
+        
+         if ( $this->settings['usecybersource'] =="yes") {
+              $useCybersource="true";  
+              $cs_data = array(
+                    "send_to_cs" => true,
+                    "channel" => "Web",
+                    "bill_to" => array(
+                      "city" => $cs_city,
+                      "country" => $cs_country,
+                      "customer_id" => $csuserid,
+                      "email" =>  $cs_email,
+                      "first_name" => $cs_first_name,
+                      "last_name" => $cs_last_name,
+                      "phone_number" =>  $cs_phone,
+                      "postal_code" =>$cs_postal_code,
+                      "state" => $cs_state,
+                      "street1" => $cs_street1,
+                      "street2" => $cs_street2,
+                    ),
+                    "ship_to" => array(
+                      "city" => $cs_city,
+                      "country" => $cs_country,
+                      "customer_id" => $csuserid,
+                      "email" =>  $cs_email,
+                      "first_name" => $cs_first_name,
+                      "last_name" => $cs_last_name,
+                      "phone_number" =>  $cs_phone,
+                      "postal_code" =>$cs_postal_code,
+                      "state" => $cs_state,
+                      "street1" => $cs_street1,
+                      "street2" => $cs_street2,
+                    ),
+                    "currency" => "ARS",
+                    "amount" => (int)$dec_Amount,
+                    "days_in_site" => $csidayinsite,
+                    "is_guest" => $csipass,
+                    "password" => $csipass,
+                    "num_of_transactions" => $order_id,
+                    "cellphone_number" =>$cs_phone,                    
+                    "street" => $cs_street1,
+                  
+                  );
+
+           
+              $cs_products = $items ;   
+
+            
+
+
+             $cybersource = new Decidir\Cybersource\Retail(
+                                $cs_data,  // Datos de la operación
+                                $cs_products, // Datos de los productos
+              );
+
+            
+
+
+            $connector->payment()->setCybersource($cybersource->getData());
+            //var_dump($connector);
+           
+            }     
+
+
+              $dec_total=$order->get_total();
+              $dec_customer=$order->get_customer_id();
+             
             
               $decidir_MerchOrderIdnewdate = date("his");
-              $site_transaction_id = $order_id .'-'. $decidir_MerchOrderIdnewdate ;
-              $psp_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
-              $amount = str_replace('.', '', $psp_Amount);  
-                    
+              $site_transaction_id = $order_id."-".$decidir_MerchOrderIdnewdate;
+              $dec_Amount = preg_replace( '#[^\d.]#', '', $dec_total );
+              $amount = str_replace('.', '', $dec_Amount);  
               $newdate = date("Y-m-d H:i:s");
-              $psp_MerchTxRef = $order->customer_id .'-'. $decidir_MerchOrderIdnewdate;
-              $psp_CardFirstName = $_POST['decidir_gateway-card-first-name'];
-              $psp_CardLastName = $_POST['decidir_gateway-card-last-name'];
-              $psp_Product = $_POST['decidir_gateway-card-tipo'];
-              $psp_CardNumber = str_replace(' ', '', $_POST['decidir_gateway-card-number']);
+              $dec_MerchTxRef =  $dec_customer.'-'. $decidir_MerchOrderIdnewdate;
+              $dec_CardFirstName = $_POST['decidir_gateway-card-first-name'];
+              $dec_CardLastName = $_POST['decidir_gateway-card-last-name'];
+              $dec_Product = $_POST['decidir_gateway-card-tipo'];
+              $dec_CardNumber = str_replace(' ', '', $_POST['decidir_gateway-card-number']);
               $data = $_POST['decidir_gateway-card-expiry'];
               $year = substr($data, strpos($data, "/") + 1);
               $month = str_split($data, 2); 
-              $psp_CardExpDate = $year . $month[0];
-              $psp_CardExpDate = str_replace(' ', '', $psp_CardExpDate);  
-              $psp_CardSecurityCode = str_replace(' ', '', $_POST['decidir_gateway-card-cvc']);
-              $psp_CustomerMail = $_POST['billing_email'];
-              $psp_NumPayments = str_replace(' ', '', $_POST['decidir-cuotas']);   
+              $dec_CardExpDate = $year . $month[0];
+              $dec_CardExpDate = str_replace(' ', '', $dec_CardExpDate);  
+              $dec_CardSecurityCode = str_replace(' ', '', $_POST['decidir_gateway-card-cvc']);
+              $dec_CustomerMail = $_POST['billing_email'];
+              $dec_NumPayments = str_replace(' ', '', $_POST['decidir-cuotas']);   
               $tarjeta_tipo = str_replace(' ', '', $_POST['decidir-tarjeta-tipo']);
               $decidir_card_tipo = intval($_POST['decidir-card-tipo']);
+             
               
          
               $data = array(
@@ -392,20 +594,54 @@ jQuery(document).on('updated_checkout', function() {
                                 ),
                     "payment_method_id" => (int)$tarjeta_tipo,
                     "bin" => $result_decidir->bin,
-                    "amount" => $psp_Amount,
+                    "amount" =>(int)$dec_Amount,
                     "currency" => "ARS",
-                    "installments" => (int)$psp_NumPayments,
-                    "description" => $this->settings['establishment_name'],
+                    "installments" => (int)$dec_NumPayments,
+                    "description" => $this->settings['description'],
                     "fraud_detection" => array(),
                     "establishment_name" => $this->settings['establishment_name'],
                     "payment_type" => "single",
                     "sub_payments" => array()
                   );
-         
+                        
+             
 
+              
               try {
-                $response = $connector->payment()->ExecutePayment($data);
+
+              $response = $connector->payment()->ExecutePayment($data);
+
+                $responsedecidir=json_encode($response);
+
+              
+                
+
                 $status = $response->getStatus();
+
+                 /* Add log  */
+
+                $filename = "Log-WC-gateway.log";
+        
+                //create a file pointer
+                $dir=plugin_dir_path( __FILE__ )."/log/" ;
+                $file = fopen($dir.$filename, 'a');
+                fwrite($file, "Order -> ".$order_id."-".$newdate.PHP_EOL);
+                 
+                fwrite($file, "Data CS" . PHP_EOL);
+                fwrite($file, json_encode($cs_data) . PHP_EOL);
+                fwrite($file, "Produsct CS" . PHP_EOL);
+                fwrite($file, json_encode($cs_products) . PHP_EOL);
+                fwrite($file, "Data Payment" . PHP_EOL);
+                fwrite($file, json_encode($data ). PHP_EOL);
+                fwrite($file, "Response Decidir" . PHP_EOL);
+                fwrite($file, "Hola".$responsedecidir . PHP_EOL);
+
+                fclose($file);
+
+
+                /* End log */ 
+
+
                 if($status == 'approved'){
                   
                   $json = json_encode($response);
@@ -419,7 +655,8 @@ jQuery(document).on('updated_checkout', function() {
                   );    
          
                  
-                  $order->reduce_order_stock();
+                 // $order->reduce_order_stock_levels();
+                    $order->reduce_order_stock();
 
                  
                   WC()->cart->empty_cart();
@@ -453,7 +690,6 @@ jQuery(document).on('updated_checkout', function() {
            
           
                } catch( \Exception $e ) {
-                
                 $resultado = json_encode($e->getData());
                 
                 $order->add_order_note(
