@@ -49,7 +49,6 @@ Maxima Cantidad de Cuotas habilitadas
 
 Seleccionar Tarjetas Habilitadas  del listado
 
-
 ## Menú lateral
 En el menú lateral de su Backoffice, se habilitará el grupo "PRISMA PROMOTIONS", donde podrá configurar tarjetas de crédito/débito, bancos y promociones/cuotas.
 

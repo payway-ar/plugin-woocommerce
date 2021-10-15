@@ -174,4 +174,3 @@ class Payment{
 		return $ResponseValues;
 	}
 }
-
