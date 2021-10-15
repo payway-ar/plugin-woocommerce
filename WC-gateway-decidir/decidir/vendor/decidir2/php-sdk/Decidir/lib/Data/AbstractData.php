@@ -5,7 +5,6 @@ namespace Decidir\Data;
 abstract class AbstractData {
 	protected $dataResponse = array();
 	private $field_required;
-	private $field_optional;
 	
 	public function __construct(array $data){
 		$this->dataResponse = $data;
@@ -16,10 +15,10 @@ abstract class AbstractData {
 
 			foreach ($this->field_required as $key => $value) {
 				if($value['name'] != "" && $key != null){
-					$exist = $this->keyExists($this->dataResponse,$key);
+					$exist = $this->keyExists($this->dataResponse,$value['name']);
 
 					if(!$exist){
-						throw new \Decidir\Exception\RequiredValue($key);
+						throw new \Decidir\Exception\RequiredValue($value['name']);
 					}
 
 				}
@@ -48,7 +47,7 @@ abstract class AbstractData {
 		
 		foreach($fieldValues as $index => $value){
 
-			if(is_array($value) && $index != "fraud_detection"){
+			if(is_array($value)){
 				$this->forValidateFields($value);
 
 			}else{
@@ -56,11 +55,11 @@ abstract class AbstractData {
 				if(array_key_exists($index, $this->field_required)){
 					$this->FieldName = $this->field_required[$index]['name'];
 					
-					if($value === ""){
+					if($value == ""){
 						throw new \Decidir\Exception\EmptyValue($index);
 					}
 
-				}else if(!array_key_exists($index, $this->field_optional)){
+				}else{
 					throw new \Decidir\Exception\AllowValue($index);
 				}
 
@@ -75,10 +74,6 @@ abstract class AbstractData {
 		$this->field_required = $data;
 	}
 
-	public function setOptionalFields($data){
-	    $this->field_optional = $data;
-    }
-
 	public function getRequiredFields($data){
 		return $this->field_required;
 	}
@@ -87,7 +82,3 @@ abstract class AbstractData {
 		return $this->dataResponse;
 	}
 }
-
-
-
-

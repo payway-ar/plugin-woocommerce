@@ -18,7 +18,7 @@ function decidir_add_gateway_class( $gateways ) {
     return $gateways;
 }
  
-
+require( plugin_dir_path( __FILE__ ) . '/init.php');
 add_action( 'plugins_loaded', 'decidir_init_gateway_class' );
 function decidir_init_gateway_class() {
  
@@ -44,6 +44,7 @@ function decidir_init_gateway_class() {
             $this->description = $this->get_option( 'description' );
             $this->enabled = $this->get_option( 'enabled' );
             $this->testmode = 'yes' === $this->get_option( 'testmode' );
+            $this->usecybersource = 'yes' === $this->get_option( 'usecybersource' );
             $this->private_key = $this->testmode ? $this->get_option( 'test_private_key' ) : $this->get_option( 'private_key' );
             $this->publishable_key = $this->testmode ? $this->get_option( 'test_publishable_key' ) : $this->get_option( 'publishable_key' );
          
@@ -97,13 +98,12 @@ function decidir_init_gateway_class() {
                     'default'     => 'yes',
                     'desc_tip'    => true,
                 ),
-                  'uselogmode' => array(
-                    'title'       => 'Use Log Mode',
-                    'label'       => 'Enable Log Mode',
-                    'type'        => 'checkbox',
-                    'description' => 'Use Log mode for debug.',
-                    'default'     => 'yes',
-                    'desc_tip'    => true,
+                  'establishment_name' => array(
+                  'title'       => __( 'Establishment Name', 'wc-gateway-decidir' ),
+                  'type'        => 'text',
+                  'description' => __( 'Enter Establishment Name' ,'wc-gateway-decidir' ),
+                  'default'     => __( '', 'wc-gateway-decidir' ),
+                  'desc_tip'    => true,
                 ),
                 'sandbox_site_id' => array(
                   'title'       => __( 'Sandbox Site Id', 'wc-gateway-decidir' ),
@@ -174,6 +174,7 @@ function decidir_init_gateway_class() {
                       '001' => 'VISA',
                       '002' => 'VISA DEBITO',
                       '104' => 'MASTERCARD',
+                      '65' => 'AMERICAN EXPRESS',
                  ) 
               )
 
@@ -194,13 +195,11 @@ function decidir_init_gateway_class() {
                 echo wpautop( wp_kses_post( $this->description ) );
             }
           ?>
-            <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
+         <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
           <?php
              $_SESSION['publishable_key'] = $this->settings['publishable_key'];
              $_SESSION['testmode'] = $this->settings['testmode'];
-             $_SESSION['cybersource'] = $this->settings['usecybersource'];
-
-             //echo $this->settings['usecybersource']."Seccion" ;
+             $_SESSION['usecybersource'] = $this->settings['usecybersource'];
             
              if($this->settings['testmode'] == 'no'){
                $_SESSION['urlSandbox'] = "https://live.decidir.com/api/v2"; 
@@ -301,26 +300,16 @@ function decidir_init_gateway_class() {
           const publicApiKey = "<?php echo $_SESSION['publishable_key']; ?>";
           const urlSandbox = "<?php echo $_SESSION['urlSandbox']; ?>";
           const testmode = "<?php echo $_SESSION['testmode']; ?>";
-          const useCS = "<?php echo $_SESSION['cybersource']; ?>";
+          const useCS = "<?php echo $_SESSION['usecybersource']; ?>";
 
-        //  console.log(useCS);
-        
+          console.log(useCS);
+
           if (useCS=="yes") {
-
-        var decidir = new Decidir(urlSandbox,false);
-
-          decidir.setPublishableKey(publicApiKey);
-          decidir.setTimeout(0);
-                  }else{
-             var decidir = new Decidir(urlSandbox,true);    
-
-          decidir.setPublishableKey(publicApiKey);
-          decidir.setTimeout(0);
-
-              }
-        
-          
-          jQuery('#place_order').on('click', function(e) {
+            let decidir = new Decidir(urlSandbox,false);
+            decidir.setPublishableKey(publicApiKey);
+            decidir.setTimeout(0);
+            console.log("si entra");
+            jQuery('#place_order').on('click', function(e) {
 
             if(jQuery('#payment_method_decidir_gateway').is(':checked')) { 
               e.preventDefault();
@@ -332,6 +321,29 @@ function decidir_init_gateway_class() {
               decidir.createToken(form, sdkResponseHandler);
             }
           });
+         
+          }else{
+            let decidir = new Decidir(urlSandbox,true);
+            decidir.setPublishableKey(publicApiKey);
+            decidir.setTimeout(0);
+            jQuery('#place_order').on('click', function(e) {
+
+            if(jQuery('#payment_method_decidir_gateway').is(':checked')) { 
+              e.preventDefault();
+              var element = document.querySelectorAll('#decidir_gateway-cc-form');
+              for (var i=0; element.length > i; i++) {
+                console.log(element[i]);
+                var form = element[i];
+              }
+              decidir.createToken(form, sdkResponseHandler);
+            }
+          });
+            console.log("no entra");
+          }
+         //  const decidir = new Decidir(urlSandbox,true);
+          
+          
+          
           
           function sdkResponseHandler(status, response) {
                      
@@ -562,9 +574,9 @@ function decidir_init_gateway_class() {
              
             
               $decidir_MerchOrderIdnewdate = date("his");
-              $site_transaction_id = $order_id."-".$decidir_MerchOrderIdnewdate;
-              $dec_Amount = preg_replace( '#[^\d.]#', '', $dec_total );
-              $amount = str_replace('.', '', $dec_Amount);  
+              $site_transaction_id = $order_id ;
+              $psp_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
+              $amount = str_replace('.', '', $psp_Amount);  
               $newdate = date("Y-m-d H:i:s");
               $dec_MerchTxRef =  $dec_customer.'-'. $decidir_MerchOrderIdnewdate;
               $dec_CardFirstName = $_POST['decidir_gateway-card-first-name'];
@@ -584,6 +596,9 @@ function decidir_init_gateway_class() {
              
               
          
+
+
+
               $data = array(
                     "site_transaction_id" => $site_transaction_id,
                     "token" => $result_decidir->id,
@@ -594,7 +609,7 @@ function decidir_init_gateway_class() {
                                 ),
                     "payment_method_id" => (int)$tarjeta_tipo,
                     "bin" => $result_decidir->bin,
-                    "amount" =>(int)$dec_Amount,
+                    "amount" =>(int)$psp_Amount,
                     "currency" => "ARS",
                     "installments" => (int)$dec_NumPayments,
                     "description" => $this->settings['description'],
@@ -603,19 +618,15 @@ function decidir_init_gateway_class() {
                     "payment_type" => "single",
                     "sub_payments" => array()
                   );
-                        
              
+               $service = "SDK-PHP"; 
+               $developer ="IURCO - Prisma SA";
+               $grouper = "WC-Gateway-DECIDIR";
 
               
               try {
 
-              $response = $connector->payment()->ExecutePayment($data);
-
-                $responsedecidir=json_encode($response);
-
-              
-                
-
+                $response = $connector->payment()->ExecutePayment($data);
                 $status = $response->getStatus();
 
                  /* Add log  */
