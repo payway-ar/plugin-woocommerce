@@ -48,6 +48,7 @@ Establishment ID
 Maxima Cantidad de Cuotas habilitadas
 
 Seleccionar Tarjetas Habilitadas  del listado
+<<<<<<< HEAD
 
 ## Menú lateral
 En el menú lateral de su Backoffice, se habilitará el grupo "PRISMA PROMOTIONS", donde podrá configurar tarjetas de crédito/débito, bancos y promociones/cuotas.
@@ -132,3 +133,5 @@ En el menú lateral de su Backoffice, se habilitará el grupo "PRISMA PROMOTIONS
 **Eliminar cuota:**
 - En la tabla de cuotas, sobre la fila correspondiente, presione el botón con el ícono del cesto de residuos.
 - Se le pedirá confirmar la eliminación de la cuota.
+=======
+>>>>>>> master
