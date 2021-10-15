@@ -87,7 +87,3 @@ abstract class AbstractData {
 		return $this->dataResponse;
 	}
 }
-
-
-
-
