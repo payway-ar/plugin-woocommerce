@@ -75,3 +75,4 @@ class Data extends \Decidir\Data\AbstractData {
 		return $array = json_encode($this->getDataField());
 	}
 }
+
