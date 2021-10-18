@@ -73,3 +73,21 @@ class Connector {
 	}
 
 }
+
+	public function healthcheck(){
+		return $this->healthCheck;
+	}
+
+	public function payment(){
+		return $this->paymentInstance;
+	}
+
+	public function cardToken(){
+		return $this->tokenInstance;
+	}
+
+	public function paymentToken(){
+		return $this->tokenInstance;
+	}
+}
+
