@@ -35,3 +35,8 @@ class SdkException extends \Exception
     }
 
 }
+
+    public function getData(){
+        return $this->data;
+    }
+}

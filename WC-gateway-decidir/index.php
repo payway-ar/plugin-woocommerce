@@ -98,12 +98,15 @@ function decidir_init_gateway_class() {
                     'default'     => 'yes',
                     'desc_tip'    => true,
                 ),
-                  'establishment_name' => array(
-                  'title'       => __( 'Establishment Name', 'wc-gateway-decidir' ),
-                  'type'        => 'text',
-                  'description' => __( 'Enter Establishment Name' ,'wc-gateway-decidir' ),
-                  'default'     => __( '', 'wc-gateway-decidir' ),
-                  'desc_tip'    => true,
+
+                  'uselogmode' => array(
+                    'title'       => 'Use Log Mode',
+                    'label'       => 'Enable Log Mode',
+                    'type'        => 'checkbox',
+                    'description' => 'Use Log mode for debug.',
+                    'default'     => 'yes',
+                    'desc_tip'    => true,
+
                 ),
                 'sandbox_site_id' => array(
                   'title'       => __( 'Sandbox Site Id', 'wc-gateway-decidir' ),
@@ -195,11 +198,14 @@ function decidir_init_gateway_class() {
                 echo wpautop( wp_kses_post( $this->description ) );
             }
           ?>
-         <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
+
+            <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
           <?php
              $_SESSION['publishable_key'] = $this->settings['publishable_key'];
              $_SESSION['testmode'] = $this->settings['testmode'];
-             $_SESSION['usecybersource'] = $this->settings['usecybersource'];
+             $_SESSION['cybersource'] = $this->settings['usecybersource'];
+
+
             
              if($this->settings['testmode'] == 'no'){
                $_SESSION['urlSandbox'] = "https://live.decidir.com/api/v2"; 
@@ -300,6 +306,7 @@ function decidir_init_gateway_class() {
           const publicApiKey = "<?php echo $_SESSION['publishable_key']; ?>";
           const urlSandbox = "<?php echo $_SESSION['urlSandbox']; ?>";
           const testmode = "<?php echo $_SESSION['testmode']; ?>";
+
           const useCS = "<?php echo $_SESSION['usecybersource']; ?>";
 
           console.log(useCS);
@@ -574,9 +581,11 @@ function decidir_init_gateway_class() {
              
             
               $decidir_MerchOrderIdnewdate = date("his");
-              $site_transaction_id = $order_id ;
-              $psp_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
-              $amount = str_replace('.', '', $psp_Amount);  
+
+              $site_transaction_id = $order_id."-".$decidir_MerchOrderIdnewdate;
+              $dec_Amount = preg_replace( '#[^\d.]#', '', $dec_total );
+              $amount = str_replace('.', '', $dec_Amount);  
+
               $newdate = date("Y-m-d H:i:s");
               $dec_MerchTxRef =  $dec_customer.'-'. $decidir_MerchOrderIdnewdate;
               $dec_CardFirstName = $_POST['decidir_gateway-card-first-name'];
@@ -609,7 +618,9 @@ function decidir_init_gateway_class() {
                                 ),
                     "payment_method_id" => (int)$tarjeta_tipo,
                     "bin" => $result_decidir->bin,
-                    "amount" =>(int)$psp_Amount,
+
+                    "amount" =>(int)$dec_Amount,
+
                     "currency" => "ARS",
                     "installments" => (int)$dec_NumPayments,
                     "description" => $this->settings['description'],
@@ -618,15 +629,25 @@ function decidir_init_gateway_class() {
                     "payment_type" => "single",
                     "sub_payments" => array()
                   );
+
              
                $service = "SDK-PHP"; 
                $developer ="IURCO - Prisma SA";
                $grouper = "WC-Gateway-DECIDIR";
 
+
               
               try {
 
-                $response = $connector->payment()->ExecutePayment($data);
+
+              $response = $connector->payment()->ExecutePayment($data);
+
+                $responsedecidir=json_encode($response);
+
+              
+                
+
+
                 $status = $response->getStatus();
 
                  /* Add log  */
