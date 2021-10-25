@@ -32,9 +32,7 @@ Presionar el botón </strong> configurar </strong>
 Ingresar los datos  solicitados en la pantalla 
 
 Test mode (si/no)
-
 Enable Cybersourse (Si/No)
-
 
 Test Publishable Key
 Test Private Key
@@ -135,4 +133,3 @@ En el menú lateral de su Backoffice, se habilitará el grupo "PRISMA PROMOTIONS
 **Eliminar cuota:**
 - En la tabla de cuotas, sobre la fila correspondiente, presione el botón con el ícono del cesto de residuos.
 - Se le pedirá confirmar la eliminación de la cuota.
-

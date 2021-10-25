@@ -1,10 +1,10 @@
 <?php
 				
-function bank_options_install() {
+function tables_options_install() {
 
     global $wpdb;
 
-    $table_name = $wpdb->prefix . "bank";
+    $table_name = $wpdb->prefix . "banks";
     $charset_collate = $wpdb->get_charset_collate();
     $sql = "CREATE TABLE $table_name (
             `id` varchar(3) CHARACTER SET utf8 NOT NULL,
@@ -13,6 +13,16 @@ function bank_options_install() {
             `enable` int(1) CHARACTER SET utf8 NOT NULL,
             PRIMARY KEY (`id`)
           ) $charset_collate; ";
+
+    $table_name = $wpdb->prefix . "cards";
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql1 = "CREATE TABLE $table_name (
+            `id` varchar(3) CHARACTER SET utf8 NOT NULL,
+            `logo` varchar(150) CHARACTER SET utf8 NOT NULL,
+            `name` varchar(150) CHARACTER SET utf8 NOT NULL,
+            `enable` int(1) CHARACTER SET utf8 NOT NULL,
+            PRIMARY KEY (`id`)
+          ) $charset_collate; ";       
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta($sql);
@@ -36,51 +46,51 @@ function prisma_bank_modifymenu() {
 	
 	//this is a submenu
 	add_submenu_page('prisma_bank_list', //parent slug
-	'Add New Bank', //page title
-	'Add New Bank', //menu title
+	'Banks', //page title
+	'Banks', //menu title
 	'manage_options', //capability
-	'prisma_bank_create', //menu slug
-	'prisma_bank_create'); //function
+	'prisma_bank_list', //menu slug
+	'prisma_bank_list'); //function
 	
 	//this submenu is HIDDEN, however, we need to add it anyways
 	add_submenu_page(null, //parent slug
 	'Update Bank', //page title
 	'Update', //menu title
 	'manage_options', //capability
-	'prisma_bank_update', //menu slug
-	'prisma_bank_update'); //function
+	'prisma_bank_create', //menu slug
+	'prisma_bank_create'); //function
 
 	//this is a submenu
 	add_submenu_page('prisma_bank_list', //parent slug
-	'Add New Card', //page title
-	'Add New Card', //menu title
+	'Cards', //page title
+	'Cards', //menu title
 	'manage_options', //capability
-	'prisma_card_create', //menu slug
-	'prisma_card_create'); //function
+	'prisma_card_list', //menu slug
+	'prisma_card_list'); //function
 	
 	//this submenu is HIDDEN, however, we need to add it anyways
 	add_submenu_page(null, //parent slug
-	'Update Card', //page title
-	'Update', //menu title
+	'List Card', //page title
+	'List', //menu title
 	'manage_options', //capability
-	'prisma_card_update', //menu slug
-	'prisma_card_update'); //function
+	'prisma_card_create', //menu slug
+	'prisma_card_create'); //function
 
 	//this is a submenu
 	add_submenu_page('prisma_bank_list', //parent slug
-	'Add New Promo', //page title
-	'Add New Promo', //menu title
+	'Promotions', //page title
+	'Promotions', //menu title
 	'manage_options', //capability
-	'prisma_promo_create', //menu slug
-	'prisma_promo_create'); //function
+	'prisma_promo_list', //menu slug
+	'prisma_promo_list'); //function
 	
 	//this submenu is HIDDEN, however, we need to add it anyways
 	add_submenu_page(null, //parent slug
 	'Update Promo', //page title
 	'Update', //menu title
 	'manage_options', //capability
-	'prisma_promo_update', //menu slug
-	'prisma_promo_update'); //function
+	'prisma_promo_create', //menu slug
+	'prisma_promo_create'); //function
 
 
 }
