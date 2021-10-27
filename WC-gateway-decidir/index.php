@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WooCommerce DECIDIR 1.1 Gateway
+ * Plugin Name: WooCommerce DECIDIR 1.0 Gateway
  
  *
  * @package   WC-Gateway-DECIDIR
@@ -98,14 +98,16 @@ function decidir_init_gateway_class() {
                     'default'     => 'yes',
                     'desc_tip'    => true,
                 ),
-                  'establishment_name' => array(
-                  'title'       => __( 'Establishment Name', 'wc-gateway-decidir' ),
-                  'type'        => 'text',
-                  'description' => __( 'Enter Establishment Name' ,'wc-gateway-decidir' ),
-                  'default'     => __( '', 'wc-gateway-decidir' ),
-                  'desc_tip'    => true,
-                ),
 
+                  'uselogmode' => array(
+                    'title'       => 'Use Log Mode',
+                    'label'       => 'Enable Log Mode',
+                    'type'        => 'checkbox',
+                    'description' => 'Use Log mode for debug.',
+                    'default'     => 'yes',
+                    'desc_tip'    => true,
+
+                ),
                 'sandbox_site_id' => array(
                   'title'       => __( 'Sandbox Site Id', 'wc-gateway-decidir' ),
                   'type'        => 'text',
@@ -196,11 +198,14 @@ function decidir_init_gateway_class() {
                 echo wpautop( wp_kses_post( $this->description ) );
             }
           ?>
-         <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
+
+            <script src="https://live.decidir.com/static/v2.5/decidir.js"></script>
           <?php
              $_SESSION['publishable_key'] = $this->settings['publishable_key'];
              $_SESSION['testmode'] = $this->settings['testmode'];
-             $_SESSION['usecybersource'] = $this->settings['usecybersource'];
+             $_SESSION['cybersource'] = $this->settings['usecybersource'];
+
+
             
              if($this->settings['testmode'] == 'no'){
                $_SESSION['urlSandbox'] = "https://live.decidir.com/api/v2"; 
@@ -277,7 +282,7 @@ function decidir_init_gateway_class() {
           });      
           
           jQuery('#decidir_numero').focusout(function () {
-            jQuery('#card_number').val(jQuery('#decidir_numero').val());
+          jQuery('#card_number').val(jQuery('#decidir_numero').val());
             
              var num = jQuery('#decidir_numero').val();
              num = num.replace(/[^\d]/g,'');
@@ -301,6 +306,7 @@ function decidir_init_gateway_class() {
           const publicApiKey = "<?php echo $_SESSION['publishable_key']; ?>";
           const urlSandbox = "<?php echo $_SESSION['urlSandbox']; ?>";
           const testmode = "<?php echo $_SESSION['testmode']; ?>";
+
           const useCS = "<?php echo $_SESSION['usecybersource']; ?>";
 
           console.log(useCS);
@@ -417,14 +423,15 @@ function decidir_init_gateway_class() {
       
         public function process_payment( $order_id ) {
          
-            global $woocommerce;
+              global $woocommerce;
          
               require_once __DIR__ . '/decidir/vendor/autoload.php';    
               $clear_slashes = stripslashes($_COOKIE['result_decidir']);
               $result_decidir= json_decode($clear_slashes);
-                   
+              $useCybersource="false";     
               $order = wc_get_order( $order_id );
-
+             // echo $this->settings['usecybersource']."-----".$this->publishable_key;
+            
               $keys_data = array('public_key' => $this->publishable_key, 'private_key' => $this->private_key);
 
               if($this->settings['testmode'] == 'no'){
@@ -432,30 +439,170 @@ function decidir_init_gateway_class() {
               } else {
                  $ambient = "test"; 
               }
-              
-              $connector = new \Decidir\Connector($keys_data, $ambient);
+
+
+              if(is_user_logged_in()){ 
+
+                            $current_user = wp_get_current_user();
+                            $now = time(); 
+                            $your_date = strtotime($current_user->user_registered);
+                            $datediff = $now - $your_date;
+                            $csidayinsite=round(($datediff / (60 * 60 * 24)));
+                            $csuserid=$current_user->user_nicename."--".$current_user->ID;
+                            $csipass=$current_user->user_pass;
+                            $csiguest=false;
+
+
+                        }else{
+                            $csidayinsite=0;
+                            $csuserid="guest-user";
+                            $csipass="password";
+                            $csiguest=true; 
+                        }
+
+              $service = "SDK-PHP"; 
+              $developer ="IURCO - Prisma SA";
+              $grouper = "WC-Gateway-DECIDIR";
+              $cs_city =$_POST['billing_city'];
+              $cs_country=$_POST['billing_country'];
+              $cs_address=$_POST['billing_city'];
+              $cs_postal_code=$_POST['billing_postcode'];
+              $cs_state=$_POST['billing_state'];
+              $cs_first_name=$_POST['billing_first_name'];
+              $cs_last_name=$_POST['billing_last_name'];
+              $cs_street1=$_POST['billing_address_1'];
+              $cs_street2=$_POST['billing_address_2'];
+              $cs_phone=$_POST['billing_phone'];
+              $cs_email=$_POST['billing_email'];
+
+              $connector = new \Decidir\Connector($keys_data, $ambient, $service, $developer , $grouper);      
+
+
+              $order = wc_get_order($order_id);
+
+                
+                foreach ($order->get_items() as $item_key => $item ):
+
+                    $item_id = $item->get_id();
+                    $item_name    = $item->get_name();
+                    $item_description    = $item->get_name();
+                    $line_total        = $item->get_total();
+                    $quantity     = $item->get_quantity(); 
+                    $product        = $item->get_product();  
+                    $product_type   = $product->get_type();
+                    $product_sku    = $product->get_sku();
+                    $product_price  = $product->get_price();
+                    $stock_quantity = $product->get_stock_quantity();
+                    if ($product_sku =="") {
+                        $product_sku=$item_id."--".$item_name;
+                    }
+
+
+                     $items[] = [
+                        "csitproductcode" => $product_sku , 
+                        "csitproductdescription" => $item_name, 
+                        "csitproductname" => $item_description,  
+                        "csitproductsku" => $product_sku,
+                        "csittotalamount" => $product_price*$quantity, 
+                        "csitquantity" => $quantity,
+                        "csitunitprice" => $product_price   
+                        ];
+
+    
+                        endforeach; 
+
+           
+
+        
+         if ( $this->settings['usecybersource'] =="yes") {
+              $useCybersource="true";  
+              $cs_data = array(
+                    "send_to_cs" => true,
+                    "channel" => "Web",
+                    "bill_to" => array(
+                      "city" => $cs_city,
+                      "country" => $cs_country,
+                      "customer_id" => $csuserid,
+                      "email" =>  $cs_email,
+                      "first_name" => $cs_first_name,
+                      "last_name" => $cs_last_name,
+                      "phone_number" =>  $cs_phone,
+                      "postal_code" =>$cs_postal_code,
+                      "state" => $cs_state,
+                      "street1" => $cs_street1,
+                      "street2" => $cs_street2,
+                    ),
+                    "ship_to" => array(
+                      "city" => $cs_city,
+                      "country" => $cs_country,
+                      "customer_id" => $csuserid,
+                      "email" =>  $cs_email,
+                      "first_name" => $cs_first_name,
+                      "last_name" => $cs_last_name,
+                      "phone_number" =>  $cs_phone,
+                      "postal_code" =>$cs_postal_code,
+                      "state" => $cs_state,
+                      "street1" => $cs_street1,
+                      "street2" => $cs_street2,
+                    ),
+                    "currency" => "ARS",
+                    "amount" => (int)$dec_Amount,
+                    "days_in_site" => $csidayinsite,
+                    "is_guest" => $csipass,
+                    "password" => $csipass,
+                    "num_of_transactions" => $order_id,
+                    "cellphone_number" =>$cs_phone,                    
+                    "street" => $cs_street1,
+                  
+                  );
+
+           
+              $cs_products = $items ;   
+
+            
+
+
+             $cybersource = new Decidir\Cybersource\Retail(
+                                $cs_data,  // Datos de la operación
+                                $cs_products, // Datos de los productos
+              );
+
+            
+
+
+            $connector->payment()->setCybersource($cybersource->getData());
+            //var_dump($connector);
+           
+            }     
+
+
+              $dec_total=$order->get_total();
+              $dec_customer=$order->get_customer_id();
+             
             
               $decidir_MerchOrderIdnewdate = date("his");
-              $site_transaction_id = $order_id ;
-              $psp_Amount =  preg_replace( '#[^\d.]#', '', $order->order_total  );
-              $amount = str_replace('.', '', $psp_Amount);  
-                    
+
+              $site_transaction_id = $order_id."-".$decidir_MerchOrderIdnewdate;
+              $dec_Amount = preg_replace( '#[^\d.]#', '', $dec_total );
+              $amount = str_replace('.', '', $dec_Amount);  
+
               $newdate = date("Y-m-d H:i:s");
-              $psp_MerchTxRef = $order->customer_id .'-'. $decidir_MerchOrderIdnewdate;
-              $psp_CardFirstName = $_POST['decidir_gateway-card-first-name'];
-              $psp_CardLastName = $_POST['decidir_gateway-card-last-name'];
-              $psp_Product = $_POST['decidir_gateway-card-tipo'];
-              $psp_CardNumber = str_replace(' ', '', $_POST['decidir_gateway-card-number']);
+              $dec_MerchTxRef =  $dec_customer.'-'. $decidir_MerchOrderIdnewdate;
+              $dec_CardFirstName = $_POST['decidir_gateway-card-first-name'];
+              $dec_CardLastName = $_POST['decidir_gateway-card-last-name'];
+              $dec_Product = $_POST['decidir_gateway-card-tipo'];
+              $dec_CardNumber = str_replace(' ', '', $_POST['decidir_gateway-card-number']);
               $data = $_POST['decidir_gateway-card-expiry'];
               $year = substr($data, strpos($data, "/") + 1);
               $month = str_split($data, 2); 
-              $psp_CardExpDate = $year . $month[0];
-              $psp_CardExpDate = str_replace(' ', '', $psp_CardExpDate);  
-              $psp_CardSecurityCode = str_replace(' ', '', $_POST['decidir_gateway-card-cvc']);
-              $psp_CustomerMail = $_POST['billing_email'];
-              $psp_NumPayments = str_replace(' ', '', $_POST['decidir-cuotas']);   
+              $dec_CardExpDate = $year . $month[0];
+              $dec_CardExpDate = str_replace(' ', '', $dec_CardExpDate);  
+              $dec_CardSecurityCode = str_replace(' ', '', $_POST['decidir_gateway-card-cvc']);
+              $dec_CustomerMail = $_POST['billing_email'];
+              $dec_NumPayments = str_replace(' ', '', $_POST['decidir-cuotas']);   
               $tarjeta_tipo = str_replace(' ', '', $_POST['decidir-tarjeta-tipo']);
               $decidir_card_tipo = intval($_POST['decidir-card-tipo']);
+             
               
          
 
@@ -471,25 +618,62 @@ function decidir_init_gateway_class() {
                                 ),
                     "payment_method_id" => (int)$tarjeta_tipo,
                     "bin" => $result_decidir->bin,
-                    "amount" =>(int)$psp_Amount,
+
+                    "amount" =>(int)$dec_Amount,
+
                     "currency" => "ARS",
-                    "installments" => (int)$psp_NumPayments,
-                    "description" => $this->settings['establishment_name'],
+                    "installments" => (int)$dec_NumPayments,
+                    "description" => $this->settings['description'],
                     "fraud_detection" => array(),
                     "establishment_name" => $this->settings['establishment_name'],
                     "payment_type" => "single",
                     "sub_payments" => array()
                   );
+
              
                $service = "SDK-PHP"; 
                $developer ="IURCO - Prisma SA";
                $grouper = "WC-Gateway-DECIDIR";
-       
 
+
+              
               try {
 
-                $response = $connector->payment()->ExecutePayment($data);
+
+              $response = $connector->payment()->ExecutePayment($data);
+
+                $responsedecidir=json_encode($response);
+
+              
+                
+
+
                 $status = $response->getStatus();
+
+                 /* Add log  */
+
+                $filename = "Log-WC-gateway.log";
+        
+                //create a file pointer
+                $dir=plugin_dir_path( __FILE__ )."/log/" ;
+                $file = fopen($dir.$filename, 'a');
+                fwrite($file, "Order -> ".$order_id."-".$newdate.PHP_EOL);
+                 
+                fwrite($file, "Data CS" . PHP_EOL);
+                fwrite($file, json_encode($cs_data) . PHP_EOL);
+                fwrite($file, "Produsct CS" . PHP_EOL);
+                fwrite($file, json_encode($cs_products) . PHP_EOL);
+                fwrite($file, "Data Payment" . PHP_EOL);
+                fwrite($file, json_encode($data ). PHP_EOL);
+                fwrite($file, "Response Decidir" . PHP_EOL);
+                fwrite($file, "Hola".$responsedecidir . PHP_EOL);
+
+                fclose($file);
+
+
+                /* End log */ 
+
+
                 if($status == 'approved'){
                   
                   $json = json_encode($response);
@@ -503,7 +687,8 @@ function decidir_init_gateway_class() {
                   );    
          
                  
-                  $order->reduce_order_stock();
+                 // $order->reduce_order_stock_levels();
+                    $order->reduce_order_stock();
 
                  
                   WC()->cart->empty_cart();
@@ -568,5 +753,4 @@ function decidir_init_gateway_class() {
         }
     }
 }
-
 
