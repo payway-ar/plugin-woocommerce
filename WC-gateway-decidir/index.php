@@ -152,19 +152,7 @@ function decidir_init_gateway_class() {
                   'description' => __( 'Select Installments', 'wc-gateway-decidir' ),
                   'default'     => __( '', 'wc-gateway-decidir' ),
                   'options' => array(
-                            '1' => ' 1 CUOTA',
-                            '2' => ' 2 CUOTAS',
-                            '3' => ' 3 CUOTAS',
-                            '4' => ' 4 CUOTAS',
-                            '5' => ' 5 CUOTAS',
-                            '6' => ' 6 CUOTAS',
-                            '7' => ' 7 CUOTAS',
-                            '8' => ' 8 CUOTAS',
-                            '9' => ' 9 CUOTAS',
-                            '10' => ' 10 CUOTAS',
-                            '11' => ' 11 CUOTAS',
-                            '12' => '12 CUOTAS',
-                            '18' => '18 CUOTAS',
+                            
                        ), // ,   
                       'desc_tip'    => true,
                       ),
@@ -174,10 +162,7 @@ function decidir_init_gateway_class() {
                  'description' => 'Ctrl + Click para habilitar la tarjeta',
                  'type' => 'multiselect',
                  'options' => array(
-                      '001' => 'VISA',
-                      '002' => 'VISA DEBITO',
-                      '104' => 'MASTERCARD',
-                      '65' => 'AMERICAN EXPRESS',
+                       
                  ) 
               )
 
@@ -309,7 +294,7 @@ function decidir_init_gateway_class() {
 
           const useCS = "<?php echo $_SESSION['usecybersource']; ?>";
 
-          console.log(useCS);
+          //console.log(useCS);
 
           if (useCS=="yes") {
             let decidir = new Decidir(urlSandbox,false);
@@ -571,8 +556,7 @@ function decidir_init_gateway_class() {
 
 
             $connector->payment()->setCybersource($cybersource->getData());
-            //var_dump($connector);
-           
+            
             }     
 
 

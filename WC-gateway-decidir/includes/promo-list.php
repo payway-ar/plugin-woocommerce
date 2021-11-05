@@ -19,8 +19,7 @@ function prisma_promo_list() {
         ?>
        <table class="data-grid data-grid-draggable" data-role="grid">
        <thead>
-            <tr><!-- ko template: getHeader() -->
-
+            <tr> 
 <th >
     
 </th>
@@ -42,33 +41,22 @@ function prisma_promo_list() {
 </th>
 
 <th>
-    <span >From Date</span>
+    <span >Coeficiente</span>
 </th>
 
 <th>
-    <span >To Date</span>
+    <span >Value</span>
 </th>
 
 <th>Priority</span>
 </th>
 
-<th >
-    <span >Is Active</span>
-</th>
-
-<th >
-    <span >Applicable Days</span>
-</th>
-
  
-<th>
-    <span >Fee Plans</span>
-</th>
 
 <th >
     <span >Action</span>
 </th>
-<!-- /ko --></tr>
+ </tr>
         </thead>
     
     </table>
