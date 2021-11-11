@@ -92,8 +92,28 @@ function prisma_bank_modifymenu() {
 	'prisma_promo_create', //menu slug
 	'prisma_promo_create'); //function
 
+	 
+	//this is a submenu
+	add_submenu_page('prisma_bank_list', //parent slug
+	'View Log', //page title
+	'View Log', //menu title
+	'manage_options', //capability
+	'prisma_view_log', //menu slug
+	'prisma_view_log'); //function
+	
+	//this submenu is HIDDEN, however, we need to add it anyways
+	add_submenu_page(null, //parent slug
+	'View Log', //page title
+	'View Log', //menu title
+	'manage_options', //capability
+	'prisma_view_log', //menu slug
+	'prisma_view_log'); //function
+
+	
+
 
 }
+
 define('ROOTDIR', plugin_dir_path(__FILE__));
 require_once(ROOTDIR . '/includes/bank-list.php');
 require_once(ROOTDIR . '/includes/bank-create.php');
@@ -104,3 +124,4 @@ require_once(ROOTDIR . '/includes/card-update.php');
 require_once(ROOTDIR . '/includes/promo-list.php');
 require_once(ROOTDIR . '/includes/promo-create.php');
 require_once(ROOTDIR . '/includes/promo-update.php');
+require_once(ROOTDIR . '/includes/view-log.php');
