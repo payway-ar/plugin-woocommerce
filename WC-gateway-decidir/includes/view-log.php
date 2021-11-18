@@ -34,10 +34,16 @@ textarea {
 
 function Read() {
                    $file = ROOTDIR . '/log/Log-WC-gateway.log';
+                   if (filesize($file)) {
+                       
+                   
                    $fp = fopen($file, "r");
                    while(!feof($fp)) {
                        $data = fgets($fp, filesize($file));
                        echo "$data <br>";
                    }
                    fclose($fp);
+               }else{
+                echo "Log Empty";
+               }
                }

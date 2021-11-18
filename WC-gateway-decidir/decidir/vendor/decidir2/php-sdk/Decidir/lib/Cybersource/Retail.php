@@ -8,15 +8,16 @@ class Retail extends AbstractData
 {
 	protected $dataSet = array();
 	protected $products_data = null;
+	protected $products_keys = array("csitproductcode", "csitproductdescription", "csitproductname", "csitproductsku", "csittotalamount", "csitquantity", "csitunitprice");
 
 	public function __construct($retailData, $productsData) {
 
 		$this->setRequiredFields(array(
 			"send_to_cs" => array(
-				"name" => "setChannel"
+				"name" => "setSendToCs"
 			),
 			"channel" => array(
-				"name" => "setSendToCs"
+				"name" => "setChannel"
 			),
 			"bill_to" => array(
 				"name" => "setBillTo"
@@ -27,59 +28,89 @@ class Retail extends AbstractData
 			"amount" => array(
 				"name" => "setAmount"
 			),
-			"days_in_site" => array(
-				"name" => "setDaysInSite"
-			),
-			"is_guest" => array(
-				"name" => "setIsGuest"
-			),
-			"password" => array(
-				"name" => "setPassword"
-			),
-			"num_of_transactions" => array(
-				"name" => "setNumOfTransactions"
-			),
-			"cellphone_number" => array(
-				"name" => "setCellPhoneNumber"
-			),
-			"date_of_birth" => array(
-				"name" => "setDateOfBirth"
-			),
-			"street" => array(
-				"name" => "setStreet"
-			),
-			"ship_to" => array(
-				"name" => "setShipTo"
-			),
-			"days_to_delivery" => array(
-				"name" => "setDaysToDelivery"
-			),
-			"dispatch_method" => array(
-				"name" => "setDispatchMethod"
-			),
-			"tax_voucher_required" => array(
-				"name" => "setTaxVoucherRequired"
-			),
-			"customer_loyality_number" => array(
-				"name" => "setCustomerLoyalityNumber"
-			),
-			"coupon_code" => array(
-				"name" => "setCouponCode"
-			)
+            "ship_to" => array(
+                "name" => "setShipTo"
+            )
 		));
+
+        $optionalFields = array(
+            "days_in_site" => array(
+                "name" => "setDaysInSite"
+            ),
+            "is_guest" => array(
+                "name" => "setIsGuest"
+            ),
+            "password" => array(
+                "name" => "setPassword"
+            ),
+            "num_of_transactions" => array(
+                "name" => "setNumOfTransactions"
+            ),
+            "cellphone_number" => array(
+                "name" => "setCellPhoneNumber"
+            ),
+            "date_of_birth" => array(
+                "name" => "setDateOfBirth"
+            ),
+            "street" => array(
+                "name" => "setStreet"
+            ),
+            "days_to_delivery" => array(
+                "name" => "setDaysToDelivery"
+            ),
+            "dispatch_method" => array(
+                "name" => "setDispatchMethod"
+            ),
+            "tax_voucher_required" => array(
+                "name" => "setTaxVoucherRequired"
+            ),
+            "customer_loyality_number" => array(
+                "name" => "setCustomerLoyalityNumber"
+            ),
+            "coupon_code" => array(
+                "name" => "setCouponCode"
+            ),
+            "device_unique_id" => array(
+            	"name"=> "setDeviceUniqueId"
+            )
+        );
+
+		$csmddFields = array();
+		for($i = 17; $i <= 34; $i++){
+		    $csmdd = "csmdd" . $i;
+		    $csmddField = array(
+		        "name" => "SetCsmdds" 
+            );
+            $csmddFields[$csmdd] = $csmddField;
+        }
+        for($i = 43; $i <= 99; $i++){
+            $csmdd = "csmdd" . $i;
+            $csmddField = array(
+                "name" => "SetCsmdds"
+            );
+            $csmddFields[$csmdd] = $csmddField;
+        }
+
+        $allOptionalFields = array_merge($optionalFields, $csmddFields);
+
+        $this->setOptionalFields($allOptionalFields);
 
 		parent::__construct($retailData);
 
+		$products = array();
 		foreach($productsData as $index => $product) {
 			foreach($product as $idProd => $value){
 				if($idProd == 'csittotalamount' || $idProd == 'csitunitprice'){
 					$product[$idProd] = ($product[$idProd]*100);
 				}
+                if(in_array($idProd, $this->products_keys)) {
+                    $products[$index][$this->convertKeyProduct($idProd)] = $product[$idProd];
+                }
 			}
 			$this->products_data[] = new Product($product);
 		}
 		$this->setCSMDDS($retailData);
-		$this->setProducts($this->products_data);
+		$this->setProducts($products);
 	}
 
 	public function CsmddsList($data){
@@ -194,5 +225,31 @@ class Retail extends AbstractData
 	public function getData(){
 		return $this->dataSet;
 	}
+
+	public function convertKeyProduct($key){
+	    switch ($key){
+            case "csitproductcode":
+                return "code";
+                break;
+            case "csitproductdescription":
+                return "description";
+                break;
+            case "csitproductname":
+                return "name";
+                break;
+            case "csitproductsku":
+                return "sku";
+                break;
+            case "csittotalamount":
+                return "total_amount";
+                break;
+            case "csitquantity":
+                return "quantity";
+                break;
+            case "csitunitprice":
+                return "unit_price";
+                break;
+        }
+    }
 	
 }
