@@ -4,7 +4,7 @@ function tables_options_install() {
 
     global $wpdb;
 
-    $table_name = $wpdb->prefix . "banks";
+    $table_name_banks = $wpdb->prefix . "banks";
     $charset_collate = $wpdb->get_charset_collate();
     $sql = "CREATE TABLE $table_name (
             `id` varchar(3) CHARACTER SET utf8 NOT NULL,
@@ -14,7 +14,7 @@ function tables_options_install() {
             PRIMARY KEY (`id`)
           ) $charset_collate; ";
 
-    $table_name = $wpdb->prefix . "cards";
+    $table_name_cards = $wpdb->prefix . "cards";
     $charset_collate = $wpdb->get_charset_collate();
     $sql1 = "CREATE TABLE $table_name (
             `id` varchar(3) CHARACTER SET utf8 NOT NULL,
@@ -22,14 +22,26 @@ function tables_options_install() {
             `name` varchar(150) CHARACTER SET utf8 NOT NULL,
             `enable` int(1) CHARACTER SET utf8 NOT NULL,
             PRIMARY KEY (`id`)
-          ) $charset_collate; ";       
+          ) $charset_collate; ";    
+
+    $table_name_promotions = $wpdb->prefix . "promotions";
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql2 = "CREATE TABLE $table_name (
+            `id` varchar(3) CHARACTER SET utf8 NOT NULL,
+            `name` varchar(150) CHARACTER SET utf8 NOT NULL,
+            `enable` int(1) CHARACTER SET utf8 NOT NULL,
+            `id` varchar(3) CHARACTER SET utf8 NOT NULL,
+            PRIMARY KEY (`id`)
+          ) $charset_collate; ";            
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta($sql);
+    dbDelta($sql1);
+    dbDelta($sql2);
 }
 
 // run the install scripts upon plugin activation
-register_activation_hook(__FILE__, 'bank_options_install');
+register_activation_hook(__FILE__, 'tables_options_install');
 
 //menu items
 add_action('admin_menu','prisma_bank_modifymenu');
