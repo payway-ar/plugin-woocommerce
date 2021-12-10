@@ -57,11 +57,7 @@
                 <label for="card_holder_doc_type">Numero de documento:</label>
                 <input id="card_holder_doc_number" type="text"data-decidir="card_holder_doc_number" placeholder="" value=""/>
               </li>
-              <input type="hidden" id="device_unique_identifier" value="123456" />
-              <input type="hidden" id="ip_address" value="<?php echo  $_SERVER['REMOTE_ADDR']; ?>" />
                
-
-              <input type="hidden" id="result_decidir"/>   
               <div class="clear"></div>
             </fieldset>
         

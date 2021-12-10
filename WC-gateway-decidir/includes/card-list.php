@@ -1,10 +1,24 @@
 <?php
 
+
+
 function prisma_card_list() {
     ?>
+<style>
+img {
+    width: 80px;
+}
+
+td {
+    width: 220px;
+    text-align: left;
+}
+
+
+</style>
     <link type="text/css" href="<?php echo WP_PLUGIN_URL; ?>/WC-gategay-decidir/assets/css/style-admin.css" rel="stylesheet" />
     <div class="wrap">
-        <h2>Schools</h2>
+        <h2>Cards</h2>
         <div class="tablenav top">
             <div class="alignleft actions">
                 <a href="<?php echo admin_url('admin.php?page=prisma_card_create'); ?>">Add New</a>
@@ -17,20 +31,39 @@ function prisma_card_list() {
 
         $rows = $wpdb->get_results("SELECT id,name from $table_name");
         ?>
-        <table class='wp-list-table widefat fixed striped posts'>
-            <tr>
-                <th class="manage-column ss-list-width">ID</th>
-                <th class="manage-column ss-list-width">Name</th>
-                <th>&nbsp;</th>
-            </tr>
-            <?php foreach ($rows as $row) { ?>
-                <tr>
-                    <td class="manage-column ss-list-width"><?php echo $row->id; ?></td>
-                    <td class="manage-column ss-list-width"><?php echo $row->name; ?></td>
-                    <td><a href="<?php echo admin_url('admin.php?page=prisma_card_update&id=' . $row->id); ?>">Update</a></td>
-                </tr>
-            <?php } ?>
-        </table>
+       <table class="data-grid data-grid-draggable" data-role="grid">
+       <thead>
+<tr data-bind="foreach: {data: getVisible(), as: '$col'}"> 
+
+
+ 
+<th class="data-grid-th _sortable _draggable _descend" style="text-align:right;">
+    <span class="data-grid-cell-content" data-bind="i18n: label">ID</span>
+</th>
+ 
+<th class="data-grid-th _sortable _draggable" style="text-align:right;">
+    <span class="data-grid-cell-content" data-bind="i18n: label">Card Name</span>
+</th>
+<!-- /ko --><!-- ko template: getHeader() -->
+<th class="data-grid-th _sortable _draggable" style="text-align:right;">
+    <span class="data-grid-cell-content" data-bind="i18n: label">ID SPS</span>
+</th>
+<!-- /ko --><!-- ko template: getHeader() -->
+<th class="data-grid-th _sortable _draggable" style="text-align:right;">
+    <span class="data-grid-cell-content" data-bind="i18n: label">ID NPS</span>
+</th>
+<!-- /ko --><!-- ko template: getHeader() -->
+<th class="data-grid-th _draggable" style="text-align:right;">
+    <span class="data-grid-cell-content" data-bind="i18n: label">Logo</span>
+</th>
+<!-- /ko --><!-- ko template: getHeader() -->
+<th class="data-grid-th" style="text-align:right;">
+    <span class="data-grid-cell-content" data-bind="i18n: label">Action</span>
+</th>
+<!-- /ko --></tr>
+        </thead>
+        
+    </table>
     </div>
     <?php
 }
