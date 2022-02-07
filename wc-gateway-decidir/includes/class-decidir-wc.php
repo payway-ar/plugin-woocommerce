@@ -1,8 +1,9 @@
 <?php
 /**
- *
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
+
 defined( 'ABSPATH' ) || exit;
 
 final class DecidirWC {
@@ -45,14 +46,14 @@ final class DecidirWC {
 	 * Cloning is forbidden.
 	 */
 	public function __clone() {
-		wc_doing_it_wrong( __FUNCTION__, __( 'Cloning is forbidden.', 'decidir_gateway' ), '0.1.0' );
+		wc_doing_it_wrong( __FUNCTION__, __( 'Cloning is forbidden.', 'wc-gateway-decidir' ), '0.1.0' );
 	}
 
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 */
 	public function __wakeup() {
-		wc_doing_it_wrong( __FUNCTION__, __( 'Unserializing instances of this class is forbidden.', 'decidir_gateway' ), '0.1.0' );
+		wc_doing_it_wrong( __FUNCTION__, __( 'Unserializing instances of this class is forbidden.', 'wc-gateway-decidir' ), '0.1.0' );
 	}
 
 	/**
@@ -169,9 +170,23 @@ final class DecidirWC {
 	}
 
 	/**
+	 * Loads languages for this plugin
+	 */
+	public function load_localization_files() {
+		load_plugin_textdomain(
+			'wc-gateway-decidir',
+			false,
+			dirname( plugin_basename( WC_DECIDIR_PLUGIN_FILE)) . '/i18n/languages'
+		);
+	}
+
+	/**
 	 * Hook into actions and filters.
 	 */
 	private function init_hooks() {
+		// registers an action to process all language files
+		add_action( 'before_wc_decidir_gateway_init', array( $this, 'load_localization_files' ));
+
 		// adds Decidir into the Payment Gateways list
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'decidir_add_gateway_class'));
 
@@ -199,6 +214,8 @@ final class DecidirWC {
 	}
 
 	/**
+	 * Renders custom information within the WooCommerce Order view screen
+	 * TODO: convert into a meta box and move to it's own class
 	 *
 	 * @param WC_Order $order
 	 * @return string
@@ -219,38 +236,38 @@ final class DecidirWC {
 		$payment_data = get_post_meta( $order->get_id(), $payment_data_meta, true );
 
 		?>
-			<h3><?php _e('Decidir Payment Information', 'decidir_gateway'); ?></h3>
+			<h3><?php _e('Decidir Payment Information', 'wc-gateway-decidir'); ?></h3>
 			<?php if ( $decidir_transaction_id ): ?>
 			<div>
-				<strong><?php _e('Trans. ID', 'decidir_gateway'); ?>:</strong>
+				<strong><?php _e('Trans. ID', 'wc-gateway-decidir'); ?>:</strong>
 				<span><?php echo $decidir_transaction_id; ?></span>
 			</div>
 			<?php endif; ?>
 			<?php if ( $decidir_site_transaction_id ): ?>
 			<div>
-				<strong><?php _e('Site Trans. ID', 'decidir_gateway'); ?>:</strong>
+				<strong><?php _e('Site Trans. ID', 'wc-gateway-decidir'); ?>:</strong>
 				<span><?php echo $decidir_site_transaction_id; ?></span>
 			</div>
 			<?php endif; ?>
 			<?php if ( !empty($payment_data) && isset($payment_data['status_details']) ): ?>
 			<?php $status = $payment_data['status_details']; ?>
 			<div>
-				<strong><?php _e('Ticket', 'decidir_gateway'); ?></strong>
+				<strong><?php _e('Ticket', 'wc-gateway-decidir'); ?></strong>
 				<span><?php echo $status['ticket']; ?></span>
 			</div>
 			<div>
-				<strong><?php _e('CC Auth Code', 'decidir_gateway'); ?></strong>
+				<strong><?php _e('CC Auth Code', 'wc-gateway-decidir'); ?></strong>
 				<span><?php echo $status['card_authorization_code']; ?></span>
 			</div>
 			<div>
-				<strong><?php _e('CC Address Code', 'decidir_gateway'); ?></strong>
+				<strong><?php _e('CC Address Code', 'wc-gateway-decidir'); ?></strong>
 				<span><?php echo $status['address_validation_code']; ?></span>
 			</div>
 			<?php endif; ?>
 			<?php if ( !empty($payment_data) && isset($payment_data['cybersource']) ): ?>
 			<?php $cybersource = $payment_data['cybersource']; ?>
 			<div>
-				<strong><?php _e('CS Decision', 'decidir_gateway'); ?></strong>
+				<strong><?php _e('CS Decision', 'wc-gateway-decidir'); ?></strong>
 				<span><?php echo $cybersource['decision']; ?></span>
 			</div>
 			<?php endif; ?>

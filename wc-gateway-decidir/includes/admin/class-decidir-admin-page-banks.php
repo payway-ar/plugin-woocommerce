@@ -1,6 +1,7 @@
 <?php
 /**
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -30,8 +31,8 @@ class WC_Decidir_Admin_Navigation_Page_Banks extends WP_List_Table {
 	 */
 	public function __construct() {
 		parent::__construct( [
-			'singular' => __( 'Bank', 'decidir_gateway' ),
-			'plural' => __( 'Banks', 'decidir_gateway' ),
+			'singular' => __( 'Bank', 'wc-gateway-decidir' ),
+			'plural' => __( 'Banks', 'wc-gateway-decidir' ),
 			'ajax' => false,
 			'screen' => 'decidir_admin_page_banks'
 		] );
@@ -88,9 +89,8 @@ class WC_Decidir_Admin_Navigation_Page_Banks extends WP_List_Table {
 	}
 
 	/**
-	 *
 	 * @param int|string $id
-	 * @return [type]     [description]
+	 * @return bool
 	 */
 	public static function delete_bank( $id ) {
 		return WC_Decidir_Bank_Factory::delete_bank( $id );
@@ -105,7 +105,7 @@ class WC_Decidir_Admin_Navigation_Page_Banks extends WP_List_Table {
 	}
 
 	public function no_items() {
-		return __( 'No Banks available', 'decidir_gateway' );
+		return __( 'No Banks available', 'wc-gateway-decidir' );
 	}
 
 	/**
@@ -116,8 +116,8 @@ class WC_Decidir_Admin_Navigation_Page_Banks extends WP_List_Table {
 	public function get_columns() {
 		$columns = [
 			// 'cb' => '<input type="checkbox" />',
-			'name' => __( 'Name', 'decidir_gateway' ),
-			// 'logo' => __( 'Logo', 'decidir_gateway' ),
+			'name' => __( 'Name', 'wc-gateway-decidir' ),
+			// 'logo' => __( 'Logo', 'wc-gateway-decidir' ),
 		];
 
 		return $columns;
@@ -237,53 +237,5 @@ class WC_Decidir_Admin_Navigation_Page_Banks extends WP_List_Table {
 	// 		'<input type="checkbox" name="bulk-delete[]" value="%s" />',
 	// 		$item->id
 	// 	);
-	// }
-
-	/**
-	 * Returns an associative array containing the bulk action
-	 *
-	 * @return array
-	 */
-	// public function get_bulk_actions() {
-	// 	$actions = [
-	// 		'bulk-delete' => __( 'Delete', 'decidir_gateway' )
-	// 	];
-	//
-	// 	return $actions;
-	// }
-
-	/**
-	 *
-	 * @return
-	 */
-	// public function process_bulk_action() {
-	// 	// Detect when a bulk action is being triggered...
-	// 	if ( 'delete' === $this->current_action() ) {
-	// 		// In our file that handles the request, verify the nonce.
-	// 		$nonce = esc_attr( $_REQUEST['_wpnonce'] );
-	//
-	// 		if ( ! wp_verify_nonce( $nonce, '_wpnonce_decidir-delete-banks-massaction' ) ) {
-	// 			die( 'Go get a life script kiddies' );
-	// 		} else {
-	// 			self::delete_bank( absint( $_GET['bank_id'] ) );
-	// 			wp_redirect( esc_url( add_query_arg() ) );
-	// 			exit;
-	// 		}
-	// 	}
-	//
-	// 	// If the delete bulk action is triggered
-	// 	if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
-	// 	|| ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
-	// 	) {
-	// 		$delete_ids = esc_sql( $_POST['bulk-delete'] );
-	//
-	// 		// loop over the array of record ids and delete them
-	// 		foreach ( $delete_ids as $id ) {
-	// 			self::delete_bank( $id );
-	// 		}
-	//
-	// 		wp_redirect( esc_url( add_query_arg() ) );
-	// 		exit;
-	// 	}
 	// }
 }

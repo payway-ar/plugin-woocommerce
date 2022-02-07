@@ -1,6 +1,7 @@
 <?php
 /**
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -17,17 +18,17 @@ $is_creation = isset( $params['action'] ) && $params['action'] === $ACTION_NAME_
 
 // Page Title
 $title = $is_creation
-	? esc_html_x('Add New', 'decidir_gateway')
-	: esc_html_x('Banks', 'decidir_gateway');
+	? esc_html__('Add New', 'wc-gateway-decidir')
+	: esc_html__('Banks', 'wc-gateway-decidir');
 ?>
 <div class="wrap">
 	<h1 class="wp-heading-inline">
-		<?php echo esc_html( $title ); ?>
+		<?php echo $title; ?>
 	</h1>
 	<?php if ( ! isset($params['action']) ): ?>
 		<?php //wp_nonce_field( 'decidir-table-banks-massaction', '_wpnonce_decidir-delete-banks-massaction' ); ?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME . '&action=' . $ACTION_NAME_NEW ) ); ?>" class="page-title-action">
-			<?php echo esc_html_x( 'Add New', 'decidir_gateway' ); ?>
+			<?php echo esc_html__( 'Add New', 'wc-gateway-decidir' ); ?>
 		</a>
 		<?php echo $this->get_table(); ?>
 	<?php else: ?>
@@ -42,7 +43,7 @@ $title = $is_creation
 					if ( isset( $_POST['name'] ) && $_POST['name'] != '' ) {
 						$data['name'] = sanitize_text_field( $_POST['name'] );
 					} else {
-						$errors->add( 'name', __('Name is a required field', 'decidir_gateway') );
+						$errors->add( 'name', __('Name is a required field', 'wc-gateway-decidir') );
 					}
 				?>
 				<?php if ( ! $errors->has_errors() ): ?>
@@ -52,8 +53,8 @@ $title = $is_creation
 						<?php wp_redirect( $redirect ); ?>
 						<?php die(); ?>
 					<?php else: ?>
-						<p><?php echo __('Some things happened during bank creation', 'decidir_gateway'); ?></p>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'decidir_gateway'); ?></a>
+						<p><?php echo __('Some things happened during bank creation', 'wc-gateway-decidir'); ?></p>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'wc-gateway-decidir'); ?></a>
 					<?php endif; ?>
 				<?php else: ?>
 					<?php if ( isset( $errors ) && is_wp_error( $errors ) ): ?>
@@ -64,7 +65,7 @@ $title = $is_creation
 							<?php endforeach; ?>
 							</ul>
 						</div>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME . '&action=' . $ACTION_NAME_NEW) ); ?>"><?php echo __('Go back', 'decidir_gateway'); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME . '&action=' . $ACTION_NAME_NEW) ); ?>"><?php echo __('Go back', 'wc-gateway-decidir'); ?></a>
 					<?php endif; ?>
 				<?php endif; ?>
 			<?php elseif ( $_POST['action'] === $ACTION_NAME_EDIT ): ?>
@@ -75,8 +76,8 @@ $title = $is_creation
 					<?php wp_redirect( $redirect ); ?>
 					<?php die(); ?>
 				<?php else: ?>
-					<p><?php echo __('Some things happened while updating the bank', 'decidir_gateway'); ?></p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'decidir_gateway'); ?></a>
+					<p><?php echo __('Some things happened while updating the bank', 'wc-gateway-decidir'); ?></p>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'wc-gateway-decidir'); ?></a>
 				<?php endif; ?>
 			<?php else: ?>
 			<p>unhandled $_POST action</p>
@@ -96,7 +97,7 @@ $title = $is_creation
 						<?php endforeach; ?>
 						</ul>
 					</div>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'decidir_gateway'); ?></a>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'wc-gateway-decidir'); ?></a>
 					<?php die(); ?>
 				<?php endif; ?>
 				<form method="post" name="<?php echo $params['action'] ?>" id="<?php echo $params['action'] ?>" class="validate" novalidate="novalidate">
@@ -111,18 +112,18 @@ $title = $is_creation
 					?>
 					<table class="form-table" role="presentation">
 						<tr class="form-field form-required">
-							<th scope="row"><label for="name"><?php _e( 'Name', 'decidir_gateway' ); ?> <span class="description"><?php _e( '(required)' ); ?></span></label></th>
+							<th scope="row"><label for="name"><?php _e( 'Name', 'wc-gateway-decidir' ); ?> <span class="description"><?php _e( '(required)', 'wc-gateway-decidir' ); ?></span></label></th>
 							<td><input name="name" type="text" id="name" value="<?php echo esc_attr( $bank_name ); ?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="100" /></td>
 						</tr>
 					</table>
 					<div>
 						<?php if ( $is_edit ): ?>
-							<?php submit_button( __( 'Save', 'decidir_gateway' ), 'primary', 'editbank', true, array( 'id' => 'editbanksub' ) ); ?>
+							<?php submit_button( __( 'Save', 'wc-gateway-decidir' ), 'primary', 'editbank', true, array( 'id' => 'editbanksub' ) ); ?>
 						<?php else: ?>
-							<?php submit_button( __( 'Add', 'decidir_gateway' ), 'primary', 'createbank', true, array( 'id' => 'newbanksub' ) ); ?>
+							<?php submit_button( __( 'Add', 'wc-gateway-decidir' ), 'primary', 'createbank', true, array( 'id' => 'newbanksub' ) ); ?>
 						<?php endif; ?>
 					</div>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'decidir_gateway'); ?></a>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'wc-gateway-decidir'); ?></a>
 				</form>
 		<?php elseif ( $ACTION_NAME_DELETE === $params['action'] ): ?>
 			<?php //TODO: implement a backend notice whether success/error happened ?>

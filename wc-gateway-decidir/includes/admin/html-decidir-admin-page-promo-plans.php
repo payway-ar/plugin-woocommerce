@@ -1,6 +1,7 @@
 <?php
 /**
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -20,23 +21,23 @@ $params = $_GET;
 		<?php $is_edit = $ACTION_NAME_EDIT === $params['action']; ?>
 
 		<div class="wrap-table-fee-plans" id="wrap-table-fee-plans">
-			<h2><?php echo __( 'Fee Plans configuration', 'decidir_gateway' ); ?></h2>
+			<h2><?php echo __( 'Fee Plans configuration', 'wc-gateway-decidir' ); ?></h2>
 			<table id="decidir-admin-promotions-plans">
 				<thead>
 					<tr>
-						<th><?php echo __( 'Period' , 'decidir_gateway' ); ?></th>
-						<th><?php echo __( 'Coeficient' , 'decidir_gateway' ); ?></th>
-						<th><?php echo __( 'TEA' , 'decidir_gateway' ); ?></th>
-						<th><?php echo __( 'CFT' , 'decidir_gateway' ); ?></th>
-						<th><?php echo __( 'Fee to send' , 'decidir_gateway' ); ?></th>
-						<th><?php echo __( 'Delete' , 'decidir_gateway' ); ?></th>
+						<th><?php echo __( 'Period' , 'wc-gateway-decidir' ); ?></th>
+						<th><?php echo __( 'Coeficient' , 'wc-gateway-decidir' ); ?></th>
+						<th><?php echo __( 'TEA' , 'wc-gateway-decidir' ); ?></th>
+						<th><?php echo __( 'CFT' , 'wc-gateway-decidir' ); ?></th>
+						<th><?php echo __( 'Fee to send' , 'wc-gateway-decidir' ); ?></th>
+						<th><?php echo __( 'Delete' , 'wc-gateway-decidir' ); ?></th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
 						<td colspan="6">
-							<a href="#" id="fee-plans-add-new" title="<?php echo __( 'Add new plan', 'decidir_gateway' ); ?>">
-								<?php echo __( 'Add new plan', 'decidir_gateway' ); ?>
+							<a href="#" id="fee-plans-add-new" title="<?php echo __( 'Add new plan', 'wc-gateway-decidir' ); ?>">
+								<?php echo __( 'Add new plan', 'wc-gateway-decidir' ); ?>
 							</a>
 						</td>
 					</tr>
@@ -85,8 +86,8 @@ jQuery( function( $ ) {
 			<td><input type="text" name="fee_plans[${row_id}][fee_to_send]"
 				id="plan_${row_id}_fee_to_send" class="promotion-fee-plan-field field-fee-to-send" value="${row_fee_to_send}" /></td>
 			<td>
-				<a href="#" class="plans-remove-row" id="fee-plans-remove-row" title="<?php echo __( 'Delete', 'decidir_gateway' ); ?>">
-					<?php echo __( 'Delete', 'decidir_gateway' ); ?>
+				<a href="#" class="plans-remove-row" id="fee-plans-remove-row" title="<?php echo __( 'Delete', 'wc-gateway-decidir' ); ?>">
+					<?php echo __( 'Delete', 'wc-gateway-decidir' ); ?>
 				</a>
 			</td>
 		</tr>`;

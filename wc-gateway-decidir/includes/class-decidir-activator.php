@@ -1,16 +1,17 @@
 <?php
 /**
- * Decidir Activation class
- *
- * Inspired on MailChimp_WooCommerce_Activator class
- * @see https://github.com/mailchimp/mc-woocommerce
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 // do not allow this file to be called directly
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Activator class
+ * Decidir Activation class
+ *
+ * Inspired on MailChimp_WooCommerce_Activator class
+ * @see https://github.com/mailchimp/mc-woocommerce
  */
 class WC_Decidir_Activator implements WC_Decidir_Activator_Interface {
 
@@ -72,7 +73,7 @@ class WC_Decidir_Activator implements WC_Decidir_Activator_Interface {
 
 	public static function display_deactivation_notice() {
 		$class = 'notice notice-error error';
-		$message = __('<div class="error">Decidir Payment Gateway requires the <a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a> plugin to run.</div>', 'decidir_gateway');
+		$message = __('<div class="error">Decidir Payment Gateway requires the <a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a> plugin to run.</div>', 'wc-gateway-decidir');
 		printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message );
 	}
 

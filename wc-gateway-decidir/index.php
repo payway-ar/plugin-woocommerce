@@ -6,13 +6,15 @@
  * Version: 0.1.0
  * Author: IURCO - Prisma SA
  * Author URI: https://iurco.com/
+ * Text Domain: wc-gateway-decidir
+ * Domain Path: /i18n/languages
  * License: GPLv2 or later
  * Requires at least: 5.8
  * Requires PHP: 7.4
  *
  * @package wc-gateway-decidir
  * @author IURCO - Prisma SA
- * @copyright Copyright (c) 2021 IURCO SAS - PRISMA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 if ( ! defined( 'WC_DECIDIR_PLUGIN_FILE' ) ) {

@@ -1,7 +1,9 @@
 <?php
 /**
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
+
 class WC_Decidir_Request_Order_Processor implements WC_Decidir_Request_Processor_Interface {
 
 	/**

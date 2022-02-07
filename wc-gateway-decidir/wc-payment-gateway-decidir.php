@@ -1,7 +1,7 @@
 <?php
 /**
- * Provides the Payment Gateway
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -37,9 +37,9 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 			'woocommerce_decidir_icon',
 			plugins_url('assets/images/card-logos.png', WC_DECIDIR_PLUGIN_FILE)
 		);
-		$this->order_button_text	= __( 'Pay with Decidir', 'decidir_gateway' );
-		$this->method_title			= __( 'Decidir Payment Gateway', 'decidir_gateway' );
-		$this->method_description	= __( 'PRISMA Decidir allows customers to pay directly through your site.', 'decidir_gateway' );
+		$this->order_button_text	= __( 'Pay with Decidir', 'wc-gateway-decidir' );
+		$this->method_title			= __( 'Decidir Payment Gateway', 'wc-gateway-decidir' );
+		$this->method_description	= __( 'PRISMA Decidir allows customers to pay directly through your site.', 'wc-gateway-decidir' );
 		$this->supports				= array('products');
 
 		// Load the settings.
@@ -228,7 +228,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 				);
 			} else {
 				wc_add_notice(
-					__('Payment error: ', 'decidir_gateway') . $request->get_error_messages(),
+					__('Payment error: ', 'wc-gateway-decidir') . $request->get_error_messages(),
 					'error'
 				);
 
@@ -242,7 +242,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 				$message = 'Order cancelled due to an error while processing in the gateway: ' . $e->getMessage();
 				$order->update_status(
 					'cancelled',
-					__( $message, 'decidir_gateway' )
+					__( $message, 'wc-gateway-decidir' )
 				);
 
 				$result = array(
@@ -257,7 +257,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 		} catch (\Exception $e) {
 			// TODO: log the error through custom wc_get_logger() implementation
 			wc_add_notice(
-				__('Payment error:', 'decidir_gateway') . $e->getMessage(),
+				__('Payment error:', 'wc-gateway-decidir') . $e->getMessage(),
 				'error'
 			);
 
@@ -271,7 +271,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 			$message = 'Order cancelled due to an error while processing in the gateway: ' . $e->getMessage();
 			$order->update_status(
 				'cancelled',
-				__( $message, 'decidir_gateway' )
+				__( $message, 'wc-gateway-decidir' )
 			);
 
 			return array(
@@ -289,14 +289,14 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 	 * @param string $error_message
 	 */
 	private function add_failure_note_to_order( $order, $error_message = '' ) {
-		$note = __('Order couldn\'t be processed through Decidir Payment Gateway', 'decidir_gateway');
+		$note = __('Order couldn\'t be processed through Decidir Payment Gateway', 'wc-gateway-decidir');
 
 		if ( wc_decidir_config_is_cs_enabled() ) {
-			$note .= __(' using Cybersource', 'decidir_gateway');
+			$note .= __(' using Cybersource', 'wc-gateway-decidir');
 		}
 
 		if ( $error_message ) {
-			$note .= __(': ' . $error_message, 'decidir_gateway');
+			$note .= __(': ' . $error_message, 'wc-gateway-decidir');
 		}
 
 		$order->add_order_note( $note );
@@ -308,10 +308,10 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 	 * @param WC_Order $order
 	 */
 	private function add_success_note_to_order( $order ) {
-		$note = __('Order successfully processed through Decidir Payment Gateway', 'decidir_gateway');
+		$note = __('Order successfully processed through Decidir Payment Gateway', 'wc-gateway-decidir');
 
 		if ( wc_decidir_config_is_cs_enabled() ) {
-			$note .= __(' using Cybersource', 'decidir_gateway');
+			$note .= __(' using Cybersource', 'wc-gateway-decidir');
 		}
 
 		$order->add_order_note( $note );
@@ -457,7 +457,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 	 */
 	public function order_received_text( $text, $order ) {
 		if ( $order && $this->id === $order->get_payment_method() ) {
-			return esc_html__( 'Thank you for your payment. Your transaction has been completed.', 'decidir_gateway' );
+			return esc_html__( 'Thank you for your payment. Your transaction has been completed.', 'wc-gateway-decidir' );
 		}
 
 		return $text;

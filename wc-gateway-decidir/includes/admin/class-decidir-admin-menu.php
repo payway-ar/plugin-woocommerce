@@ -1,7 +1,7 @@
 <?php
 /**
- *
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 if ( class_exists( 'WC_Decidir_Admin_Menu' )) {
@@ -106,8 +106,8 @@ class WC_Decidir_Admin_Menu {
 
 		add_submenu_page(
 			'decidir_admin_dashboard',
-			'Manage Promotions',
-			'Manage Promotions',
+			__('Manage Promotions', 'wc-gateway-decidir' ),
+			__('Manage Promotions', 'wc-gateway-decidir' ),
 			'manage_options',
 			'decidir_admin_promotions',
 			array( $this, 'render_promotions_page' )
@@ -115,8 +115,8 @@ class WC_Decidir_Admin_Menu {
 
 		add_submenu_page(
 			'decidir_admin_dashboard',
-			'Manage Banks',
-			'Manage Banks',
+			__( 'Manage Banks', 'wc-gateway-decidir' ),
+			__( 'Manage Banks', 'wc-gateway-decidir' ),
 			'manage_options',
 			'decidir_admin_banks',
 			array( $this, 'render_banks_page' )
@@ -124,8 +124,8 @@ class WC_Decidir_Admin_Menu {
 
 		add_submenu_page(
 			'decidir_admin_dashboard',
-			'Manage Cards',
-			'Manage Cards',
+			__( 'Manage Cards', 'wc-gateway-decidir' ),
+			__( 'Manage Cards', 'wc-gateway-decidir' ),
 			'manage_options',
 			'decidir_admin_cards',
 			array( $this, 'render_cards_page' )
@@ -133,8 +133,8 @@ class WC_Decidir_Admin_Menu {
 
 		add_submenu_page(
 			'decidir_admin_dashboard',
-			'Status',
-			'Status',
+			__( 'Status', 'wc-gateway-decidir' ),
+			__( 'Status', 'wc-gateway-decidir' ),
 			'manage_options',
 			'decidir_admin_status',
 			array( $this, 'render_status_page' )

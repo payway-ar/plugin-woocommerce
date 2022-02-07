@@ -1,6 +1,7 @@
 <?php
 /**
- * Class WC_Gateway_Decidir_Response file.
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

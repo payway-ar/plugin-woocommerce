@@ -1,17 +1,16 @@
 <?php
 /**
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 /**
  * TODO: implement cache for getting Settings to avoid hitting db too many times
  * - configuration settings could be cached (and cleaned/warmed up)
  *   when saving WC Settings admin section
+ * - this interface loading, shouldn't be required to be done, `Decidir()` is in charge
  */
 
-/**
- * TODO: this interface loading, shouldn't be required to be done, `Decidir()` is in charge
- */
 // review an alternative load process
 include_once WC_DECIDIR_ABSPATH . 'includes/interfaces/class-wc-decidir-config-interface.php';
 include_once WC_DECIDIR_ABSPATH . 'includes/interfaces/class-wc-decidir-rest-interface.php';

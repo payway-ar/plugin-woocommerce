@@ -1,6 +1,7 @@
 <?php
 /**
- *
+ * @author IURCO - Prisma SA
+ * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
 $gateway_identifier = $this->id;
@@ -21,7 +22,7 @@ $gateway_field_id = $gateway_identifier . '_';
 			</select>
 		</div>
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_installments"><?php echo __('Installments', 'decidir-gateway'); ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_installments"><?php echo __('Installments', 'wc-gateway-decidir'); ?> <span class="required">*</span></label>
 			<select id="<?php echo $gateway_field_id; ?>cc_installments" class="input-text wc-credit-card-form-cc-installments" name="<?php echo $gateway_field_id; ?>cc_installments">
 				<!-- filled out based on current available promotions -->
 			</select>
