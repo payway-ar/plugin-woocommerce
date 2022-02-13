@@ -137,3 +137,16 @@ En el menú lateral de su Backoffice, se habilitará el grupo "PRISMA PROMOTIONS
 
 ### Accounting Library
 Checkout Form makes use of `accounting` JS library (already included in WooCommerce) to display the prices in the same way your Store is configured. If you have customized your theme to strip out this lib, form won't work.
+
+
+# Changelog
+
+## 0.1.x
+### improvements
+- **add uninstall hooks**; process will drop custom tables and clean all configuration options previously saved in `wp_options` table. It won't delete existing transaction data already saved within Orders.
+
+### bugfix
+- **localization**; implement missing translations for CRUD admin panel operations in `es_AR`.
+
+## 0.1.0
+- Initial version

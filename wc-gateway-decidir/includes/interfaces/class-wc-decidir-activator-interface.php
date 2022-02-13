@@ -49,4 +49,18 @@ interface WC_Decidir_Activator_Interface {
 	 * @var string
 	 */
 	const TABLE_NAME_PROMOTIONS = 'prisma_decidir_promotions';
+
+	/**
+	 * Config option name that holds the plugin version
+	 *
+	 * @var string
+	 */
+	const CONFIG_OPTION_GATEWAY_VERSION_NAME = 'decidir_gateway_version';
+
+	/**
+	 * Config option name that holds the Decidir SDK version
+	 *
+	 * @var string
+	 */
+	const CONFIG_OPTION_SDK_VERSION_NAME = 'decidir_gateway_sdk_version';
 }

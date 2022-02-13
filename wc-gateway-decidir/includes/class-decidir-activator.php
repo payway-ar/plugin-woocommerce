@@ -39,7 +39,11 @@ class WC_Decidir_Activator implements WC_Decidir_Activator_Interface {
 			: false;
 	}
 
-	// If the plugin is active, we're good.
+	/**
+	 * Checks if WooCommerce is installed
+	 *
+	 * @return boolean
+	 */
 	public static function wc_decidir_is_woocommerce_plugin_installed() {
 		$is_woocommerce_installed = in_array(
 			'woocommerce/woocommerce.php',
@@ -108,24 +112,34 @@ class WC_Decidir_Activator implements WC_Decidir_Activator_Interface {
 	}
 
 	/**
-	 * Hook for deactivation process
+	 * Deactivation process hook
 	 */
 	public static function deactivate() {}
 
 	/**
-	* Hook for uninstall process
+	* Uninstall process hook
 	*/
-	public static function uninstall() {}
+	public static function uninstall() {
+		self::decidir_clean_config_options();
+		self::decidir_drop_core_tables();
+	}
 
 	/**
-	 * Updates version config options in the database
-	 * with the latest codebase
+	 * Updates config options
+	 * with the latest values found in the codebase
 	 *
 	 * @see DecidirWC::define_constants()
 	 */
 	public static function update_plugin_db_versions() {
-		update_option( 'decidir_gateway_version', static::WC_DECIDIR_VERSION_VALUE );
-		update_option( 'decidir_gateway_sdk_version', static::WC_DECIDIR_SDK_VERSION_VALUE );
+		update_option(
+			static::CONFIG_OPTION_GATEWAY_VERSION_NAME,
+			static::WC_DECIDIR_VERSION_VALUE
+		);
+
+		update_option(
+			static::CONFIG_OPTION_SDK_VERSION_NAME,
+			static::WC_DECIDIR_SDK_VERSION_VALUE
+		);
 	}
 
 	/**
@@ -141,25 +155,6 @@ class WC_Decidir_Activator implements WC_Decidir_Activator_Interface {
 
 		foreach( $plugin_options as $option ) {
 			delete_option( $option->option_name );
-		}
-	}
-
-	/**
-	 * Removes all data from custom tables
-	 */
-	public static function decidir_flush_core_tables() {
-		try {
-			global $wpdb;
-
-			$truncate_banks = "TRUNCATE {$wpdb->prefix}" . static::TABLE_NAME_BANKS;
-			$truncate_cards = "TRUNCATE {$wpdb->prefix}" . static::TABLE_NAME_CARDS;
-			$truncate_promotions = "TRUNCATE {$wpdb->prefix}" . static::TABLE_NAME_PROMOTIONS;
-
-			$wpdb->query($truncate_banks);
-			$wpdb->query($truncate_cards);
-			$wpdb->query($truncate_promotions);
-		} catch (\Exception $e) {
-
 		}
 	}
 
@@ -247,9 +242,52 @@ class WC_Decidir_Activator implements WC_Decidir_Activator_Interface {
 			applicable_days varchar(50) NOT NULL,
 			fee_plans text DEFAULT NULL,
 			PRIMARY KEY  (`id`),
-			CONSTRAINT `wp_prisma_promotions_bank_FK` FOREIGN KEY (bank_id) REFERENCES {$table_banks} (id) ON DELETE CASCADE ON UPDATE CASCADE,
-			CONSTRAINT `wp_prisma_promotions_card_FK` FOREIGN KEY (card_id) REFERENCES {$table_cards} (id) ON DELETE CASCADE ON UPDATE CASCADE
+			CONSTRAINT $table_promotions . `_bank_FK` FOREIGN KEY (bank_id) REFERENCES {$table_banks} (id) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT $table_promotions . `_card_FK` FOREIGN KEY (card_id) REFERENCES {$table_cards} (id) ON DELETE CASCADE ON UPDATE CASCADE
 		) $charset_collate;";
 		return $sql;
+	}
+
+	/**
+	 * Removes all data from custom tables
+	 */
+	public static function decidir_flush_core_tables() {
+		try {
+			global $wpdb;
+
+			$truncate_banks = "TRUNCATE {$wpdb->prefix}" . static::TABLE_NAME_BANKS;
+			$truncate_cards = "TRUNCATE {$wpdb->prefix}" . static::TABLE_NAME_CARDS;
+			$truncate_promotions = "TRUNCATE {$wpdb->prefix}" . static::TABLE_NAME_PROMOTIONS;
+
+			$wpdb->query($truncate_promotions);
+			$wpdb->query($truncate_cards);
+			$wpdb->query($truncate_banks);
+		} catch (\Exception $e) {
+
+		}
+	}
+
+	/**
+	 * Removes plugin core tables from database
+	 */
+	public static function decidir_drop_core_tables() {
+		try {
+			global $wpdb;
+
+			$prefix = $wpdb->prefix;
+			$table_cards = $prefix . static::TABLE_NAME_CARDS;
+			$table_banks = $prefix . static::TABLE_NAME_BANKS;
+			$table_promotions = $prefix . static::TABLE_NAME_PROMOTIONS;
+
+			$drop_promotions = 'DROP TABLE IF EXISTS ' . $table_promotions;
+			$drop_cards = 'DROP TABLE IF EXISTS ' . $table_cards;
+			$drop_banks = 'DROP TABLE IF EXISTS ' . $table_banks;
+
+			$wpdb->query($drop_promotions);
+			$wpdb->query($drop_cards);
+			$wpdb->query($drop_banks);
+		} catch (\Exception $e) {
+
+		}
 	}
 }

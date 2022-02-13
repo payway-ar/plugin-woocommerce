@@ -109,7 +109,9 @@ function wc_decidir_get_sdk_version_in_codebase() {
 // Registers activation process
 register_activation_hook( __FILE__, array( 'WC_Decidir_Activator', 'activate' ));
 // register_deactivation_hook( __FILE__, array( 'WC_Decidir_Activator', 'deactivate' ) );
-// register_uninstall_hook( __FILE__, array( 'WC_Decidir_Activator', 'uninstall' ) );
+
+// Registers uninstall process
+register_uninstall_hook( __FILE__, array( 'WC_Decidir_Activator', 'uninstall' ) );
 
 // Initialize Decidir class
 add_action( 'plugins_loaded', array( 'DecidirWC', 'instance'));
