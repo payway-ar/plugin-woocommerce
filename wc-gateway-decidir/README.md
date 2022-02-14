@@ -141,12 +141,20 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 # Changelog
 
-## 0.1.x
+## 0.2.0
 ### improvements
-- **add uninstall hooks**; process will drop custom tables and clean all configuration options previously saved in `wp_options` table. It won't delete existing transaction data already saved within Orders.
+- **Uninstall Hook added**; process will drop custom tables and clean all configuration options previously saved in `wp_options` table. It won't delete existing transaction data already saved within Orders.
+
+- **Checkout form validations**; implements custom validations into checkout form to avoid wrong data being posted to the gateway.
+
+- **`site_transaction_id` value**; now it's built by the WC_Order id and a timestamp value. Avoids *repeated site_transaction_id* error for OmniChannel Merchants using the same `merchant_id` in all the integrations.
 
 ### bugfix
-- **localization**; implement missing translations for CRUD admin panel operations in `es_AR`.
+- **Localization**; implement missing translations for CRUD admin panel operations in `es_AR`.
+
+- **Order Total now includes fees**; previously if Customer selected an installment with an insterest applied through the coefficient field in Promotions backoffice section, the total sent to the gateway was the one in the Order, instead of the total including the fee.
+
+- **Available Promotions in Checkout**; now takes into account the Applicable Days configured.
 
 ## 0.1.0
 - Initial version

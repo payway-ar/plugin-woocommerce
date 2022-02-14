@@ -209,10 +209,16 @@ class WC_Decidir_Admin_Navigation_Page_Promotions extends WP_List_Table {
 	 * @return bool
 	 */
 	public function is_day_in_promotion( $day_number, $promotion ) {
-		return in_array(
-			$day_number,
-		 	WC_Decidir_Promotion_Factory::get_promotion_days_array( $promotion )
-	 	);
+		$exists = false;
+		$promo_days = WC_Decidir_Promotion_Factory::get_promotion_days( $promotion );
+
+		if ( is_array( $promo_days)) {
+			$exists = in_array( $day_number, $promo_days );
+		} else {
+			$exists = $promo_days === $day_number;
+		}
+
+		return $exists;
 	}
 
 	/**
@@ -314,13 +320,13 @@ class WC_Decidir_Admin_Navigation_Page_Promotions extends WP_List_Table {
 
 		$actions = [
 			'edit' => sprintf(
-				'<a href="?page=%s&action=%s&promotion_id=%s">Edit</a>',
+				'<a href="?page=%s&action=%s&promotion_id=%s">' . __('Edit') . '</a>',
 				esc_attr( $_REQUEST['page'] ),
 				'editpromotion',
 				absint( $item->id )
 			),
 			'delete' => sprintf(
-				'<a href="?page=%s&action=%s&promotion_id=%s&_wpnonce=%s">Delete</a>',
+				'<a href="?page=%s&action=%s&promotion_id=%s&_wpnonce=%s">' . __('Delete', 'wc-gateway-decidir')  . '</a>',
 				esc_attr( $_REQUEST['page'] ),
 				'deletepromotion',
 				absint( $item->id ),

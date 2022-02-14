@@ -143,13 +143,13 @@ class WC_Decidir_Admin_Navigation_Page_Banks extends WP_List_Table {
 
 		$actions = [
 			'edit' => sprintf(
-				'<a href="?page=%s&action=%s&bank_id=%s">Edit</a>',
+				'<a href="?page=%s&action=%s&bank_id=%s">' . __('Edit') . '</a>',
 				esc_attr( $_REQUEST['page'] ),
 				'editbank',
 				absint( $item->id )
 			),
 			'delete' => sprintf(
-				'<a href="?page=%s&action=%s&bank_id=%s&_wpnonce=%s">Delete</a>',
+				'<a href="?page=%s&action=%s&bank_id=%s&_wpnonce=%s">' . __('Delete', 'wc-gateway-decidir')  . '</a>',
 				esc_attr( $_REQUEST['page'] ),
 				'deletebank',
 				absint( $item->id ),

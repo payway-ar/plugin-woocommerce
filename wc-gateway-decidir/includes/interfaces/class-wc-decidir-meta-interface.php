@@ -5,11 +5,14 @@
  */
 
 /**
- *
+ * Interface that holds custom meta field names
+ * with Transaction and Promotion data applied to the WC Order
  */
 interface WC_Decidir_Meta_Interface
 {
 	/**
+	 * Prefix for all Plugin's Meta fields
+	 *
 	 * @var string
 	 */
 	const PREFIX = '_decidir_';
@@ -20,6 +23,8 @@ interface WC_Decidir_Meta_Interface
 	const TRANSACTION_ID = 'transaction_id';
 
 	/**
+	 * Meta field that holds the transaction id value from the Merchant
+	 *
 	 * @var string
 	 */
 	const SITE_TRANSACTION_ID = 'site_transaction_id';
@@ -28,4 +33,18 @@ interface WC_Decidir_Meta_Interface
 	 * @var string
 	 */
 	const PAYMENT_DATA = 'payment_data';
+
+	/**
+	 * Holds the entire SDK response data of a transaction
+	 *
+	 * @var string
+	 */
+	 const FULL_RESPONSE = 'full_response';
+
+	/**
+	 * Holds relevant Promotion data selected during Checkout process
+	 *
+	 * @var string
+	 */
+	const PROMOTION_APPLIED = 'promotion_applied';
 }

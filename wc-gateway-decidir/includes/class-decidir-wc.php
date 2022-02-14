@@ -127,11 +127,12 @@ final class DecidirWC {
 		// Interfaces classes
 		require_once WC_DECIDIR_ABSPATH . 'includes/interfaces/class-wc-decidir-meta-interface.php';
 
-		// Factory classes
+		// Classes and Factories
 		require_once WC_DECIDIR_ABSPATH . 'includes/class-decidir-core-functions.php';
 		require_once WC_DECIDIR_ABSPATH . 'includes/class-decidir-bank-factory.php';
 		require_once WC_DECIDIR_ABSPATH . 'includes/class-decidir-card-factory.php';
 		require_once WC_DECIDIR_ABSPATH . 'includes/class-decidir-promotion-factory.php';
+		require_once WC_DECIDIR_ABSPATH . 'includes/class-decidir-meta.php';
 
 		// Core functions
 		require_once WC_DECIDIR_ABSPATH . 'includes/class-decidir-core-functions.php';
@@ -221,20 +222,15 @@ final class DecidirWC {
 	 * @return string
 	 */
 	public function render_order_payment_details( $order ) {
-		// ensure the current Order was payed through Decidir
+		// Ensure the current Order was payed through Decidir
 		if ( wc_decidir_get_payment_code() !== $order->get_payment_method() ) {
 			return;
 		}
 
-		$prefix = WC_Decidir_Meta_Interface::PREFIX;
-		$trans_id_meta = $prefix . WC_Decidir_Meta_Interface::TRANSACTION_ID;
-		$site_trans_meta = $prefix . WC_Decidir_Meta_Interface::SITE_TRANSACTION_ID;
-		$payment_data_meta = $prefix . WC_Decidir_Meta_Interface::PAYMENT_DATA;
-
-		$decidir_transaction_id = get_post_meta( $order->get_id(), $trans_id_meta, true );
-		$decidir_site_transaction_id = get_post_meta( $order->get_id(), $site_trans_meta, true );
-		$payment_data = get_post_meta( $order->get_id(), $payment_data_meta, true );
-
+		$order_id = $order->get_id();
+		$decidir_transaction_id = WC_Decidir_Meta::get_order_transaction_id( $order_id, true );
+		$decidir_site_transaction_id = WC_Decidir_Meta::get_order_site_transaction_id( $order_id, true );
+		$payment_data = WC_Decidir_Meta::get_order_payment_data( $order_id, true );
 		?>
 			<h3><?php _e('Decidir Payment Information', 'wc-gateway-decidir'); ?></h3>
 			<?php if ( $decidir_transaction_id ): ?>

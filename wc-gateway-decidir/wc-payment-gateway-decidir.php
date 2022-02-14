@@ -70,6 +70,56 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 				2
 			);
 		}
+
+		// After processing Checkout Payment form
+		// check if we need to add a fee into the Order before sending it to the gateway
+		add_action(
+			'wc_decidir_request_builder_process_before',
+			array( $this, 'order_process_before_gateway' )
+		);
+	}
+
+	/**
+	 * Captures the Order and creates fees into the Order
+	 *
+	 * @param WC_Decidir_Request_Builder $builder
+	 */
+	public function order_process_before_gateway( $builder ) {
+		$data = $builder->get_checkout_form_data();
+		$plan = false;
+
+		if (
+			isset($data['rule_id'])
+			&& isset($data['installments'])
+			&& $data['rule_id']
+			&& $data['installments']
+		) {
+			$rule_id = $data['rule_id'];
+			$installments = $data['installments'];
+
+			$plan = WC_Decidir_Promotion_Factory::get_applied_fee_plan( $rule_id,  $installments );
+		}
+
+		if ( $plan && $builder->get_order()) {
+			$order = $builder->get_order();
+			$total = $order->get_total();
+
+			$coefficient = $plan->coefficient;
+			$new_total = $total * $coefficient;
+			$charge = $new_total - $total;
+
+			// Ensure there's a charge that needs to be billed
+			if ( $charge > 0) {
+				$fee = new WC_Order_Item_Fee();
+				$fee->set_name( __('Transaction Fee', 'wc-gateway-decidir') );
+				$fee->set_amount( $charge );
+				$fee->set_total( $charge );
+
+				$order->add_item( $fee );
+				$order->calculate_totals();
+				$order->save();
+			}
+		}
 	}
 
 	/**
@@ -185,32 +235,31 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 	/**
 	 * Process the payment and return the result.
 	 *
-	 * @param  int $order_id Order ID.
+	 * @param int $order_id Order ID.
 	 * @return array
 	 */
 	public function process_payment( $order_id ) {
 		// Loads all files required to execute the payment request
 		Decidir()->init_decidir_request_includes();
 
-		$order = wc_get_order( $order_id );
-		$builder = new WC_Decidir_Request_Builder();
-
 		try {
-			$request_data = $builder
-				// Retrieve custom payment fields
-				// till we find a better way to hook up into WC process
-				->set_checkout_form_data( $_POST )
+			$order = wc_get_order( $order_id );
+			$builder = new WC_Decidir_Request_Builder();
+
+			// Retrieve custom payment fields
+			// till we find a better way to hook up into WC process
+			$request_data = $builder->set_checkout_form_data( $_POST )
 				->set_order( $order )
 				->process();
 
+			// Store the Fee Plan selected by the Customer into the Order
+			$this->update_order_meta_promotion(
+				$order,
+				$builder->get_checkout_form_data()
+			);
+
+			// Execute the Gateway call
 			$request = new WC_Decidir_Request();
-
-			// set_transient(
-			// 	'decidir_gateway_request_order_id_' . $order_id,
-			// 	$request_data,
-			// 	HOUR_IN_SECONDS
-			// );
-
 			$request->pay( $request_data );
 
 			if ( $request->get_success() ) {
@@ -318,6 +367,46 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Update the Promotion applied meta field with the selected Fee Plan
+	 *
+	 * @param WC_Order $order
+	 * @param array $posted_data
+	 * @return bool Whether process finished OK
+	 */
+	public function update_order_meta_promotion( $order, $posted_data ) {
+		$order_id = $order->get_id();
+
+		/**
+		 * Retrieves the `fee_to_send` value
+		 * from the Installment dropdown's selected option
+		 * within the Checkout Payment form
+		 *
+		 * @see WC_Decidir_Request_Builder::set_checkout_form_data()
+		 * @var int
+		 */
+		$fee_to_send = isset( $posted_data['installments'] )
+			? $posted_data['installments']
+			: false;
+		$promotion_id = isset( $posted_data['rule_id'] )
+			? $posted_data['rule_id']
+			: false;
+
+		// we can't proceed if we don't have both
+		if ( !$promotion_id || !$fee_to_send ) {
+			return false;
+		}
+
+		// Now retrieve the Fee Plan data
+		$fee_details = WC_Decidir_Promotion_Factory::get_applied_fee_plan(
+			$promotion_id,
+			$fee_to_send
+		);
+
+		// Update the Order meta data with the selected Plan
+		WC_Decidir_Meta::set_order_promotion( $order_id, $fee_details );
+	}
+
+	/**
 	 * Saves order metadata for further display through Order View
 	 *
 	 * @param array $result
@@ -325,14 +414,13 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 	 */
 	public function update_order_meta( $result, $order ) {
 		$order_id = $order->get_id();
-		$prefix = WC_Decidir_Meta_Interface::PREFIX;
-		$trans_id_meta = $prefix . WC_Decidir_Meta_Interface::TRANSACTION_ID;
-		$site_trans_meta = $prefix . WC_Decidir_Meta_Interface::SITE_TRANSACTION_ID;
-		$payment_data_meta = $prefix . WC_Decidir_Meta_Interface::PAYMENT_DATA;
 
-		update_post_meta( $order_id, $prefix . 'response_full', $result );
-		update_post_meta( $order_id, $trans_id_meta, $result['id'] );
-		update_post_meta( $order_id, $site_trans_meta, $result['site_transaction_id'] );
+		// Saves full response from Gateway
+		WC_Decidir_Meta::set_order_transaction_response( $order_id, $result );
+		// Saves transaction id data
+		WC_Decidir_Meta::set_order_transaction_id( $order_id, $result['id'] );
+		// Saves Site Transaction Id data
+		WC_Decidir_Meta::set_order_site_transaction_id( $order_id, $result['site_transaction_id'] );
 
 		$payment_data = array();
 		$payment_data['payment_method_id'] = $result['payment_method_id'] ?? 'no data in response';
@@ -340,6 +428,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 		$payment_data['installments'] = $result['installments'] ?? 'no data in response';
 		$payment_data['status'] = $result['status'] ?? 'no data in response';
 
+		// Builds general status data details
 		if ( isset($result['status_details']) ) {
 			$details = $result['status_details'];
 			$payment_data['status_details'] = array(
@@ -349,7 +438,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 			);
 		}
 
-		// cybersource
+		// Builds Cybersource data
 		if ( isset($result['fraud_detection']) && isset($result['fraud_detection']['status']) ) {
 			$fraud = $result['fraud_detection']['status'];
 			$payment_data['cybersource'] = array(
@@ -358,8 +447,8 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 			);
 		}
 
-		update_post_meta( $order->get_id(), $payment_data_meta, $payment_data );
-		// update_post_meta( $order->get_id(), '_decidir_response', $result->PAYMENTSTATUS );
+		// Save data into the Order meta field
+		WC_Decidir_Meta::set_order_payment_data( $order_id, $payment_data );
 	}
 
 	/**

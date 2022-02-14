@@ -43,10 +43,10 @@ class WC_Decidir_Request_Order_Processor implements WC_Decidir_Request_Processor
 	 */
 	private function get_data( $order ) {
 		return array(
-			self::AMOUNT => $order->get_total( $order ),
+			self::AMOUNT => $order->get_total(),
 			self::CURRENCY => $order->get_currency(),
 			self::ESTABLISHMENT_NAME => $this->get_establishment_name(),
-			self::SITE_TRANSACTION_ID => $order->get_order_number()
+			self::SITE_TRANSACTION_ID => $this->get_site_transaction_id( $order )
 		);
 	}
 
@@ -57,8 +57,6 @@ class WC_Decidir_Request_Order_Processor implements WC_Decidir_Request_Processor
 	 */
 	private function get_amount( $order ) {
 		return $order->get_total();
-
-		// return (int) str_replace(",", "", str_replace(".", "", $amount));
 	}
 
 	/**
@@ -69,5 +67,15 @@ class WC_Decidir_Request_Order_Processor implements WC_Decidir_Request_Processor
 	private function get_establishment_name()
 	{
 		return (string) get_bloginfo('name');
+	}
+
+	/**
+	 * Returns the site transaction id for the current Order
+	 *
+	 * @param WC_Order $order
+	 * @return string
+	 */
+	private function get_site_transaction_id( $order ) {
+		return (string) $order->get_order_number() . '-' . time();
 	}
 }

@@ -118,7 +118,6 @@ class WC_Decidir_Promotion_Factory {
 		ORDER BY promos.rule_name ASC";
 
 		return $wpdb->get_results(
-			// $wpdb->prepare()
 			$query
 		);
 	}
@@ -136,6 +135,7 @@ class WC_Decidir_Promotion_Factory {
 		$card_table = self::get_cards_table_name();
 
 		//TODO: remains `applicable_days` implementation filter
+		$current_day = wc_decidir_get_current_day_number();
 
 		$query = "SELECT promos.*,
 			bank.name as 'bank_name',
@@ -150,15 +150,13 @@ class WC_Decidir_Promotion_Factory {
 			promos.is_active = 1
 			AND promos.from_date <= NOW()
 			AND promos.to_date >= NOW()
+			AND find_in_set( {$current_day}, promos.applicable_days )
 		ORDER BY promos.priority ASC,
 			promos.bank_id ASC,
 			promos.card_id ASC;
 		";
 
-		return $wpdb->get_results(
-			// $wpdb->prepare($query)
-			$query
-		);
+		return $wpdb->get_results( $query );
 	}
 
 	/**
@@ -367,13 +365,55 @@ class WC_Decidir_Promotion_Factory {
 	 * Returns an array of strings with all the day ids selected for the current promotion
 	 *
 	 * @param stdClass $promotion
-	 * @return string[]|array
+	 * @return string|string[]
 	 */
-	public static function get_promotion_days_array( $promotion ) {
-		if ( ! $promotion || ! $promotion->applicable_days ) {
+	public static function get_promotion_days( $promotion ) {
+		if ( ! $promotion || $promotion->applicable_days === '') {
 			return array();
 		}
 
-		return explode( ',', $promotion->applicable_days );
+		if (strpos($promotion->applicable_days, ',') ) {
+			$data = explode( ',', $promotion->applicable_days );
+		} else {
+			$data = $promotion->applicable_days;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Returns Fee Plan data from Promotion based on the selected `fee_to_send`
+	 *
+	 * This helper function retrieves the Fee Plan selected in the Installments dropdown
+	 * during the Checkout Process. It's used to store the Fee Plan data
+	 * in a custom WC_Order meta field for later visualization in WC_Order details
+	 *
+	 * @see WC_Decidir_Meta_Interface::PROMOTION_APPLIED
+	 *
+	 * @param int $promotion_id
+	 * @param int $fee_to_send
+	 * @return array
+	 */
+	public static function get_applied_fee_plan( $promotion_id, $fee_to_send ) {
+		$promotion = self::get_promotion( $promotion_id );
+
+		$plans = $promotion
+			? json_decode($promotion->fee_plans)
+			: false;
+
+		if ( !$plans || empty( $plans )) {
+			return array();
+		}
+
+		$details = array();
+
+		foreach ( $plans as $plan ) {
+			if ( (int) $plan->fee_to_send === $fee_to_send) {
+				$details = $plan;
+				break;
+			}
+		}
+
+		return $details;
 	}
 }

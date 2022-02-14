@@ -55,55 +55,7 @@ class WC_Decidir_Request_CyberSource_Processor implements WC_Decidir_Request_Pro
 				'customer_loyalty_number' => '',
 				'coupon_code' => ''
 			)
-
-            // 'bill_to' => $this->getBillTo($order->getBillingAddress(), $order->getCustomerId()),
-            // 'purchase_totals' => $this->getPurchaseTotals($order),
-            // 'customer_in_site' => $this->getCustomerInSite($order->getCustomerId(), $order->getBillingAddress()),
-            // 'retail_transaction_data' => $this->getRetailTransactionData(
-            //     $this->getShipTo($order->getShippingAddress(),  $order->getCustomerId()),
-            //     $order,
-            //     $this->getItems($order)
-            // )
 		);
-
-		// $cs_data = array(
-		// 	"send_to_cs" => true,
-		// 	"channel" => "Web",
-		// 	"bill_to" => [
-		// 		"city"		 => $cs_city,
-		// 		"country"	  => $cs_country,
-		// 		"customer_id"  => $csuserid,
-		// 		"email"		=> $cs_email,
-		// 		"first_name"   => $cs_first_name,
-		// 		"last_name"	=> $cs_last_name,
-		// 		"phone_number" => $cs_phone,
-		// 		"postal_code"  => $cs_postal_code,
-		// 		"state"		=> $cs_state,
-		// 		"street1"	  => $cs_street1,
-		// 		"street2"	  => $cs_street2,
-		// 	],
-		// 	"ship_to" => [
-		// 		"city"		 => $cs_city,
-		// 		"country"	  => $cs_country,
-		// 		"customer_id"  => $csuserid,
-		// 		"email"		=> $cs_email,
-		// 		"first_name"   => $cs_first_name,
-		// 		"last_name"	=> $cs_last_name,
-		// 		"phone_number" => $cs_phone,
-		// 		"postal_code"  => $cs_postal_code,
-		// 		"state"		=> $cs_state,
-		// 		"street1"	  => $cs_street1,
-		// 		"street2"	  => $cs_street2,
-		// 	],
-		// 	"currency"			=> "ARS",
-		// 	"amount"			  => $dec_Amount,
-		// 	"days_in_site"		=> $csidayinsite,
-		// 	"is_guest"			=> false,
-		// 	// "password"			=> "password",
-		// 	"num_of_transactions" => 1,
-		// 	"cellphone_number"	=> $cs_phone,
-		// 	"street"			  => $cs_street1,
-		// );
 
 		return $data;
 	}

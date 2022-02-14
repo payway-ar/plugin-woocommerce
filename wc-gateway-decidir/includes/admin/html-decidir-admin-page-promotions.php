@@ -74,8 +74,6 @@ $title = $is_creation
 						<?php die(); ?>
 					<?php else: ?>
 						<p><?php echo __('Ensure all required fields are being filled with valid information', 'wc-gateway-decidir'); ?></p>
-	<?php echo var_dump( $result ) . ' - - - - - - '; ?>
-	<?php echo var_dump( $_POST ); ?>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $PAGE_KEY_NAME ) ); ?>"><?php echo __('Go back', 'wc-gateway-decidir'); ?></a>
 					<?php endif; ?>
 					<?php die(); ?>
@@ -125,7 +123,11 @@ $title = $is_creation
 						$from_date = $is_edit ? $promotion->from_date : '';
 						$to_date = $is_edit ? $promotion->to_date : '';
 						$priority = $is_edit ? $promotion->priority : '';
-						$applicable_days = $is_edit ? explode( ',', $promotion->applicable_days ) : '';
+						$applicable_days = $is_edit
+							? (strpos($promotion->applicable_days, ',') !== false)
+								? explode( ',', $promotion->applicable_days )
+								: $promotion->applicable_days
+							: '';
 					?>
 					<table class="form-table" role="presentation">
 						<tr class="form-field form-required">

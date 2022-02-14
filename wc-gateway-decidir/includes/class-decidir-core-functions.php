@@ -183,3 +183,18 @@ function wc_decidir_storefront_options($encode_as_json = false) {
 		? $options
 		: json_encode( $options );
 }
+
+/**
+ * Returns the current day in numeric format
+ *
+ * Usually used to compare `applicable_days` of a Promotion
+ * 0 (for Sunday) through 6 (for Saturday)
+ *
+ * @see https://www.php.net/manual/en/function.date.php
+ * @see https://www.php.net/manual/en/datetime.format.php
+ *
+ * @return string
+ */
+function wc_decidir_get_current_day_number() {
+	return date('w');
+}

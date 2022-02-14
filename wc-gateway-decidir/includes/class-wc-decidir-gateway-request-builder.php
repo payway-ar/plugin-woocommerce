@@ -4,8 +4,6 @@
  * @copyright Copyright © 2022 IURCO and PRISMA. All rights reserved.
  */
 
-use Automattic\WooCommerce\Utilities\NumberUtil;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -32,9 +30,10 @@ class WC_Decidir_Request_Builder {
 
 	/**
 	 * Holds relevant checkout form data values
+	 *
 	 * @var array
 	 */
-	protected $checkout_posted_data;
+	protected $checkout_posted_data = array();
 
 	/**
 	 * Constructor
@@ -66,6 +65,17 @@ class WC_Decidir_Request_Builder {
 	}
 
 	/**
+	 * Returns the Checkout posted data associated during the Payment process
+	 *
+	 * @see WC_Payment_Gateway_Decidir::process_payment()
+	 *
+	 * @return array
+	 */
+	public function get_checkout_form_data() {
+		return $this->checkout_posted_data;
+	}
+
+	/**
 	 *
 	 * TODO: WC_Checkout::get_checkout_fields
 	 * to add custom form fields into the list through:
@@ -81,10 +91,33 @@ class WC_Decidir_Request_Builder {
 	 * @return $this
 	 */
 	public function set_checkout_form_data( $post_data ) {
+		$rule_id = false;
+		$card_id = false;
+		$installments = false;
+
+		/**
+		 * Installment dropdown option value
+		 *
+		 * built with the following structure: <rule_id>-<card_id>-<fee_to_send>
+		 * @var array
+		 */
+		if ( isset( $post_data['decidir_gateway_cc_installments'])) {
+			$cc_installments = explode('-', $post_data['decidir_gateway_cc_installments']);
+			$rule_id = isset( $cc_installments[0] )
+				? (int) $cc_installments[0]
+				: false;
+			$card_id = isset( $cc_installments[1] )
+				? (int) $cc_installments[1]
+				: false;
+			$installments = isset( $cc_installments[2] )
+				? (int) $cc_installments[2]
+				: false;
+		}
+
 		$this->checkout_posted_data = array(
-			'installments' => isset($post_data['decidir_gateway_cc_installments'])
-				? explode('-', $post_data['decidir_gateway_cc_installments'])[2]
-				: false,
+			'rule_id' => $rule_id,
+			'card_id' => $card_id,
+			'installments' => $installments,
 			'token' => isset($post_data['decidir_gateway_cc_token'])
 				? $post_data['decidir_gateway_cc_token']
 				: false,
@@ -103,9 +136,18 @@ class WC_Decidir_Request_Builder {
 	}
 
 	/**
+	 * Returns the associated Order
+	 *
+	 * @return WC_Order|null
+	 */
+	public function get_order() {
+		return $this->order;
+	}
+
+	/**
+	 * Assigns the Order
 	 *
 	 * @param WC_Order $order
-	 *
 	 * @return void
 	 */
 	public function set_order( $order ) {
@@ -115,13 +157,16 @@ class WC_Decidir_Request_Builder {
 	}
 
 	/**
+	 * Executes all data processors
 	 *
-	 * @return array
+	 * @return array data to be sent to the Gateway
 	 */
 	public function process()
 	{
 		$request = $this->request;
 		$result = array();
+
+		do_action('wc_decidir_request_builder_process_before', $this);
 
 		foreach ( $this->processors as $name => $processor ) {
 			$result = $this->merge(
@@ -130,18 +175,20 @@ class WC_Decidir_Request_Builder {
 			);
 		}
 
+		do_action('wc_decidir_request_builder_process_after', $this);
+
 		return $result;
 	}
 
 	/**
-     * Merge function for builders
-     *
-     * @param array $result
-     * @param array $builder
-     * @return array
-     */
-    protected function merge(array $result, array $builder)
-    {
-        return array_replace_recursive($result, $builder);
-    }
+	 * Merge function for builders
+	 *
+	 * @param array $result
+	 * @param array $builder
+	 * @return array
+	 */
+	protected function merge(array $result, array $builder)
+	{
+		return array_replace_recursive($result, $builder);
+	}
 }
