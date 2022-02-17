@@ -231,6 +231,7 @@ final class DecidirWC {
 		$decidir_transaction_id = WC_Decidir_Meta::get_order_transaction_id( $order_id, true );
 		$decidir_site_transaction_id = WC_Decidir_Meta::get_order_site_transaction_id( $order_id, true );
 		$payment_data = WC_Decidir_Meta::get_order_payment_data( $order_id, true );
+		$promo = WC_Decidir_Meta::get_order_promotion( $order_id, true );
 		?>
 			<h3><?php _e('Decidir Payment Information', 'wc-gateway-decidir'); ?></h3>
 			<?php if ( $decidir_transaction_id ): ?>
@@ -248,23 +249,48 @@ final class DecidirWC {
 			<?php if ( !empty($payment_data) && isset($payment_data['status_details']) ): ?>
 			<?php $status = $payment_data['status_details']; ?>
 			<div>
-				<strong><?php _e('Ticket', 'wc-gateway-decidir'); ?></strong>
+				<strong><?php _e('Ticket', 'wc-gateway-decidir'); ?>:</strong>
 				<span><?php echo $status['ticket']; ?></span>
 			</div>
 			<div>
-				<strong><?php _e('CC Auth Code', 'wc-gateway-decidir'); ?></strong>
+				<strong><?php _e('CC Auth Code', 'wc-gateway-decidir'); ?>:</strong>
 				<span><?php echo $status['card_authorization_code']; ?></span>
 			</div>
 			<div>
-				<strong><?php _e('CC Address Code', 'wc-gateway-decidir'); ?></strong>
+				<strong><?php _e('CC Address Code', 'wc-gateway-decidir'); ?>:</strong>
 				<span><?php echo $status['address_validation_code']; ?></span>
 			</div>
 			<?php endif; ?>
 			<?php if ( !empty($payment_data) && isset($payment_data['cybersource']) ): ?>
 			<?php $cybersource = $payment_data['cybersource']; ?>
 			<div>
-				<strong><?php _e('CS Decision', 'wc-gateway-decidir'); ?></strong>
+				<strong><?php _e('CS Decision', 'wc-gateway-decidir'); ?>:</strong>
 				<span><?php echo $cybersource['decision']; ?></span>
+			</div>
+			<?php endif; ?>
+			<?php if ( !empty($promo) && is_array($promo)): ?>
+			<div>
+				<h4><?php _e('Fee Plans configuration', 'wc-gateway-decidir'); ?></h4>
+			</div>
+			<div>
+				<strong><?php _e('Period', 'wc-gateway-decidir'); ?>:</strong>
+				<span><?php echo isset($promo['fee_period']) ? $promo['fee_period'] : ''; ?></span>
+			</div>
+			<div>
+				<strong><?php _e('Coeficient', 'wc-gateway-decidir'); ?>:</strong>
+				<span><?php echo isset($promo['coefficient']) ? $promo['coefficient'] : ''; ?></span>
+			</div>
+			<div>
+				<strong><?php _e('TEA', 'wc-gateway-decidir'); ?>:</strong>
+				<span><?php echo isset($promo['tea']) ? $promo['tea'] : ''; ?></span>
+			</div>
+			<div>
+				<strong><?php _e('CFT', 'wc-gateway-decidir'); ?>:</strong>
+				<span><?php echo isset($promo['cft']) ? $promo['cft'] : ''; ?></span>
+			</div>
+			<div>
+				<strong><?php _e('Fee to send', 'wc-gateway-decidir'); ?>:</strong>
+				<span><?php echo isset($promo['fee_to_send']) ? $promo['fee_to_send'] : ''; ?></span>
 			</div>
 			<?php endif; ?>
 		<?php

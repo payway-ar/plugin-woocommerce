@@ -111,7 +111,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 			// Ensure there's a charge that needs to be billed
 			if ( $charge > 0) {
 				$fee = new WC_Order_Item_Fee();
-				$fee->set_name( __('Transaction Fee', 'wc-gateway-decidir') );
+				$fee->set_name( __('Costo de Financiacion', 'wc-gateway-decidir') );
 				$fee->set_amount( $charge );
 				$fee->set_total( $charge );
 
@@ -411,6 +411,12 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 			$promotion_id,
 			$fee_to_send
 		);
+
+		// convert the record into an array()
+		// to make it easy access to the data within the Order Detail view
+		if ( gettype($fee_details) === 'object' ) {
+			$fee_details = json_decode(json_encode($fee_details), true);
+		}
 
 		// Update the Order meta data with the selected Plan
 		WC_Decidir_Meta::set_order_promotion( $order_id, $fee_details );
