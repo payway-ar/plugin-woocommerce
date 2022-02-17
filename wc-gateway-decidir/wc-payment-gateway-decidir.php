@@ -214,10 +214,15 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 
 		$this->enqueueStorefrontScripts();
 
+		// retrieve all config options for the DecidirCheckoutForm
+		$config_options = wc_decidir_storefront_options();
+		// adds the cart total for installment calculation
+		$config_options['cart_total'] = $this->get_order_total();
+
 		wp_localize_script(
-			'woocommerce_gateway_decidir_sdk',
+			'woocommerce-gateway-decidir-sdk',
 			'wc_gateway_decidir_params',
-			wc_decidir_storefront_options()
+			$config_options
 		);
 
 		require_once WC_DECIDIR_ABSPATH . 'template/html-decidir-checkout-form.php';
@@ -228,8 +233,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 	 * @return void
 	 */
 	public function validate_fields() {
-// wc_add_notice( __METHOD__, 'error' );
-// wc_add_notice( 'second message in validate_fields()', 'error' );
+		// wc_add_notice( '', 'error' );
 	}
 
 	/**
@@ -264,6 +268,12 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 
 			if ( $request->get_success() ) {
 				$order->payment_complete( $request->get_transaction_id() );
+
+				// currently isn't needed to execute the stock reduction
+				// for those products that are marked as `manage stock`,
+				// it's happening without manually executing it
+				//
+				// $order->reduce_order_stock();
 
 				// Update WC_Order custom fields for custom metabox display
 				$this->update_order_meta( $request->get_result(), $order );
@@ -303,7 +313,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 
 			return $result;
 
-		} catch (\Exception $e) {
+		} catch ( Exception $e ) {
 			// TODO: log the error through custom wc_get_logger() implementation
 			wc_add_notice(
 				__('Payment error:', 'wc-gateway-decidir') . $e->getMessage(),
@@ -459,52 +469,71 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 	private function enqueueStorefrontScripts() {
 		//@TODO: most likely this shouldn't be hardcoded and depends on other factors, like SDK version
 		$scriptUrl = 'https://live.decidir.com/static/v2.5/decidir.js';
-		wp_enqueue_script(
-			'woocommerce_gateway_decidir_sdk',
+		wp_register_script(
+			'woocommerce-gateway-decidir-sdk',
 			$scriptUrl,
 			array(),
 			'2.5',
+			false
 		);
+		wp_enqueue_script('woocommerce-gateway-decidir-sdk');
+
 		// wp_enqueue_script('decidir_js', 'https://live.decidir.com/static/v2/decidir.js');
 
 		/**
 		 * Introduce WC JS lib to control price format
 		 * @see WC_Widget_Price_Filter
 		 */
-		wp_enqueue_script(
-			'accounting',
+		wp_register_script(
+			'woocommerce-accounting',
 			// we're forcing to always use `min` version
 			WC()->plugin_url() . '/assets/js/accounting/accounting.min.js',
 			array( 'jquery' ),
-			'0.4.2',
-			true
+			'0.4.2'
 		);
 
 		// Implements accounting.js configuration
 		wp_localize_script(
-			'accounting',
+			'woocommerce-accounting',
 			'wc_gateway_decidir_accounting_format',
 			array(
 				'precision' => wc_get_price_decimals(),
 				'symbol'  => get_woocommerce_currency_symbol(),
 				'decimal'  => esc_attr( wc_get_price_decimal_separator() ),
 				'thousand' => esc_attr( wc_get_price_thousand_separator() ),
-				'format' => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) )
+				'format' => esc_attr( str_replace(
+					array( '%1$s', '%2$s' ),
+					array( '%s', '%v' ),
+					get_woocommerce_price_format()
+				))
 			)
 		);
 
+		// JS that takes care of all Form interations
+		// wp_register_script(
+		// 	'woocommerce-gateway-decidir-payment',
+		// 	plugins_url('assets/js/frontend/payment.js', WC_DECIDIR_PLUGIN_FILE),
+		// 	array(
+		// 		'jquery',
+		// 		'wc-checkout',
+		// 		'woocommerce-gateway-decidir-sdk',
+		// 		'woocommerce-accounting'
+		// 	),
+		// 	null
+		// );
+
 		// Storefront styling
 		wp_register_style(
-			'woocommerce_gateway_decidir_styles',
+			'woocommerce-gateway-decidir-styles',
 			plugins_url('assets/css/style.css', WC_DECIDIR_PLUGIN_FILE)
 		);
-		wp_enqueue_style( 'woocommerce_gateway_decidir_styles' );
+		wp_enqueue_style( 'woocommerce-gateway-decidir-styles' );
 
 		// JS handling card changes
 		// wp_register_script(
 		// 	'woocommerce_gateway_decidir_form_card',
 		// 	plugins_url('assets/js/card.js', WC_DECIDIR_PLUGIN_FILE),
-		// 	array('jquery', 'woocommerce_gateway_decidir_sdk')
+		// 	array('jquery', 'woocommerce-gateway-decidir-sdk')
 		// );
 		// wp_enqueue_script('woocommerce_gateway_decidir_form_card');
 
@@ -512,9 +541,12 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 		// wp_register_script(
 		// 	'woocommerce_gateway_decidir_form',
 		// 	plugins_url('assets/js/form.js', WC_DECIDIR_PLUGIN_FILE),
-		// 	array('jquery', 'woocommerce_gateway_decidir_sdk')
+		// 	array('jquery', 'woocommerce-gateway-decidir-sdk')
 		// );
 		// wp_enqueue_script('woocommerce_gateway_decidir_form');
+
+		wp_enqueue_script('woocommerce-accounting');
+		// wp_enqueue_script('woocommerce-gateway-decidir-payment');
 	}
 
 	/**

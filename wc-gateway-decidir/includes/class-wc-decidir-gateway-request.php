@@ -104,11 +104,6 @@ class WC_Decidir_Request {
 			$result = $this->api->post_payment( $payment_data );
 			$logger->debug( print_r($result->getDataField(), true) );
 
-			// set_transient(
-			// 	'decidir_gateway_result_order_id_' . $order_id,
-			// 	$result,
-			// 	HOUR_IN_SECONDS
-			// );
 			$this->set_result( $result->getDataField() );
 
 			return $this->process_response( $result );
@@ -122,25 +117,19 @@ class WC_Decidir_Request {
 			$logger->error( print_r($exception->getMessage(), true) );
 			$logger->error( print_r($exception->getData(), true) );
 
-			// set_transient(
-			// 	'decidir_gateway_result_order_id_' . $order_id,
-			// 	$exception->getMessage(),
-			// 	HOUR_IN_SECONDS
-			// );
+			// We'll throw again so plugin can cancel the order
+			throw $exception;
 
 		} catch (\Exception $exception) {
 			$this->set_success( false );
 			$this->set_error_codes( $exception->getCode() );
 			$this->set_error_messages( array( $exception->getMessage() ) );
 
-			// set_transient(
-			// 	'decidir_gateway_result_order_id_' . $order_id,
-			// 	$exception->getMessage(),
-			// 	HOUR_IN_SECONDS
-			// );
-
 			$logger->error( '\Exception catch' );
 			$logger->error( print_r($exception->getMessage(), true) );
+
+			// We'll throw again so plugin can cancel the order
+			throw $exception;
 		}
 
 		return $this;
