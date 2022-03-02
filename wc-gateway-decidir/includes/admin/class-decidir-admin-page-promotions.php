@@ -89,11 +89,11 @@ class WC_Decidir_Admin_Navigation_Page_Promotions extends WP_List_Table {
 		$error_messages = array();
 		$errors = null;
 
-		foreach($required_field_names as $field_name) {
-			if ( ! isset($post[$field_name]) || $post[$field_name] == '' ) {
+		foreach($required_field_names as $field) {
+			if ( ! isset($post[$field['name']]) || $post[$field['name']] == '' ) {
 				$error_messages[] = array(
-					'error_key' => $field_name,
-					'message' => __( $field_name . ' is a required field', 'wc-gateway-decidir' )
+					'error_key' => $field['name'],
+					'message' => __( '<strong>' . $field['label'] . '</strong>' . ' es un campo requerido', 'wc-gateway-decidir' )
 				);
 			}
 		}

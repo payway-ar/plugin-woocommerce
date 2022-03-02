@@ -81,7 +81,7 @@ $title = $is_creation
 					<div class="error">
 						<ul>
 						<?php foreach ( $validation_result->get_error_messages() as $error ): ?>
-							<?php echo "<li>$error</li>\n"; ?>
+							<li><?php echo $error['message']; ?></li>
 						<?php endforeach; ?>
 						</ul>
 					</div>
@@ -97,7 +97,7 @@ $title = $is_creation
 				<?php $promotion = $promotion_id ? $this->get_promotion( $promotion_id ) : false; ?>
 				<?php if ( $is_edit && ! $promotion ): ?>
 					<?php $errors = new WP_Error(); ?>
-					<?php $errors->add( 'promotion_id', __('Promotion does not exist') ); ?>
+					<?php $errors->add( 'promotion_id', __('Promotion does not exist', 'wc-gateway-decidir') ); ?>
 					<div class="error">
 						<ul>
 						<?php foreach ( $errors->get_error_messages() as $err ): ?>

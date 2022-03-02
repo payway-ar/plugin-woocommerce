@@ -141,6 +141,10 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 # Changelog
 
+## 0.2.1
+### bugfix
+- **Promotions Admin**; fix how errors are displayed during CRUD operations
+
 ## 0.2.0
 ### improvements
 - **Uninstall Hook added**; process will drop custom tables and clean all configuration options previously saved in `wp_options` table. It won't delete existing transaction data already saved within Orders.

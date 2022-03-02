@@ -23,7 +23,7 @@ interface WC_Decidir_Activator_Interface {
 	 * @see wc-gateway-decidir/index.php
 	 * @var string
 	 */
-	const WC_DECIDIR_VERSION_VALUE = '0.2.0';
+	const WC_DECIDIR_VERSION_VALUE = '0.2.1';
 
 	/**
 	 * @var string

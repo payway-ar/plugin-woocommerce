@@ -30,16 +30,34 @@ class WC_Decidir_Promotion_Factory {
 	/**
 	 * Returns a list of the required field names
 	 *
-	 * @return array
+	 * @return array[]
 	 */
 	public static function get_required_fields() {
 		return array(
-			'rule_name',
-			'bank_id',
-			'card_id',
-			'from_date',
-			'to_date',
-			'applicable_days'
+			array(
+				'name' => 'rule_name',
+				'label' => __( 'Name', 'wc-gateway-decidir' )
+			),
+			array(
+				'name' => 'bank_id',
+				'label' => __( 'Bank', 'wc-gateway-decidir' )
+			),
+			array(
+				'name' => 'card_id',
+				'label' => __( 'Card', 'wc-gateway-decidir' )
+			),
+			array(
+				'name' => 'from_date',
+				'label' => __( 'From Date', 'wc-gateway-decidir' )
+			),
+			array(
+				'name' => 'to_date',
+				'label' => __( 'To Date', 'wc-gateway-decidir' )
+			),
+			array(
+				'name' => 'applicable_days',
+				'label' => __( 'Applicable Days', 'wc-gateway-decidir' )
+			),
 		);
 	}
 

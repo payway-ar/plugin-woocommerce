@@ -108,10 +108,8 @@ jQuery( function( $ ) {
 			$(this).closest('tr').remove();
 		});
 
-// console.log('plans', plans);
 	if (plans) {
 		$.each(plans, function (index, data) {
-// console.log(index, data);
 			row_id++;
 			add_plan_row(data);
 		});
