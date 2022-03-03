@@ -136,7 +136,7 @@ jQuery(function ( $ ) {
 		  endpoint_url: wc_gateway_decidir_params.endpoint_url,
 		  sandboxEnabled: Boolean( wc_gateway_decidir_params.sandbox_enabled ),
 		  credentials: {
-		    public_key: wc_gateway_decidir_params.creds.public_key,
+		    public_key: wc_gateway_decidir_params.creds.public_key
 		  },
 		  promotions: wc_gateway_decidir_params.promotions,
 		  currencySettings: typeof wc_gateway_decidir_accounting_format !== 'undefined'
