@@ -141,6 +141,10 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 # Changelog
 
+## 0.2.2
+### bugfix
+- **Credentials**; fix when retrieves production keys, now processes all required configurations for Connector class creation.
+
 ## 0.2.1
 ### bugfix
 - **Promotions Admin**; fix how errors are displayed during CRUD operations

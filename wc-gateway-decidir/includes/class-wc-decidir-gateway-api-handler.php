@@ -53,8 +53,8 @@ class WC_Decidir_Api_Handler {
 		} else {
 			$type = WC_Decidir_Rest_Interface::CONNECTOR_ENVIRONMENT_PRODUCTION;
 			$url = WC_Decidir_Rest_Interface::PRODUCTION_URL;
-			$public = $config[WC_Decidir_Config_Interface::FIELD_SANDBOX_PUBLIC_KEY];
-			$private = $config[WC_Decidir_Config_Interface::FIELD_SANDBOX_PRIVATE_KEY];
+			$public = $config[WC_Decidir_Config_Interface::FIELD_PRODUCTION_PUBLIC_KEY];
+			$private = $config[WC_Decidir_Config_Interface::FIELD_PRODUCTION_PRIVATE_KEY];
 		}
 
 		$this->type = $type;

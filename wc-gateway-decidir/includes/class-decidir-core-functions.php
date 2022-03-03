@@ -65,8 +65,10 @@ function wc_decidir_config_is_cs_enabled() {
  * Returns an array with credentials for the specified environment
  * returned array contains: `site_id`, `public_key` and `private_key`
  *
+ * Avoid using this method directly. Use `wc_decidir_get_<environment>_credentials()` instead
+ *
  * @param boolean $sandbox Whether to return creds from sandbox or production
- * @param boolean $include_private_key
+ * @param boolean $include_private_key Whether to include private key or not
  * @return array
  */
 function wc_decidir_get_credentials( $sandbox = true, $include_private_key = false ) {
@@ -95,19 +97,21 @@ function wc_decidir_get_credentials( $sandbox = true, $include_private_key = fal
 /**
  * Retrieves Sandbox credentials, including the site id
  *
+ * @param boolean $include_private_key whether to include private key or not
  * @return array
  */
-function wc_decidir_get_sandbox_credentials() {
-	return wc_decidir_get_credentials();
+function wc_decidir_get_sandbox_credentials( $include_private_key = false ) {
+	return wc_decidir_get_credentials( true, $include_private_key );
 }
 
 /**
  * Retrieves Production credentials, including the site id
  *
+ * @param boolean $include_private_key whether to include private key or not
  * @return array
  */
-function wc_decidir_get_production_credentials() {
-	return wc_decidir_get_credentials(false);
+function wc_decidir_get_production_credentials( $include_private_key = true ) {
+	return wc_decidir_get_credentials( false, $include_private_key );
 }
 
 /**
