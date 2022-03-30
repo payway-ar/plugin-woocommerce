@@ -140,6 +140,8 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 
 # Changelog
+## 0.2.3
+- **error logs**; improve how some exceptions during place order are displayed
 
 ## 0.2.2
 ### bugfix

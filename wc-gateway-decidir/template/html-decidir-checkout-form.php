@@ -321,6 +321,7 @@ jQuery(function ( $ ) {
 
 		    // ensure our gateway is the one selected
 		    if( ! $('#payment_method_decidir_gateway').is(':checked') ) {
+		      this.log('gateway selected isnt decidir, moving on...');
 		      return true;
 		    }
 
