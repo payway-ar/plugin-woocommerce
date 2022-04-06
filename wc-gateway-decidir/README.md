@@ -140,6 +140,9 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 
 # Changelog
+## 0.2.4
+- **unable to access billing address on guest**; fixes CS trying to extract the `street1` value from a Guest Checkout
+
 ## 0.2.3
 - **error logs**; improve how some exceptions during place order are displayed
 

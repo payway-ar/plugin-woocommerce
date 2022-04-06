@@ -173,7 +173,7 @@ class WC_Decidir_Request_CyberSource_Processor implements WC_Decidir_Request_Pro
 			'num_of_transactions' => (int) $cid ? $customer->get_order_count() : 0,
 			'cellphone_number' => $order->get_billing_phone(),
 			'date_of_birth' => '',
-			'street1' => $customer->get_billing_address()
+			'street1' => (int) $cid ? $customer->get_billing_address() : ''
 		);
 	}
 
