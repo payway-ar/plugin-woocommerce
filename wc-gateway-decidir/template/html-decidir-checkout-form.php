@@ -127,6 +127,7 @@ jQuery(function ( $ ) {
 
 		$cardExpirationMonth: $( '#decidir_gateway_cc_exp_month', this.$form ),
 		$cardNumber: $( '#decidir_gateway_cc_number', this.$form),
+		$cardCVV: $( '#decidir_gateway_cc_cid', this.$form),
 		$cardHolderName: $( '#decidir_gateway_cc_holder_name', this.$form),
 		$cardHolderDocumentType: $( '#decidir_gateway_cc_doc_type', this.$form),
 		$cardHolderDocumentNumber: $( '#decidir_gateway_cc_doc_number', this.$form),
@@ -145,6 +146,7 @@ jQuery(function ( $ ) {
 			form: {
 				fields: {
 					cardNumber: '#decidir_gateway_cc_number',
+					cardCVV: '#decidir_gateway_cc_cid',
 					cardHolderName: '#decidir_gateway_cc_holder_name',
 					cardHolderDocumentType: '#decidir_gateway_cc_doc_type',
 					cardHolderDocumentNumber: '#decidir_gateway_cc_doc_number',
@@ -225,6 +227,7 @@ jQuery(function ( $ ) {
 			var htmlInputList = '',
 			fieldList = [
 				{'name': 'card_number', 'value': formValues.cc_number},
+				{'name': 'security_code', 'value': formValues.cc_cid},
 				{'name': 'card_expiration_month', 'value': formValues.cc_exp_month},
 				{'name': 'card_expiration_year', 'value': formValues.cc_exp_year},
 				{'name': 'card_holder_name', 'value': formValues.card_holder_name},
@@ -249,6 +252,7 @@ jQuery(function ( $ ) {
 
 		_buildDummyForm: function () {
 			var holderName = this._getFormValue( 'cardHolderName' ),
+				ccCVV = this._getFormValue('cardCVV'),
 				ccNumber = this._getFormValue( 'cardNumber' ),
 				expMonth = this._getFormValue( 'cardExpirationMonth' ),
 				expYear = this._getFormValue( 'cardExpirationYear' ),
