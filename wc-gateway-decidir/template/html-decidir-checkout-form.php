@@ -261,7 +261,7 @@ jQuery(function ( $ ) {
 
 			 formData = this._generateDummyForm({
 				card_holder_name: holderName,
-				cc_id: ccCVV,
+				cc_cid: ccCVV,
 				cc_number: ccNumber,
 				cc_exp_month: expMonth,
 				cc_exp_year: expYear,
