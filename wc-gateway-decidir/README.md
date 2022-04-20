@@ -140,6 +140,17 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 
 # Changelog
+## 0.2.4
+- **unable to access billing address on guest**; fixes CS trying to extract the `street1` value from a Guest Checkout
+- **`establishment_name` length**; fixes so blog name string matches expected max length
+- **`security_code` field**; add security_code field during token creation process
+
+## 0.2.3
+- **error logs**; improve how some exceptions during place order are displayed
+
+## 0.2.2
+### bugfix
+- **Credentials**; fix when retrieves production keys, now processes all required configurations for Connector class creation.
 
 ## 0.2.1
 ### bugfix

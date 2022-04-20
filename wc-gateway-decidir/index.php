@@ -3,7 +3,7 @@
  * Plugin Name: Decidir Payment Gateway for WooCommerce
  * Plugin URI: https://www.prismamediosdepago.com.ar
  * Description: Decidir payment gateway integration for WooCommerce
- * Version: 0.2.1
+ * Version: 0.2.4
  * Author: IURCO - Prisma SA
  * Author URI: https://iurco.com/
  * Text Domain: wc-gateway-decidir

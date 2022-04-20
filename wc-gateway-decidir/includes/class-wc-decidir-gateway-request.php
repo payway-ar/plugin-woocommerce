@@ -249,7 +249,6 @@ class WC_Decidir_Request {
 	 * @return stdClass
 	 */
 	private function response_validator( $data ) {
-// error_log(__METHOD__);
 
 		$is_valid = true;
 		$error_messages = array();
@@ -285,7 +284,6 @@ class WC_Decidir_Request {
 	 * @return stdClass
 	 */
 	private function payment_validator( $data ) {
-// error_log(__METHOD__);
 
 		$is_valid = true;
 		$error_messages = array();
@@ -309,7 +307,6 @@ class WC_Decidir_Request {
 	 * @return stdClass
 	 */
 	private function cs_retail_validator( $data ) {
-// error_log(__METHOD__);
 
 		$is_valid = true;
 		$error_messages = array();
@@ -339,7 +336,6 @@ class WC_Decidir_Request {
 	 * @return array
 	 */
 	private function cs_validate_decision( array $data ) {
-// error_log(__METHOD__);
 
 		$decision = array();
 		$decision['errors'] = false;

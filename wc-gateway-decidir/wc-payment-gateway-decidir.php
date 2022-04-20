@@ -287,18 +287,18 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 				);
 			} else {
 				wc_add_notice(
-					__('Payment error: ', 'wc-gateway-decidir') . $request->get_error_messages(),
+					__('Payment error: ', 'wc-gateway-decidir') . json_encode($request->get_error_messages()),
 					'error'
 				);
 
 				// Leave an Order message, without notifying
 				$this->add_failure_note_to_order(
 					$order,
-					$request->get_error_messages()
+					json_encode($request->get_error_messages())
 				);
 
 				// Cancel the Order
-				$message = 'Order cancelled due to an error while processing in the gateway: ' . $e->getMessage();
+				$message = 'Order cancelled due to an error while processing in the gateway: ' . json_encode($request->get_error_messages());
 				$order->update_status(
 					'cancelled',
 					__( $message, 'wc-gateway-decidir' )
@@ -307,7 +307,7 @@ class WC_Payment_Gateway_Decidir extends WC_Payment_Gateway {
 				$result = array(
 					'result'   => 'failure',
 					'refresh' => true,
-					'messages' => $request->get_error_messages()
+					'messages' => json_encode($request->get_error_messages())
 				);
 			}
 

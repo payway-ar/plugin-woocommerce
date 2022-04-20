@@ -66,7 +66,7 @@ class WC_Decidir_Request_Order_Processor implements WC_Decidir_Request_Processor
 	 */
 	private function get_establishment_name()
 	{
-		return (string) get_bloginfo('name');
+		return substr( get_bloginfo('name'), 0, 25);
 	}
 
 	/**
