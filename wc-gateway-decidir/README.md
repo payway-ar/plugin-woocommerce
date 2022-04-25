@@ -1,7 +1,14 @@
 # Decidir Payment Gateway for WordPress
-Plugin de integracion con PRISMA Decidir, para WooCommerce
+Plugin de integracion con PRISMA Decidir para WooCommerce.
 
-### Requisitos
+## Importante
+> **No utilizar directamente en un entorno Productivo**.
+>
+> En cambio, utilizar un entorno de desarrollo/integracion/UAT, y realizar las pruebas necesarias confirmando el correcto funcionamiento del plugin y su comportamiento con las personalizaciones y Theme que tiene en su sitio.
+
+Todas las instalaciones de WordPress varian en sus caracteristicas, dependiendo de los plugins, tema activo (theme), personalizaciones, cache, etc que tengan implementadas. Es por ello que se recomienda enfaticamente realizar pruebas en un entorno previo (siendo este una copia fiel de su actual sitio), para confirmar que ninguno de las caracteristicas mencionadas afecten el comportamiento de este plugin.
+
+## Requisitos
 * Wordpress `>= 5.8.3`,` <= 5.9.3`
 * WooCommerce `>= 6.0`
 * PHP `>=7.4 < 8`
@@ -25,32 +32,29 @@ Recuerde: no es necesario realizarlo de las dos formas, escoja la forma que le s
 4. Dirijase a la sección _Plugins > Plugins instalados_ y haga click en el link _Activar_ que se encuentra debajo del nombre del plugin: _Decidir Payment Gateway for WooCommerce_.
 
 
-
 ## Configuración
-### Credenciales y datos de comercio
+### Credenciales y Datos del Comercio
 
-1. Ingresar al menu de configuración del plugin desde: <em>WooCommerce -> Ajustes -> Pagos </em>
-2. Habilitar el plugin desde el boton <strong>Habilitar</strong>
-3. Presionar el botón </strong>configurar</strong>, en caso que al habilitar el medio de pago no se redirija automaticamente a la sección de configuración
+1. Ingresar al menu de configuración del plugin desde: _WooCommerce -> Ajustes -> Pagos_
+2. Activar el plugin _Medio de Pago Decidir_ usando el boton ubicado en la columna **Activado**, dentro de la tab la con los metodos de pago.
+3. Presionar el botón **Gestionar**, (en caso que, al habilitar el metodo de pago, no se redirija automaticamente a la sección de configuración)
 4. Ingresar los datos solicitados en la pantalla
 
-Test mode (si/no)
-Enable Cybersourse (Si/No)
+| Campo | Descripcion |
+|------|------|
+| Status| Habilitar o deshabilitar el medio de pago |
+| Titulo| Titulo que se visualizara en el Checkout |
+| Descripcion| Descripción a presentar en el Checkout |
+| Modo Sandbox| Si el medio de pago debe funcionar en modo test, para pruebas |
+| Usar Cybersource| Si se debe utilizar Cybersource para validar la información del Comprador |
+| Modo Debug| Si el plugin debe generar logs con información para desarrolladores (ver la sección _Estado_ del plugin, para visualizar los logs)|
+| Sandbox Site Id| Id del sitio para modo Sandbox |
+| Sandbox Public Key| Clave publica para el modo Sandbox |
+| Sandbox Private Key| Clave privada para el modo Sandbox |
+| Production Site Id| Id del sitio para modo Productivo |
+| Production Public Key| Clave publica para el modo Productivo |
+| Production Private Key| Clave privada para el modo Productivo |
 
-Test Publishable Key
-Test Private Key
-
-•••••••••••••••••••••••••••••••
-Live Publishable Key
-Live Private Key
-
-••••••••••••••••••••••••••••••••
-Establishment ID
-
-••••••••••••••••••••••••••••••••
-Maxima Cantidad de Cuotas habilitadas
-
-Seleccionar Tarjetas Habilitadas  del listado
 
 ## Consideraciones
 El formulario no será presentado en el Checkout, si:
@@ -140,13 +144,13 @@ En el mismo formulario de edición y creación de una Promoción, tendrá dispon
 
 **Ejemplo de Plan y sus valores**
 
-Promocion a Configurar:
+Plan a Configurar:
 * 1 cuota sin interes
 * 2 cuotas sin interes
 * 3 cuotas sin interes
 * 4 cuotas con 10% de interes
 * 5 cuotas con 15% de interes
-* 6 cuotas con 20% de interes, mostrar en el Checkout el valor `6`, pero  enviar al gateway el valor de cuota `20`
+* 6 cuotas con 20% de interes, mostrar en el Checkout el valor `6` en el desplegable de Cuotas y enviar al gateway el valor de cuota `20`
 
 | Periodo | Coeficiente | TEA | CFT | Valor a Enviar |
 |---|---|---|---|---|
@@ -161,8 +165,8 @@ Promocion a Configurar:
 - Click en _Agregar un nuevo Plan_ una nueva fila a la tabla con los campos que deberá completar según lo necesite.
 - El campo "Periodo" indica el número de cuotas que se asignarán al pago.
 - El campo "Coeficiente" indica el interés correspondiente al número de cuota.
-- Los campos "%TEA" y "%CFT" son indicativos, y no son requeridos.
-- El campo "Valor a enviar" se utiliza para indicar el número de cuotas que se enviarán a Decidir. Este campo debe tener el mismo valor que el campo "Cuota", a excepción de casos especiales, como al utilizar el emisor de tarjeta "Ahora 12".
+- Los campos "TEA" y "CFT" son indicativos, y no son requeridos.
+- El campo "Valor a enviar" se utiliza para indicar el número de cuotas que se enviarán al gateway. Este campo debe tener el mismo valor que el campo "Cuota", a excepción de casos especiales, como al utilizar el emisor de tarjeta "Ahora 12".
 ​
 
 **Editar Plan**
@@ -190,11 +194,13 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 # Changelog
 ## 0.2.4
+### bugfix
 - **unable to access billing address on guest**; fixes CS trying to extract the `street1` value from a Guest Checkout
 - **`establishment_name` length**; fixes so blog name string matches expected max length
 - **`security_code` field**; add security_code field during token creation process
 
 ## 0.2.3
+### improvements
 - **error logs**; improve how some exceptions during place order are displayed
 
 ## 0.2.2
