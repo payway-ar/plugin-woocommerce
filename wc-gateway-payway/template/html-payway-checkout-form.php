@@ -241,7 +241,7 @@ jQuery(function ( $ ) {
 				var field = document.createElement('input')
 				field.setAttribute('type', 'text');
 				field.setAttribute('name', fieldList[i].name);
-				field.setAttribute('data-payway', fieldList[i].name);
+				field.setAttribute('data-decidir', fieldList[i].name);
 				field.setAttribute('value', fieldList[i].value);
 
 				htmlInputList.appendChild(field);
