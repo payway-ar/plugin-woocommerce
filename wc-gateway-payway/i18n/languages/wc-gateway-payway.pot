@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Payway Payment Gateway for WooCommerce 0.1.0\n"
+"Project-Id-Version: Payway Payment Gateway for WooCommerce 0.2.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-gateway-payway\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-02-07T15:08:40+00:00\n"
+"POT-Creation-Date: 2022-04-28T01:09:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wc-gateway-payway\n"
@@ -34,29 +34,30 @@ msgstr ""
 msgid "https://iurco.com/"
 msgstr ""
 
-#: includes/admin/class-payway-admin-menu.php:109
-#: includes/admin/class-payway-admin-menu.php:110
+#: includes/admin/class-payway-admin-menu.php:111
+#: includes/admin/class-payway-admin-menu.php:112
 msgid "Manage Promotions"
 msgstr ""
 
-#: includes/admin/class-payway-admin-menu.php:118
-#: includes/admin/class-payway-admin-menu.php:119
+#: includes/admin/class-payway-admin-menu.php:120
+#: includes/admin/class-payway-admin-menu.php:121
 msgid "Manage Banks"
 msgstr ""
 
-#: includes/admin/class-payway-admin-menu.php:127
-#: includes/admin/class-payway-admin-menu.php:128
+#: includes/admin/class-payway-admin-menu.php:129
+#: includes/admin/class-payway-admin-menu.php:130
 msgid "Manage Cards"
 msgstr ""
 
-#: includes/admin/class-payway-admin-menu.php:136
-#: includes/admin/class-payway-admin-menu.php:137
+#: includes/admin/class-payway-admin-menu.php:138
+#: includes/admin/class-payway-admin-menu.php:139
 msgid "Status"
 msgstr ""
 
 #: includes/admin/class-payway-admin-page-banks.php:34
-#: includes/admin/class-payway-admin-page-promotions.php:226
-#: includes/admin/html-payway-admin-page-promotions.php:152
+#: includes/admin/class-payway-admin-page-promotions.php:232
+#: includes/admin/html-payway-admin-page-promotions.php:154
+#: includes/class-payway-promotion-factory.php:43
 msgid "Bank"
 msgstr ""
 
@@ -71,14 +72,25 @@ msgstr ""
 
 #: includes/admin/class-payway-admin-page-banks.php:119
 #: includes/admin/class-payway-admin-page-cards.php:125
-#: includes/admin/class-payway-admin-page-promotions.php:225
+#: includes/admin/class-payway-admin-page-promotions.php:231
 #: includes/admin/html-payway-admin-page-banks.php:115
+#: includes/class-payway-promotion-factory.php:39
 msgid "Name"
 msgstr ""
 
+#: includes/admin/class-payway-admin-page-banks.php:152
+#: includes/admin/class-payway-admin-page-cards.php:158
+#: includes/admin/class-payway-admin-page-promotions.php:329
+#: includes/admin/html-payway-admin-page-promo-plans.php:33
+#: includes/admin/html-payway-admin-page-promo-plans.php:89
+#: includes/admin/html-payway-admin-page-promo-plans.php:90
+msgid "Delete"
+msgstr ""
+
 #: includes/admin/class-payway-admin-page-cards.php:34
-#: includes/admin/class-payway-admin-page-promotions.php:227
-#: includes/admin/html-payway-admin-page-promotions.php:164
+#: includes/admin/class-payway-admin-page-promotions.php:233
+#: includes/admin/html-payway-admin-page-promotions.php:166
+#: includes/class-payway-promotion-factory.php:47
 msgid "Card"
 msgstr ""
 
@@ -110,40 +122,47 @@ msgstr ""
 msgid "Promotions"
 msgstr ""
 
+#: includes/admin/class-payway-admin-page-promotions.php:96
+msgid "<strong>"
+msgstr ""
+
 #: includes/admin/class-payway-admin-page-promotions.php:159
 msgid "No Promotions available"
 msgstr ""
 
-#: includes/admin/class-payway-admin-page-promotions.php:228
-#: includes/admin/html-payway-admin-page-promotions.php:176
+#: includes/admin/class-payway-admin-page-promotions.php:234
+#: includes/admin/html-payway-admin-page-promotions.php:178
+#: includes/class-payway-promotion-factory.php:51
 msgid "From Date"
 msgstr ""
 
-#: includes/admin/class-payway-admin-page-promotions.php:229
-#: includes/admin/html-payway-admin-page-promotions.php:184
+#: includes/admin/class-payway-admin-page-promotions.php:235
+#: includes/admin/html-payway-admin-page-promotions.php:186
+#: includes/class-payway-promotion-factory.php:55
 msgid "To Date"
 msgstr ""
 
-#: includes/admin/class-payway-admin-page-promotions.php:230
-#: includes/admin/html-payway-admin-page-promotions.php:192
+#: includes/admin/class-payway-admin-page-promotions.php:236
+#: includes/admin/html-payway-admin-page-promotions.php:194
 msgid "Priority"
 msgstr ""
 
-#: includes/admin/class-payway-admin-page-promotions.php:231
+#: includes/admin/class-payway-admin-page-promotions.php:237
 msgid "Enabled?"
 msgstr ""
 
-#: includes/admin/class-payway-admin-page-promotions.php:232
+#: includes/admin/class-payway-admin-page-promotions.php:238
+#: includes/class-payway-promotion-factory.php:59
 msgid "Applicable Days"
 msgstr ""
 
-#: includes/admin/class-payway-admin-page-promotions.php:269
-#: includes/admin/html-payway-admin-page-promotions.php:145
+#: includes/admin/class-payway-admin-page-promotions.php:275
+#: includes/admin/html-payway-admin-page-promotions.php:147
 msgid "Enabled"
 msgstr ""
 
-#: includes/admin/class-payway-admin-page-promotions.php:270
-#: includes/admin/html-payway-admin-page-promotions.php:146
+#: includes/admin/class-payway-admin-page-promotions.php:276
+#: includes/admin/html-payway-admin-page-promotions.php:148
 msgid "Disabled"
 msgstr ""
 
@@ -176,9 +195,9 @@ msgstr ""
 #: includes/admin/html-payway-admin-page-cards.php:111
 #: includes/admin/html-payway-admin-page-cards.php:159
 #: includes/admin/html-payway-admin-page-promotions.php:50
-#: includes/admin/html-payway-admin-page-promotions.php:79
-#: includes/admin/html-payway-admin-page-promotions.php:110
-#: includes/admin/html-payway-admin-page-promotions.php:221
+#: includes/admin/html-payway-admin-page-promotions.php:77
+#: includes/admin/html-payway-admin-page-promotions.php:108
+#: includes/admin/html-payway-admin-page-promotions.php:223
 msgid "Go back"
 msgstr ""
 
@@ -187,24 +206,24 @@ msgid "Some things happened while updating the bank"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-banks.php:115
-#: includes/admin/html-payway-admin-page-promotions.php:133
-#: includes/admin/html-payway-admin-page-promotions.php:152
-#: includes/admin/html-payway-admin-page-promotions.php:164
-#: includes/admin/html-payway-admin-page-promotions.php:176
-#: includes/admin/html-payway-admin-page-promotions.php:184
-#: includes/admin/html-payway-admin-page-promotions.php:200
+#: includes/admin/html-payway-admin-page-promotions.php:135
+#: includes/admin/html-payway-admin-page-promotions.php:154
+#: includes/admin/html-payway-admin-page-promotions.php:166
+#: includes/admin/html-payway-admin-page-promotions.php:178
+#: includes/admin/html-payway-admin-page-promotions.php:186
+#: includes/admin/html-payway-admin-page-promotions.php:202
 msgid "(required)"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-banks.php:121
 #: includes/admin/html-payway-admin-page-cards.php:154
-#: includes/admin/html-payway-admin-page-promotions.php:216
+#: includes/admin/html-payway-admin-page-promotions.php:218
 msgid "Save"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-banks.php:123
 #: includes/admin/html-payway-admin-page-cards.php:156
-#: includes/admin/html-payway-admin-page-promotions.php:218
+#: includes/admin/html-payway-admin-page-promotions.php:220
 msgid "Add"
 msgstr ""
 
@@ -229,33 +248,33 @@ msgid "Card Name"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-promo-plans.php:24
+#: includes/class-payway-wc.php:273
 msgid "Fee Plans configuration"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-promo-plans.php:28
+#: includes/class-payway-wc.php:276
 msgid "Period"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-promo-plans.php:29
+#: includes/class-payway-wc.php:280
 msgid "Coeficient"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-promo-plans.php:30
+#: includes/class-payway-wc.php:284
 msgid "TEA"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-promo-plans.php:31
+#: includes/class-payway-wc.php:288
 msgid "CFT"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-promo-plans.php:32
+#: includes/class-payway-wc.php:292
 msgid "Fee to send"
-msgstr ""
-
-#: includes/admin/html-payway-admin-page-promo-plans.php:33
-#: includes/admin/html-payway-admin-page-promo-plans.php:89
-#: includes/admin/html-payway-admin-page-promo-plans.php:90
-msgid "Delete"
 msgstr ""
 
 #: includes/admin/html-payway-admin-page-promo-plans.php:39
@@ -271,15 +290,19 @@ msgstr ""
 msgid "Ensure all required fields are being filled with valid information"
 msgstr ""
 
-#: includes/admin/html-payway-admin-page-promotions.php:133
+#: includes/admin/html-payway-admin-page-promotions.php:100
+msgid "Promotion does not exist"
+msgstr ""
+
+#: includes/admin/html-payway-admin-page-promotions.php:135
 msgid "Promotion Name"
 msgstr ""
 
-#: includes/admin/html-payway-admin-page-promotions.php:141
+#: includes/admin/html-payway-admin-page-promotions.php:143
 msgid "Is Active"
 msgstr ""
 
-#: includes/admin/html-payway-admin-page-promotions.php:200
+#: includes/admin/html-payway-admin-page-promotions.php:202
 msgid "Applicable days"
 msgstr ""
 
@@ -322,7 +345,7 @@ msgstr ""
 msgid "Codebase SDK Version"
 msgstr ""
 
-#: includes/class-payway-activator.php:76
+#: includes/class-payway-activator.php:80
 msgid "<div class=\"error\">Payway Payment Gateway requires the <a href=\"http://wordpress.org/extend/plugins/woocommerce/\">WooCommerce</a> plugin to run.</div>"
 msgstr ""
 
@@ -334,31 +357,31 @@ msgstr ""
 msgid "Unserializing instances of this class is forbidden."
 msgstr ""
 
-#: includes/class-payway-wc.php:239
+#: includes/class-payway-wc.php:236
 msgid "Payway Payment Information"
 msgstr ""
 
-#: includes/class-payway-wc.php:242
+#: includes/class-payway-wc.php:239
 msgid "Trans. ID"
 msgstr ""
 
-#: includes/class-payway-wc.php:248
+#: includes/class-payway-wc.php:245
 msgid "Site Trans. ID"
 msgstr ""
 
-#: includes/class-payway-wc.php:255
+#: includes/class-payway-wc.php:252
 msgid "Ticket"
 msgstr ""
 
-#: includes/class-payway-wc.php:259
+#: includes/class-payway-wc.php:256
 msgid "CC Auth Code"
 msgstr ""
 
-#: includes/class-payway-wc.php:263
+#: includes/class-payway-wc.php:260
 msgid "CC Address Code"
 msgstr ""
 
-#: includes/class-payway-wc.php:270
+#: includes/class-payway-wc.php:267
 msgid "CS Decision"
 msgstr ""
 
@@ -439,7 +462,7 @@ msgstr ""
 msgid "Enter your Production Private Key"
 msgstr ""
 
-#: template/html-payway-checkout-form.php:25
+#: template/html-payway-checkout-form.php:32
 msgid "Installments"
 msgstr ""
 
@@ -455,31 +478,35 @@ msgstr ""
 msgid "Payway allows customers to pay directly through your site."
 msgstr ""
 
-#: wc-payment-gateway-payway.php:231
+#: wc-payment-gateway-payway.php:114
+msgid "Costo de Financiacion"
+msgstr ""
+
+#: wc-payment-gateway-payway.php:290
 msgid "Payment error: "
 msgstr ""
 
-#: wc-payment-gateway-payway.php:260
+#: wc-payment-gateway-payway.php:319
 msgid "Payment error:"
 msgstr ""
 
-#: wc-payment-gateway-payway.php:292
+#: wc-payment-gateway-payway.php:351
 msgid "Order couldn't be processed through Payway Payment Gateway"
 msgstr ""
 
-#: wc-payment-gateway-payway.php:295
-#: wc-payment-gateway-payway.php:314
+#: wc-payment-gateway-payway.php:354
+#: wc-payment-gateway-payway.php:373
 msgid " using Cybersource"
 msgstr ""
 
-#: wc-payment-gateway-payway.php:299
+#: wc-payment-gateway-payway.php:358
 msgid ": "
 msgstr ""
 
-#: wc-payment-gateway-payway.php:311
+#: wc-payment-gateway-payway.php:370
 msgid "Order successfully processed through Payway Payment Gateway"
 msgstr ""
 
-#: wc-payment-gateway-payway.php:460
+#: wc-payment-gateway-payway.php:587
 msgid "Thank you for your payment. Your transaction has been completed."
 msgstr ""

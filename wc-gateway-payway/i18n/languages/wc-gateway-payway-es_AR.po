@@ -5,37 +5,37 @@ msgstr ""
 "Project-Id-Version: Payway Payment Gateway for WooCommerce 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-gateway-"
 "payway\n"
+"POT-Creation-Date: 2022-02-07T14:38:17+00:00\n"
+"PO-Revision-Date: 2022-04-27 22:24-0300\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-02-07T14:38:17+00:00\n"
-"PO-Revision-Date: 2022-02-07 12:10-0300\n"
-"X-Generator: Poedit 3.0\n"
-"X-Domain: wc-gateway-payway\n"
-"Last-Translator: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: es_AR\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Domain: wc-gateway-payway\n"
 
 #. Plugin Name of the plugin
 msgid "Payway Payment Gateway for WooCommerce"
-msgstr ""
+msgstr "Payway medio de pago para WooCommerce"
 
 #. Plugin URI of the plugin
 msgid "https://www.prismamediosdepago.com.ar"
-msgstr ""
+msgstr "https://www.prismamediosdepago.com.ar"
 
 #. Description of the plugin
 msgid "Payway payment gateway integration for WooCommerce"
-msgstr ""
+msgstr "Integración de pasarela de pago de Payway para WooCommerce"
 
 #. Author of the plugin
 msgid "IURCO - Prisma SA"
-msgstr ""
+msgstr "IURCO - Prisma SA"
 
 #. Author URI of the plugin
 msgid "https://iurco.com/"
-msgstr ""
+msgstr "https://iurco.com/"
 
 #: includes/admin/class-payway-admin-menu.php:109
 #: includes/admin/class-payway-admin-menu.php:110
@@ -326,7 +326,7 @@ msgstr "No se detecto una version"
 
 #: includes/admin/html-payway-admin-page-status.php:35
 msgid "Payway SDK Version"
-msgstr "Versión Payway SDK "
+msgstr "Versión del SDK de Payway"
 
 #: includes/admin/html-payway-admin-page-status.php:41
 msgid "Codebase Plugin Version"
@@ -342,8 +342,8 @@ msgid ""
 "wordpress.org/extend/plugins/woocommerce/\">WooCommerce</a> plugin to run.</"
 "div>"
 msgstr ""
-"<div class=\\\"error\\\">El plugin de Payway requiere de <a href=\\"
-"\"http://wordpress.org/extend/plugins/woocommerce/\\\">WooCommerce</a> para "
+"<div class=\\\"error\\\">El plugin de Payway requiere de <a href=\\\"http://"
+"wordpress.org/extend/plugins/woocommerce/\\\">WooCommerce</a> para "
 "funcionar.</div>"
 
 #: includes/class-payway-wc.php:49
@@ -478,8 +478,8 @@ msgstr "Medio de Pago Payway"
 #: wc-payment-gateway-payway.php:42
 msgid "Payway allows customers to pay directly through your site."
 msgstr ""
-"Payway permite a sus Clientes pagar directamente a traves de su "
-"sitio con todas las tarjetas de credito."
+"Payway permite a sus Clientes pagar directamente a traves de su sitio con "
+"todas las tarjetas de credito."
 
 #: wc-payment-gateway-payway.php:231
 msgid "Payment error: "
