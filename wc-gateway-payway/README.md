@@ -12,6 +12,7 @@ Todas las instalaciones de WordPress varian en sus caracteristicas, dependiendo 
 * Wordpress `>= 5.8.3`,` <= 5.9.3`
 * WooCommerce `>= 6.0`
 * PHP `>=7.4 < 8`
+* MySQL `>= 5.7` || MariaDb `>= 10.2 <= 10.4`
 
 ## Instalación
 Para la instalación puede optar por subir el plugin a traves del Administrador. O bien, copiar el plugin manualmente dentro de la instalación de WordPress.
