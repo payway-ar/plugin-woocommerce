@@ -235,15 +235,15 @@ class WC_Payway_Activator implements WC_Payway_Activator_Interface {
 			rule_name varchar(150) NOT NULL,
 			card_id int(11) unsigned NOT NULL,
 			bank_id int(11) unsigned NOT NULL,
-			from_date timestamp NOT NULL DEFAULT current_timestamp(),
-			to_date timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+			from_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			to_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			priority int(2) unsigned DEFAULT NULL,
 			is_active tinyint(1) NOT NULL DEFAULT 1,
 			applicable_days varchar(50) NOT NULL,
 			fee_plans text DEFAULT NULL,
 			PRIMARY KEY  (`id`),
-			CONSTRAINT $table_promotions . `_bank_FK` FOREIGN KEY (bank_id) REFERENCES {$table_banks} (id) ON DELETE CASCADE ON UPDATE CASCADE,
-			CONSTRAINT $table_promotions . `_card_FK` FOREIGN KEY (card_id) REFERENCES {$table_cards} (id) ON DELETE CASCADE ON UPDATE CASCADE
+			FOREIGN KEY  (bank_id) REFERENCES {$table_banks} (id) ON DELETE CASCADE ON UPDATE CASCADE,
+			FOREIGN KEY  (card_id) REFERENCES {$table_cards} (id) ON DELETE CASCADE ON UPDATE CASCADE
 		) $charset_collate;";
 		return $sql;
 	}
