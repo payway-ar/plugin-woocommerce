@@ -111,7 +111,7 @@ class WC_Payment_Gateway_Payway extends WC_Payment_Gateway {
 			// Ensure there's a charge that needs to be billed
 			if ( $charge > 0) {
 				$fee = new WC_Order_Item_Fee();
-				$fee->set_name( __('Costo de Financiacion', 'wc-gateway-payway') );
+				$fee->set_name( __('Financing Cost', 'wc-gateway-payway') );
 				$fee->set_amount( $charge );
 				$fee->set_total( $charge );
 

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-28T01:09:35+00:00\n"
+"POT-Creation-Date: 2022-05-04T12:12:46+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wc-gateway-payway\n"
@@ -389,8 +389,24 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+#: includes/wc-payway-admin-settings.php:20
+msgid "Payment method title that will be displayed during Checkout."
+msgstr ""
+
+#: includes/wc-payway-admin-settings.php:22
+msgid "Credit Card"
+msgstr ""
+
 #: includes/wc-payway-admin-settings.php:25
 msgid "Description"
+msgstr ""
+
+#: includes/wc-payway-admin-settings.php:27
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: includes/wc-payway-admin-settings.php:28
+msgid "Pay thought Payway with your credit card right from the store."
 msgstr ""
 
 #: includes/wc-payway-admin-settings.php:31
@@ -399,6 +415,10 @@ msgstr ""
 
 #: includes/wc-payway-admin-settings.php:32
 msgid "Enable test mode"
+msgstr ""
+
+#: includes/wc-payway-admin-settings.php:34
+msgid "Gateway will place all the transactions against the Sandbox environment using the test credentials."
 msgstr ""
 
 #: includes/wc-payway-admin-settings.php:39
@@ -436,6 +456,10 @@ msgstr ""
 
 #: includes/wc-payway-admin-settings.php:65
 msgid "Sandbox Public Key"
+msgstr ""
+
+#: includes/wc-payway-admin-settings.php:70
+msgid "Sandbox Private Key"
 msgstr ""
 
 #: includes/wc-payway-admin-settings.php:75
@@ -479,7 +503,7 @@ msgid "Payway allows customers to pay directly through your site."
 msgstr ""
 
 #: wc-payment-gateway-payway.php:114
-msgid "Costo de Financiacion"
+msgid "Financing Cost"
 msgstr ""
 
 #: wc-payment-gateway-payway.php:290

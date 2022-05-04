@@ -8,8 +8,8 @@ defined( 'ABSPATH' ) || exit;
 
 return array(
 	WC_Payway_Config_Interface::FIELD_ENABLED => array(
-		'title'			=> __('Status', 'wp-gateway-payway'),
-		'label'			=> __('enable/disable payment gateway', 'wp-gateway-payway'),
+		'title'			=> __('Status', 'wc-gateway-payway'),
+		'label'			=> __('Enabled?', 'wc-gateway-payway'),
 		'type'			=> 'checkbox',
 		'description'	=> '',
 		'default'		=> 'no'
@@ -17,21 +17,21 @@ return array(
 	WC_Payway_Config_Interface::FIELD_GATEWAY_TITLE => array(
 		'title'			=> __('Title', 'wc-gateway-payway'),
 		'type'			=> 'text',
-		'description'	=> 'Payment method title that will be displayed during Checkout.',
+		'description'	=> __('Payment method title that will be displayed during Checkout.', 'wc-gateway-payway'),
 		'desc_tip'		=> true,
-		'default'		=> 'Credit Card'
+		'default'		=> __('Credit Card', 'wc-gateway-payway')
 	),
 	WC_Payway_Config_Interface::FIELD_GATEWAY_DESCRIPTION => array(
 		'title'	   		=> __('Description', 'wc-gateway-payway'),
 		'type'			=> 'textarea',
-		'description' 	=> 'This controls the description which the user sees during checkout.',
-		'default'	 	=> 'Pay thought Payway with your credit card right from the store.'
+		'description' 	=> __('This controls the description which the user sees during checkout.', 'wc-gateway-payway'),
+		'default'	 	=> __('Pay thought Payway with your credit card right from the store.', 'wc-gateway-payway')
 	),
 	WC_Payway_Config_Interface::FIELD_SANDBOX_MODE => array(
 		'title'			=> __('Sandbox Mode', 'wc-gateway-payway'),
 		'label'			=> __('Enable test mode', 'wc-gateway-payway'),
 		'type'			=> 'checkbox',
-		'description'	=> 'Gateway will place all the transactions against the Sandbox environment using the test credentials.',
+		'description'	=> __('Gateway will place all the transactions against the Sandbox environment using the test credentials.', 'wc-gateway-payway'),
 		'desc_tip'		=> true,
 		'default'		=> 'yes'
 	),
@@ -67,7 +67,7 @@ return array(
 		'default'		=> ''
 	),
 	WC_Payway_Config_Interface::FIELD_SANDBOX_PRIVATE_KEY => array(
-		'title' 		=> 'Sandbox Private Key',
+		'title' 		=> __('Sandbox Private Key', 'wc-gateway-payway'),
 		'type'  		=> 'password',
 		'default'		=> ''
 	),
