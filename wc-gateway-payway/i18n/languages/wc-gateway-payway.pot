@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-05-04T12:12:46+00:00\n"
+"POT-Creation-Date: 2022-06-23T21:07:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wc-gateway-payway\n"
@@ -51,6 +51,7 @@ msgstr ""
 
 #: includes/admin/class-payway-admin-menu.php:138
 #: includes/admin/class-payway-admin-menu.php:139
+#: includes/wc-payway-admin-settings.php:11
 msgid "Status"
 msgstr ""
 
@@ -58,6 +59,7 @@ msgstr ""
 #: includes/admin/class-payway-admin-page-promotions.php:232
 #: includes/admin/html-payway-admin-page-promotions.php:154
 #: includes/class-payway-promotion-factory.php:43
+#: template/html-payway-checkout-form.php:14
 msgid "Bank"
 msgstr ""
 
@@ -91,6 +93,7 @@ msgstr ""
 #: includes/admin/class-payway-admin-page-promotions.php:233
 #: includes/admin/html-payway-admin-page-promotions.php:166
 #: includes/class-payway-promotion-factory.php:47
+#: template/html-payway-checkout-form.php:23
 msgid "Card"
 msgstr ""
 
@@ -148,6 +151,7 @@ msgid "Priority"
 msgstr ""
 
 #: includes/admin/class-payway-admin-page-promotions.php:237
+#: includes/wc-payway-admin-settings.php:12
 msgid "Enabled?"
 msgstr ""
 
@@ -488,6 +492,32 @@ msgstr ""
 
 #: template/html-payway-checkout-form.php:32
 msgid "Installments"
+msgstr ""
+
+#: template/html-payway-checkout-form.php:42
+#: template/html-payway-checkout-form.php:47
+msgid "Credit Card Number"
+msgstr ""
+
+#: template/html-payway-checkout-form.php:54
+msgid "Card Expiration Month"
+msgstr ""
+
+#: template/html-payway-checkout-form.php:63
+msgid "Card Expiration Year"
+msgstr ""
+
+#: template/html-payway-checkout-form.php:82
+#: template/html-payway-checkout-form.php:86
+msgid "Holder Name"
+msgstr ""
+
+#: template/html-payway-checkout-form.php:92
+msgid "Document Type"
+msgstr ""
+
+#: template/html-payway-checkout-form.php:98
+msgid "Document Number"
 msgstr ""
 
 #: wc-payment-gateway-payway.php:40
