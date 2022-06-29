@@ -11,7 +11,7 @@ $gateway_field_id = $gateway_identifier . '_';
 	<div id="error_container"></div>
 	<div class="fields-wrapper">
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_bank"><?php echo "Bank"; ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_bank"><?php echo __('Bank', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<!-- filled out based on current available promotions -->
 			<select id="<?php echo $gateway_field_id; ?>cc_bank"
 				class="input-text wc-credit-card-form-cc-bank"
@@ -20,7 +20,7 @@ $gateway_field_id = $gateway_identifier . '_';
 			</select>
 		</div>
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_type"><?php echo "Card"; ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_type"><?php echo __('Card', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<!-- filled out based on current available promotions -->
 			<select id="<?php echo $gateway_field_id; ?>cc_type"
 				class="input-text wc-credit-card-form-cc-type"
@@ -39,19 +39,19 @@ $gateway_field_id = $gateway_identifier . '_';
 		</div>
 
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_number"><?php echo "Credit Card Number"; ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_number"><?php echo __('Credit Card Number', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<input type="text"
 				id="<?php echo $gateway_field_id; ?>cc_number"
 				name="<?php echo $gateway_field_id; ?>cc_number"
 				data-payway="<?php echo $gateway_field_id; ?>cc_number"
-				placeholder="<?php echo "Credit Card Number"; ?>"
+				placeholder="<?php echo __('Credit Card Number', 'wc-gateway-payway'); ?>"
 				class="input-text"
 				class="input-text"
 				autocomplete="off" />
 		</div>
 
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_exp_month"><?php echo "Card Expiration Month"; ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_exp_month"><?php echo __('Card Expiration Month', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<input type="text"
 				id="<?php echo $gateway_field_id; ?>cc_exp_month"
 				name="<?php echo $gateway_field_id; ?>cc_exp_month"
@@ -60,7 +60,7 @@ $gateway_field_id = $gateway_identifier . '_';
 				autocomplete="off" />
 		</div>
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_exp_year"><?php echo "Card Expiration Year"; ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_exp_year"><?php echo __('Card Expiration Year', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<input type="text"
 				id="<?php echo $gateway_field_id; ?>cc_exp_year"
 				name="<?php echo $gateway_field_id; ?>cc_exp_year"
@@ -79,23 +79,23 @@ $gateway_field_id = $gateway_identifier . '_';
 		</div>
 
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_holder_name"><?php echo "Holder Name"; ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_holder_name"><?php echo __('Holder Name', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<input type="text"
 				id="<?php echo $gateway_field_id; ?>cc_holder_name"
 				name="<?php echo $gateway_field_id; ?>cc_holder_name"
-				placeholder="Holder Name"
+				placeholder="<?php echo __('Holder Name', 'wc-gateway-payway'); ?>"
 				class="input-text"
 				autocomplete="off" />
 		</div>
 
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_doc_type"><?php echo "Document Type"; ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_doc_type"><?php echo __('Document Type', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<select id="<?php echo $gateway_field_id; ?>cc_doc_type" name="<?php echo $gateway_field_id; ?>cc_doc_type">
 				<option selected value="dni">DNI</option>
 			</select>
 		</div>
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_doc_number"><?php echo "Document Number"; ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_doc_number"><?php echo __('Document Number', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<input type="text"
 				id="<?php echo $gateway_field_id; ?>cc_doc_number"
 				name="<?php echo $gateway_field_id; ?>cc_doc_number"
