@@ -155,7 +155,7 @@ class WC_Payment_Gateway_Payway extends WC_Payment_Gateway {
 			get_woocommerce_currency(),
 			apply_filters(
 				'woocommerce_payway_supported_currencies',
-				array( 'ARS' )
+				array( 'ARS', 'USD' )
 			),
 			true
 		);
