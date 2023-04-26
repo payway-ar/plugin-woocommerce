@@ -190,6 +190,7 @@ jQuery(function ( $ ) {
 
 			this._attachListeners();
 			this._loadPromotions();
+			this._initRadioListeners();
 
 			// TODO: hook up into the custom event instead of the place order button
 			// (current issue place order triggering twice)
@@ -197,9 +198,19 @@ jQuery(function ( $ ) {
 		},
 
 		log: function() {
+			//This fun here update the cart_total value when the user changes the shipping method
+			this.mapAmountFromDom();
+
 			if ( this.config.sandboxEnabled && typeof console === 'object' ) {
 				console.log( '** payway', ...arguments );
 			}
+		},
+
+		mapAmountFromDom() {
+			this.cart_total = parseFloat(document.querySelectorAll('.amount')[document.querySelectorAll('.amount').length - 1].textContent
+			.replace(/\./g, '')
+			.replace(/[^0-9,-]+/g,"")
+			.replace(',', '.'));
 		},
 
 		_attachListeners: function () {
@@ -214,6 +225,16 @@ jQuery(function ( $ ) {
 
 			// TODO: replace with a listener into `checkout_place_order_`
 			$( this.config.form.fields.placeOrderButton ).on( 'click', this.capturePlaceOrder.bind(this) );
+		},
+
+			_initRadioListeners: function() {
+			//This renews to default value the installments data from the form every time the shipping option is changed.
+				var self = this;
+					$('body').on('click', 'input.shipping_method', function() {
+						self.$banksDropdown.val(self.$banksDropdown.find('option:first').val());
+						self.$cardsDropdown.val(self.$cardsDropdown.find('option:first').val());
+						self.$installmentsDropdown.val(self.$installmentsDropdown.find('option:first').val());
+				});
 		},
 
 		_getFormValue: function ( fieldConfigKey ) {
@@ -592,8 +613,8 @@ jQuery(function ( $ ) {
 		        charge = 0,
 		        optionText = "",
 		        feePeriod = plan.fee_period,
-		        installmentPrice = (grandTotal) / parseInt(feePeriod),
-		        total = parseFloat(grandTotal);
+		        installmentPrice = (this.cart_total) / parseInt(feePeriod),
+		        total = parseFloat(this.cart_total);
 
 		      if (coefficient > 1 ) {
 		        charge = parseFloat(parseFloat((total * coefficient) - total));
