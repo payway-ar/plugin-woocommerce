@@ -66,9 +66,10 @@ class WC_Payway_Request_CyberSource_Processor implements WC_Payway_Request_Proce
 	 * @return int
 	 */
 	private function get_purchase_total( $order ) {
+		$amount = $this->parse_amount( $order->get_total() );
 		return array(
 			'currency' => $order->get_currency(),
-			'amount' => $this->parse_amount( $order->get_total() )
+			'amount' => $amount * 100
 		);
 	}
 
@@ -100,9 +101,9 @@ class WC_Payway_Request_CyberSource_Processor implements WC_Payway_Request_Proce
 				'name' => $item_name,
 				'description' => $description,
 				'sku' => $product_sku,
-				'total_amount' => $line_total,
+				'total_amount' => $line_total * 100,
 				'quantity' => $quantity,
-				'unit_price' => $product_price
+				'unit_price' => $product_price * 100
 			];
 		}
 
