@@ -60,55 +60,85 @@ class WC_Payway_Request_CyberSource_Processor implements WC_Payway_Request_Proce
 		return $data;
 	}
 
-	/**
-	 *
-	 * @param WC_Order $order
-	 * @return int
-	 */
-	private function get_purchase_total( $order ) {
-		$amount = $this->parse_amount( $order->get_total() );
-		return array(
-			'currency' => $order->get_currency(),
-			'amount' => $amount * 100
-		);
-	}
+/**
+ * @param WC_Order $order
+ * @return int
+ */
+private function get_purchase_total( $order ) { 
 
-	/**
-	 *
-	 * @param WC_Order $order
-	 * @return array
-	 */
-	private function get_order_items( $order ) {
-		$items = array();
+    $total = $order->get_total();
+    $amount = $this->parse_amount( $total );
 
-		foreach ( $order->get_items() as $item ) {
-			$product = $item->get_product();
-			$product_sku = $product->get_sku();
-			$product_price = $this->parse_amount( $product->get_price() );
+    if (strpos($total, ',') !== false || strpos($total, '.') !== false) {
+        $purchase_total = array(
+            'currency' => $order->get_currency(),
+            'amount' => $amount
+        );
+    } else {
+        $purchase_total = array(
+            'currency' => $order->get_currency(),
+            'amount' => $amount * 100
+        );
+    }
 
-			$item_id = $item->get_id();
-			$item_name = $item->get_name();
-			$description = $product->get_short_description() ?? $product->get_description();
-			$line_total = $this->parse_amount( $item->get_total() );
-			$quantity = $item->get_quantity();
+    return $purchase_total;
+}
 
-			if ($product_sku == "") {
-				$product_sku = $item_id . "-" . strtolower(str_replace(" ", "-", $item_name));
-			}
+/**
+*
+* @param WC_Order $order
+* @return array
+*/
+private function get_order_items($order) {
+  $items = [];
 
-			$items[] = [
-				'code' => $product_sku,
-				'name' => $item_name,
-				'description' => $description,
-				'sku' => $product_sku,
-				'total_amount' => $line_total * 100,
-				'quantity' => $quantity,
-				'unit_price' => $product_price * 100
-			];
-		}
+  foreach ($order->get_items() as $item) {
+    $product = $item->get_product();
+    $product_sku = $product->get_sku();
+    $product_price = $product->get_price();
+    $total_price_item = $item->get_total();
+    $item_id = $item->get_id();
+    $item_name = $item->get_name();
+    $description = $product->get_short_description() ?? $product->get_description();
+    $quantity = $item->get_quantity();
 
-		return $items;
-	}
+      if ($product_sku == "") {
+        $product_sku = $item_id . "-" . strtolower(str_replace(" ", "-", $item_name));
+      }
+
+      $total_amount = $this->format_amount($total_price_item);
+      $unit_price = $this->format_amount($product_price);
+
+      $items[] = [
+        'code' => $product_sku,
+        'name' => $item_name,
+        'description' => $description,
+        'sku' => $product_sku,
+        'total_amount' => $total_amount,
+        'quantity' => $quantity,
+        'unit_price' => $unit_price
+      ];
+  }
+
+    return $items;
+}
+
+private function format_amount($amount) {
+    if ($this->has_decimal_separator($amount)) {
+        $decimalSeparator = strpos($amount, ',') !== false ? ',' : '.';
+        $decimalDigits = strlen(substr(strrchr($amount, $decimalSeparator), 1));
+        if ($decimalDigits === 1) {
+            $amount .= '0';
+        }
+    } else {
+        $amount *= 100;
+    }
+    return $this->parse_amount($amount);
+}
+
+private function has_decimal_separator($number) {
+    return strpos($number, ',') !== false || strpos($number, '.') !== false;
+}
 
 	private function get_bill_to( $order ) {
 		return array(

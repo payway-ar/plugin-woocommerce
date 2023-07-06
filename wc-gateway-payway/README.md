@@ -9,9 +9,9 @@ Plugin de integracion con Payway para WooCommerce.
 Todas las instalaciones de WordPress varian en sus caracteristicas, dependiendo de los plugins, tema activo (theme), personalizaciones, cache, etc que tengan implementadas. Es por ello que se recomienda enfaticamente realizar pruebas en un entorno previo (siendo este una copia fiel de su actual sitio), para confirmar que ninguno de las caracteristicas mencionadas afecten el comportamiento de este plugin.
 
 ## Requisitos
-* Wordpress `>= 5.8.3`,` <= 5.9.3`
+* Wordpress `>= 5.8.3`
 * WooCommerce `>= 6.0`
-* PHP `>=7.4 < 8`
+* PHP `>=7.4 <= 8.*`
 * MySQL `>= 5.7` || MariaDb `>= 10.2 <= 10.4`
 
 ## Instalación
@@ -31,6 +31,7 @@ Recuerde: no es necesario realizarlo de las dos formas, escoja la forma que le s
 2. Copiar carpeta `wc-gateway-payway` al directorio de plugins de su instalación de WordPress: `wp-content/plugins/`
 3. Ingrese al panel de Administración de WordPress
 4. Dirijase a la sección _Plugins > Plugins instalados_ y haga click en el link _Activar_ que se encuentra debajo del nombre del plugin: _Payway Payment Gateway for WooCommerce_.
+5. Siempre que se agrega un plugin manualmente, es recomendable activar el modo debug para auditar si el plugin en cuestión está corriendo su ejecución satisfactoriamente.
 
 
 ## Configuración
@@ -62,6 +63,28 @@ El formulario no será presentado en el Checkout, si:
 - El plugin está deshabilitado en la configuración de WooCommerce (ver WC config: WooCommerce > Ajustes > Pagos > Medio de Pago Payway: Activado - Si)
 - WooCommerce está configurado en otra moneda diferente a _Peso Argentino ($)_ (ver WC config: WooCommerce > Ajustes > General > Opciones de Moneda > Moneda)
 - El plugin Payway no contiene una Promoción configurada correctamente (ver sección: Promociones > Consideraciones en este README)
+
+<br>
+
+[![Advertencia](https://img.shields.io/badge/Advertencia-yellow?style=flat&logo=warning)](#) **Cuando se trata de ajustar las "Opciones de moneda"...**
+En el plugin de WooCommerce, debes seguir la siguiente ruta: Woocommerce -> Ajustes -> General -> "Opciones de moneda" -> "Número de decimales".
+
+**En esta configuración, solo hay dos opciones válidas**:
+- **[0]** para mostrar precios sin decimales
+- **[2]** para mostrar precios con dos decimales.
+
+Si seleccionas cualquier otro valor, podrían surgir errores, ya que el plugin fue diseñado teniendo en cuenta la representación de la moneda actual en el mercado.
+
+Siempre **antes de hacer cualquier cambio** de este, es super recomendable hacer un **backup** de los productos que tenemos cargados, para **tener un respaldo de los precios.**
+
+![Respaldar productos](../wc-gateway-payway/img/respaldo.png)
+
+### Opción válida para precios con decimales:
+![Precios decimales](../wc-gateway-payway/img/decimal.png)
+
+### Opción válida para precios sin decimales:
+![Precios enteros](../wc-gateway-payway/img/entero.png)
+
 
 ## Menú lateral
 En el menú lateral de su Backoffice, se habilitará el grupo "Payway", donde podrá configurar tarjetas de crédito/débito, bancos y promociones con sus respectivos planes.
@@ -139,28 +162,22 @@ En el mismo formulario de edición y creación de una Promoción, tendrá dispon
 |---|---|---|
 | Periodo | numero entero | El numero de Cuota de la Promoción |
 | Coeficiente  | entero o decimal con punto | El interes a ser aplicado a la cuota del Plan |
-| TEA | decimal con punto | no se utiliza actualmente, colocar `0` |
-| CFT | decimal con punto | no se utiliza actualmente, colocar `0` |
-| Valor a Enviar | numero entero | El numero de cuota de la Promoción a enviar al gateway de pago. <br/>Usualmente este valor es exactamente el mismo que _Periodo_. Pero, pudiera existir la necesidad de mostrar un numero de cuota en el Checkout (_Periodo_) y enviar un valor diferente al gateway de pago (_Valor a Enviar_). Si tiene dudas, coloque el mismo valor que el campo _Periodo_. |
+| TEA | decimal con punto | Por default debe colocar `0`   |
+| CFT | decimal con punto | Por default debe colocar `0`   |
+| Valor a Enviar | numero entero | El número de cuota de la Promoción a enviar al medio de pago.  <br/>Usualmente este valor es exactamente el mismo que _Periodo_. Pero, pudiera existir la necesidad de mostrar un numero de cuota en el Checkout (_Periodo_) y enviar un valor diferente al gateway de pago (_Valor a Enviar_). Si tiene dudas, coloque el mismo valor que el campo _Periodo_. |
 
 **Ejemplo de Plan y sus valores**
 
 Plan a Configurar:
-* 1 cuota sin interes
-* 2 cuotas sin interes
-* 3 cuotas sin interes
-* 4 cuotas con 10% de interes
-* 5 cuotas con 15% de interes
-* 6 cuotas con 20% de interes, mostrar en el Checkout el valor `6` en el desplegable de Cuotas y enviar al gateway el valor de cuota `20`
+* 1 cuota sin interés
+* 3 cuotas sin interés
+* 6 cuotas con 20% de interés (equivale a 1.20 que se indica en el campo Coeficiente), mostrar en el Checkout el valor `6` en el desplegable de Cuotas y enviar al medio de pago, el valor de cuota `6`.
 
 | Periodo | Coeficiente | TEA | CFT | Valor a Enviar |
 |---|---|---|---|---|
 | 1 | 1 | 0 | 0 | 1 |
-| 2 | 1 | 0 | 0 | 2 |
 | 3 | 1 | 0 | 0 | 3 |
-| 4 | 1.10 | 0 | 0 | 4 |
-| 5 | 1.15 | 0 | 0 | 5 |
-| 6 | 1.20 | 0 | 0 | 20 |
+| 6 | 1.20 | 0 | 0 | 6 |
 
 **Agregar Plan**
 - Click en _Agregar un nuevo Plan_ una nueva fila a la tabla con los campos que deberá completar según lo necesite.
