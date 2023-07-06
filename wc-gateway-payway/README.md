@@ -9,9 +9,9 @@ Plugin de integracion con Payway para WooCommerce.
 Todas las instalaciones de WordPress varian en sus caracteristicas, dependiendo de los plugins, tema activo (theme), personalizaciones, cache, etc que tengan implementadas. Es por ello que se recomienda enfaticamente realizar pruebas en un entorno previo (siendo este una copia fiel de su actual sitio), para confirmar que ninguno de las caracteristicas mencionadas afecten el comportamiento de este plugin.
 
 ## Requisitos
-* Wordpress `>= 5.8.3`,` <= 5.9.3`
+* Wordpress `>= 5.8.3`
 * WooCommerce `>= 6.0`
-* PHP `>=7.4 < 8`
+* PHP `>=7.4 <= 8.*`
 * MySQL `>= 5.7` || MariaDb `>= 10.2 <= 10.4`
 
 ## Instalación
@@ -31,6 +31,7 @@ Recuerde: no es necesario realizarlo de las dos formas, escoja la forma que le s
 2. Copiar carpeta `wc-gateway-payway` al directorio de plugins de su instalación de WordPress: `wp-content/plugins/`
 3. Ingrese al panel de Administración de WordPress
 4. Dirijase a la sección _Plugins > Plugins instalados_ y haga click en el link _Activar_ que se encuentra debajo del nombre del plugin: _Payway Payment Gateway for WooCommerce_.
+5. Siempre que se agrega un plugin manualmente, es recomendable activar el modo debug para auditar si el plugin en cuestión está corriendo su ejecución satisfactoriamente.
 
 
 ## Configuración
@@ -62,6 +63,28 @@ El formulario no será presentado en el Checkout, si:
 - El plugin está deshabilitado en la configuración de WooCommerce (ver WC config: WooCommerce > Ajustes > Pagos > Medio de Pago Payway: Activado - Si)
 - WooCommerce está configurado en otra moneda diferente a _Peso Argentino ($)_ (ver WC config: WooCommerce > Ajustes > General > Opciones de Moneda > Moneda)
 - El plugin Payway no contiene una Promoción configurada correctamente (ver sección: Promociones > Consideraciones en este README)
+
+<br>
+
+[![Advertencia](https://img.shields.io/badge/Advertencia-yellow?style=flat&logo=warning)](#) **Cuando se trata de ajustar las "Opciones de moneda"...**
+En el plugin de WooCommerce, debes seguir la siguiente ruta: Woocommerce -> Ajustes -> General -> "Opciones de moneda" -> "Número de decimales".
+
+**En esta configuración, solo hay dos opciones válidas**:
+- **[0]** para mostrar precios sin decimales
+- **[2]** para mostrar precios con dos decimales.
+
+Si seleccionas cualquier otro valor, podrían surgir errores, ya que el plugin fue diseñado teniendo en cuenta la representación de la moneda actual en el mercado.
+
+Siempre **antes de hacer cualquier cambio** de este, es super recomendable hacer un **backup** de los productos que tenemos cargados, para **tener un respaldo de los precios.**
+
+![Respaldar productos](../wc-gateway-payway/img/respaldo.png)
+
+### Opción válida para precios con decimales:
+![Precios decimales](../wc-gateway-payway/img/decimal.png)
+
+### Opción válida para precios sin decimales:
+![Precios enteros](../wc-gateway-payway/img/entero.png)
+
 
 ## Menú lateral
 En el menú lateral de su Backoffice, se habilitará el grupo "Payway", donde podrá configurar tarjetas de crédito/débito, bancos y promociones con sus respectivos planes.
