@@ -162,28 +162,22 @@ En el mismo formulario de edición y creación de una Promoción, tendrá dispon
 |---|---|---|
 | Periodo | numero entero | El numero de Cuota de la Promoción |
 | Coeficiente  | entero o decimal con punto | El interes a ser aplicado a la cuota del Plan |
-| TEA | decimal con punto | no se utiliza actualmente, colocar `0` |
-| CFT | decimal con punto | no se utiliza actualmente, colocar `0` |
-| Valor a Enviar | numero entero | El numero de cuota de la Promoción a enviar al gateway de pago. <br/>Usualmente este valor es exactamente el mismo que _Periodo_. Pero, pudiera existir la necesidad de mostrar un numero de cuota en el Checkout (_Periodo_) y enviar un valor diferente al gateway de pago (_Valor a Enviar_). Si tiene dudas, coloque el mismo valor que el campo _Periodo_. |
+| TEA | decimal con punto | Por default debe colocar `0`   |
+| CFT | decimal con punto | Por default debe colocar `0`   |
+| Valor a Enviar | numero entero | El número de cuota de la Promoción a enviar al medio de pago.  <br/>Usualmente este valor es exactamente el mismo que _Periodo_. Pero, pudiera existir la necesidad de mostrar un numero de cuota en el Checkout (_Periodo_) y enviar un valor diferente al gateway de pago (_Valor a Enviar_). Si tiene dudas, coloque el mismo valor que el campo _Periodo_. |
 
 **Ejemplo de Plan y sus valores**
 
 Plan a Configurar:
-* 1 cuota sin interes
-* 2 cuotas sin interes
-* 3 cuotas sin interes
-* 4 cuotas con 10% de interes
-* 5 cuotas con 15% de interes
-* 6 cuotas con 20% de interes, mostrar en el Checkout el valor `6` en el desplegable de Cuotas y enviar al gateway el valor de cuota `20`
+* 1 cuota sin interés
+* 3 cuotas sin interés
+* 6 cuotas con 20% de interés (equivale a 1.20 que se indica en el campo Coeficiente), mostrar en el Checkout el valor `6` en el desplegable de Cuotas y enviar al medio de pago, el valor de cuota `6`.
 
 | Periodo | Coeficiente | TEA | CFT | Valor a Enviar |
 |---|---|---|---|---|
 | 1 | 1 | 0 | 0 | 1 |
-| 2 | 1 | 0 | 0 | 2 |
 | 3 | 1 | 0 | 0 | 3 |
-| 4 | 1.10 | 0 | 0 | 4 |
-| 5 | 1.15 | 0 | 0 | 5 |
-| 6 | 1.20 | 0 | 0 | 20 |
+| 6 | 1.20 | 0 | 0 | 6 |
 
 **Agregar Plan**
 - Click en _Agregar un nuevo Plan_ una nueva fila a la tabla con los campos que deberá completar según lo necesite.
