@@ -141,19 +141,26 @@ private function has_decimal_separator($number) {
 }
 
 	private function get_bill_to( $order ) {
-		return array(
-			'customer_id' => (string) $order->get_customer_id() ?? $order->get_billing_first_name() . '_' . $order->get_billing_last_name(),
-			'first_name' => $order->get_billing_first_name(),
-			'last_name' => $order->get_billing_last_name(),
-			'email' => $order->get_billing_email(),
-			'phone_number' => $order->get_billing_phone(),
-			'country' => $order->get_billing_country(),
-			'state' => $order->get_billing_state(),
-			'city' => $order->get_billing_city(),
-			'postal_code' => $order->get_billing_postcode(),
-			'street1' => $order->get_billing_address_1()
-		);
-	}
+    $bill_to = array(
+        'customer_id' => (string) $order->get_customer_id() ?? $order->get_billing_first_name() . '_' . $order->get_billing_last_name(),
+        'first_name' => $order->get_billing_first_name(),
+        'last_name' => $order->get_billing_last_name(),
+        'email' => $order->get_billing_email(),
+        'phone_number' => $order->get_billing_phone(),
+        'country' => $order->get_billing_country(),
+        'state' => $order->get_billing_state(),
+        'city' => $order->get_billing_city(),
+        'postal_code' => $order->get_billing_postcode(),
+        'street1' => $order->get_billing_address_1(),
+    );
+
+    $street2 = $order->get_billing_address_2();
+    if (!empty($street2)) {
+        $bill_to['street2'] = $street2;
+    }
+
+    return $bill_to;
+}
 
 	/**
 	 *
@@ -171,7 +178,7 @@ private function has_decimal_separator($number) {
 			? $order->get_shipping_phone()
 			: $order->get_billing_phone();
 
-		return array(
+		$shipto = array(
 			'customer_id' => $order->get_customer_id() ?? $order->get_shipping_first_name() . '_' . $order->get_shipping_last_name(),
 			'first_name' => $order->get_shipping_first_name(),
 			'last_name' => $order->get_shipping_last_name(),
@@ -183,6 +190,13 @@ private function has_decimal_separator($number) {
 			'postal_code' => $order->get_shipping_postcode(),
 			'street1' => $order->get_shipping_address_1()
 		);
+
+		 $street2 = $order->get_billing_address_2();
+    if (!empty($street2)) {
+        $shipto['street2'] = $street2;
+    }
+
+    return $shipto;
 	}
 
 	/**

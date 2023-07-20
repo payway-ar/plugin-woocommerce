@@ -23,7 +23,7 @@ interface WC_Payway_Activator_Interface {
 	 * @see wc-gateway-payway/index.php
 	 * @var string
 	 */
-	const WC_PAYWAY_VERSION_VALUE = '0.2.9';
+	const WC_PAYWAY_VERSION_VALUE = '0.3.0';
 
 	/**
 	 * @var string
