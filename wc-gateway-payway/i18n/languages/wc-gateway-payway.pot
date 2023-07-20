@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Payway Payment Gateway for WooCommerce 0.2.9\n"
+"Project-Id-Version: Payway Payment Gateway for WooCommerce 0.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-gateway-payway\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
