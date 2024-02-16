@@ -9,8 +9,8 @@ Plugin de integracion con Payway para WooCommerce.
 Todas las instalaciones de WordPress varian en sus caracteristicas, dependiendo de los plugins, tema activo (theme), personalizaciones, cache, etc que tengan implementadas. Es por ello que se recomienda enfaticamente realizar pruebas en un entorno previo (siendo este una copia fiel de su actual sitio), para confirmar que ninguno de las caracteristicas mencionadas afecten el comportamiento de este plugin.
 
 ## Requisitos
-* Wordpress `>= 5.8.3`
-* WooCommerce `>= 6.0`
+* Wordpress `>= 5.8.3 <= 6.1.3`
+* WooCommerce `>= 6.0 <= 8.4.0`
 * PHP `>=7.4 <= 8.*`
 * MySQL `>= 5.7` || MariaDb `>= 10.2 <= 10.4`
 
