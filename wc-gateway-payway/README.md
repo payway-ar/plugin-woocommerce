@@ -69,8 +69,8 @@ El formulario no será presentado en el Checkout, si:
 [![Advertencia](https://img.shields.io/badge/Advertencia-yellow?style=flat&logo=warning)](#) **Cuando se trata de ajustar las "Opciones de moneda"...**
 En el plugin de WooCommerce, debes seguir la siguiente ruta: Woocommerce -> Ajustes -> General -> "Opciones de moneda" -> "Número de decimales".
 
-**En esta configuración, solo hay dos opciones válidas**:
-- **[0]** para mostrar precios sin decimales
+**En esta configuración válida**:
+
 - **[2]** para mostrar precios con dos decimales.
 
 Si seleccionas cualquier otro valor, podrían surgir errores, ya que el plugin fue diseñado teniendo en cuenta la representación de la moneda actual en el mercado.
@@ -81,9 +81,6 @@ Siempre **antes de hacer cualquier cambio** de este, es super recomendable hacer
 
 ### Opción válida para precios con decimales:
 ![Precios decimales](../wc-gateway-payway/img/decimal.png)
-
-### Opción válida para precios sin decimales:
-![Precios enteros](../wc-gateway-payway/img/entero.png)
 
 
 ## Menú lateral
