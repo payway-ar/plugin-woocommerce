@@ -129,7 +129,11 @@ class WC_Payway_Request_Builder {
 				: false,
 			'cc_type' => isset($post_data['payway_gateway_cc_type'])
 				? $post_data['payway_gateway_cc_type']
+				: false,
+			'door_number'=> isset($post_data['payway_gateway_cc_holder_door_number'])
+				? $post_data['payway_gateway_cc_holder_door_number']
 				: false
+			
 		);
 
 		return $this;

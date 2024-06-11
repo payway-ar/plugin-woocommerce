@@ -103,6 +103,15 @@ $gateway_field_id = $gateway_identifier . '_';
 				class="input-text"
 				autocomplete="off" />
 		</div>
+		<div class="form-row validate-required">
+			<label for="<?php echo $gateway_field_id; ?>cc_holder_door_number"><?php echo __('Door Number (Street number)', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
+			<input type="text"
+				id="<?php echo $gateway_field_id; ?>cc_holder_door_number"
+				name="<?php echo $gateway_field_id; ?>cc_holder_door_number"
+				placeholder=""
+				class="input-text"
+				autocomplete="off" />
+		</div>
 
 		<input type="hidden" id="<?php echo $gateway_field_id; ?>cc_token" name="<?php echo $gateway_field_id; ?>cc_token" />
 		<input type="hidden" id="<?php echo $gateway_field_id; ?>cc_bin" name="<?php echo $gateway_field_id; ?>cc_bin" />
@@ -132,6 +141,7 @@ jQuery(function ( $ ) {
 		$cardHolderDocumentType: $( '#payway_gateway_cc_doc_type', this.$form),
 		$cardHolderDocumentNumber: $( '#payway_gateway_cc_doc_number', this.$form),
 		$cardExpirationYear: $( '#payway_gateway_cc_exp_year', this.$form),
+		$cardHolderDoorNumber: $( '#payway_gateway_cc_holder_door_number', this.$form),
 
 		config: {
 		  endpoint_url: wc_gateway_payway_params.endpoint_url,
@@ -156,6 +166,7 @@ jQuery(function ( $ ) {
 					cardDropdown: '#payway_gateway_cc_type',
 					installmentsDropdown: '#payway_gateway_cc_installments',
 					placeOrderButton: '#place_order',
+					cardHolderDoorNumber: '#payway_gateway_cc_holder_door_number'
 				},
 			}
 		},
@@ -222,7 +233,7 @@ jQuery(function ( $ ) {
 			$( this.$cardExpirationMonth ).on( 'blur change', this.validateCardExpirationMonth.bind(this) );
 			$( this.$cardExpirationYear ).on( 'blur change', this.validateCardExpirationYear.bind(this) );
 			$( this.$cardHolderDocumentNumber ).on( 'blur change', this.validateCardDocumentNumber.bind(this) );
-
+			$( this.$cardHolderDoorNumber ).on( 'blur change', this.validateDoorNumber.bind(this) );
 			// TODO: replace with a listener into `checkout_place_order_`
 			$( this.config.form.fields.placeOrderButton ).on( 'click', this.capturePlaceOrder.bind(this) );
 		},
@@ -253,7 +264,9 @@ jQuery(function ( $ ) {
 				{'name': 'card_expiration_year', 'value': formValues.cc_exp_year},
 				{'name': 'card_holder_name', 'value': formValues.card_holder_name},
 				{'name': 'card_holder_doc_type', 'value': formValues.card_holder_doc_type},
-				{'name': 'card_holder_doc_number', 'value': formValues.card_holder_doc_number}
+				{'name': 'card_holder_doc_number', 'value': formValues.card_holder_doc_number},
+				{'name': 'card_holder_door_number', 'value': formValues.card_holder_door_number}
+
 			];
 
 			htmlInputList = document.createElement('div');
@@ -279,6 +292,7 @@ jQuery(function ( $ ) {
 				expYear = this._getFormValue( 'cardExpirationYear' ),
 				holderDocType = this._getFormValue( 'cardHolderDocumentType' ),
 				holderDocNumber = this._getFormValue( 'cardHolderDocumentNumber' ),
+				holderDoorNUmber = this._getFormValue( 'cardHolderDoorNumber' )
 
 			 formData = this._generateDummyForm({
 				card_holder_name: holderName,
@@ -287,7 +301,8 @@ jQuery(function ( $ ) {
 				cc_exp_month: expMonth,
 				cc_exp_year: expYear,
 				card_holder_doc_type: holderDocType,
-				card_holder_doc_number: holderDocNumber
+				card_holder_doc_number: holderDocNumber,
+				card_holder_door_number: holderDoorNUmber
 			});
 
 			return formData;
@@ -537,6 +552,26 @@ jQuery(function ( $ ) {
 			 * - value can be converted into a number
 			 */
 			if (value === '' || value.length <= 6 || isNaN(value)) {
+				$field.closest('.form-row').addClass('woocommerce-invalid');
+				return false;
+			}
+
+			$field.val(value);
+		    $field.addClass('woocommerce-validated');
+			return true;
+		},
+
+		validateDoorNumber: function () {
+			var $field = this.$cardHolderDoorNumber || false;
+
+			if (!$field) {
+				return false;
+			}
+
+			var value = $field.val() || '';
+
+			
+			if (value === '' || isNaN(value)) {
 				$field.closest('.form-row').addClass('woocommerce-invalid');
 				return false;
 			}
