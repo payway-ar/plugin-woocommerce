@@ -211,6 +211,11 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 
 # Changelog
+## 0.3.1
+### improvements
+- **added door number to payway checkout**; added to pass vte validations
+
+
 ## 0.2.4
 ### bugfix
 - **unable to access billing address on guest**; fixes CS trying to extract the `street1` value from a Guest Checkout
