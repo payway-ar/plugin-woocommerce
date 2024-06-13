@@ -3,7 +3,7 @@
  * Plugin Name: Payway Payment Gateway for WooCommerce
  * Plugin URI: https://www.prismamediosdepago.com.ar
  * Description: Payway payment gateway integration for WooCommerce
- * Version: 0.3.0
+ * Version: 0.3.1
  * Author: IURCO - Prisma SA
  * Author URI: https://iurco.com/
  * Text Domain: wc-gateway-payway
