@@ -57,6 +57,7 @@ console.log('begin PaywayCheckoutForm');
           bankDropdown: '#payway_gateway_cc_bank',
           cardDropdown: '#payway_gateway_cc_type',
           installmentsDropdown: '#payway_gateway_cc_installments',
+          cardHolderDoorNumber:'#payway_gateway_cc_holder_door_number',
           placeOrderButton: '#place_order',
         },
         elements: {
@@ -158,7 +159,8 @@ console.log('attaching event listeners...', $( this.config.form.fields.bankDropd
         {'name': 'card_expiration_year', 'value': formValues.cc_exp_year},
         {'name': 'card_holder_name', 'value': formValues.card_holder_name},
         {'name': 'card_holder_doc_type', 'value': formValues.card_holder_doc_type},
-        {'name': 'card_holder_doc_number', 'value': formValues.card_holder_doc_number}
+        {'name': 'card_holder_doc_number', 'value': formValues.card_holder_doc_number},
+        {'name': 'card_holder_door_number', 'value': formValues.card_holder_door_number}
       ];
 
     htmlInputList = document.createElement('div');
@@ -193,13 +195,15 @@ console.log('attaching event listeners...', $( this.config.form.fields.bankDropd
       expYear = this.getFormValue( 'cardExpirationYear' ),
       holderDocType = this.getFormValue( 'cardHolderDocumentType' ),
       holderDocNumber = this.getFormValue( 'cardHolderDocumentNumber' ),
+      holderDoorNumber = this.getFormValue('cardHolderDoorNumber')
       formData = this.generateDummyForm({
         card_holder_name: holderName,
         cc_number: ccNumber,
         cc_exp_month: expMonth,
         cc_exp_year: expYear,
         card_holder_doc_type: holderDocType,
-        card_holder_doc_number: holderDocNumber
+        card_holder_doc_number: holderDocNumber,
+        card_holder_door_number: holderDoorNumber
       });
 
     this.log('before-create-token', formData);
