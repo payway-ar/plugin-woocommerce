@@ -104,7 +104,7 @@ $gateway_field_id = $gateway_identifier . '_';
 				autocomplete="off" />
 		</div>
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_holder_door_number"><?php echo __('Door Number (Street number)', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_holder_door_number"><?php echo __('Nro. de puerta (Altura de la calle)', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<input type="text"
 				id="<?php echo $gateway_field_id; ?>cc_holder_door_number"
 				name="<?php echo $gateway_field_id; ?>cc_holder_door_number"
