@@ -105,7 +105,7 @@ $gateway_field_id = $gateway_identifier . '_';
 		</div>
 
 		<div class="form-row">
-			<label for="cc-direccion"><?php echo __('Dirección', 'wc-gateway-payway'); ?></label>
+			<label for="cc-direccion"><?php echo __('Direccion de Facturación', 'wc-gateway-payway'); ?></label>
 			<input type="text"
 				id="cc-direccion"
 				name="cc-direccion"
@@ -115,7 +115,7 @@ $gateway_field_id = $gateway_identifier . '_';
 		</div>
 
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_holder_door_number"><?php echo __('Nro. de puerta (Altura de la calle)', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_holder_door_number"><?php echo __('Altura de calle (Nro de puerta)', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<input type="text"
 				id="<?php echo $gateway_field_id; ?>cc_holder_door_number"
 				name="<?php echo $gateway_field_id; ?>cc_holder_door_number"
