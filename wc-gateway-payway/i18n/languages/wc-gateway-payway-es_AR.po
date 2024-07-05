@@ -550,6 +550,10 @@ msgstr "Tipo de Documento"
 msgid "Document Number"
 msgstr "Número de Documento"
 
+#: template/html-payway-checkout-form.php:107
+msgid "Door Number (Street number)"
+msgstr "Numero de puerta(Numero de calle)"
+
 #: wc-payment-gateway-payway.php:40
 msgid "Pay with Payway"
 msgstr "Pagar con Payway"

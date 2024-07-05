@@ -103,8 +103,19 @@ $gateway_field_id = $gateway_identifier . '_';
 				class="input-text"
 				autocomplete="off" />
 		</div>
+
+		<div class="form-row">
+			<label for="cc-direccion"><?php echo __('Direccion de Facturación', 'wc-gateway-payway'); ?></label>
+			<input type="text"
+				id="cc-direccion"
+				name="cc-direccion"
+				placeholder=""
+				class="input-text"
+				autocomplete="off" />
+		</div>
+
 		<div class="form-row validate-required">
-			<label for="<?php echo $gateway_field_id; ?>cc_holder_door_number"><?php echo __('Door Number (Street number)', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
+			<label for="<?php echo $gateway_field_id; ?>cc_holder_door_number"><?php echo __('Altura de calle (Nro de puerta)', 'wc-gateway-payway'); ?> <span class="required">*</span></label>
 			<input type="text"
 				id="<?php echo $gateway_field_id; ?>cc_holder_door_number"
 				name="<?php echo $gateway_field_id; ?>cc_holder_door_number"
@@ -112,7 +123,7 @@ $gateway_field_id = $gateway_identifier . '_';
 				class="input-text"
 				autocomplete="off" />
 		</div>
-
+		
 		<input type="hidden" id="<?php echo $gateway_field_id; ?>cc_token" name="<?php echo $gateway_field_id; ?>cc_token" />
 		<input type="hidden" id="<?php echo $gateway_field_id; ?>cc_bin" name="<?php echo $gateway_field_id; ?>cc_bin" />
 		<input type="hidden" id="<?php echo $gateway_field_id; ?>cc_last_digits" name="<?php echo $gateway_field_id; ?>cc_last_digits" />
