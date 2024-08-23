@@ -211,6 +211,14 @@ Checkout Form makes use of `accounting` JS library (already included in WooComme
 
 
 # Changelog
+## 0.3.3
+### improvements
+- **Description functionality on the checkout form. If a description is added, it will be visible during the checkout process.**; Description functionality on the checkout form. If a description is added, it will be visible during the checkout process.;
+
+## 0.3.2
+### improvements
+- **acordes Added door number translation**; acordes Added door number translation;
+
 ## 0.3.1
 ### improvements
 - **added door number to payway checkout**; added to pass vte validations

@@ -6,8 +6,17 @@
 
 $gateway_identifier = $this->id;
 $gateway_field_id = $gateway_identifier . '_';
+$description = $this->get_option('description');
+
 ?>
 <fieldset id="<?php echo $gateway_identifier; ?>-cc-form" class="wc-gateway-payway">
+	<?php if (!empty($description)) : ?>
+		<hr style="border: 1px solid #ddd;">
+		<p class="fieldset-description">
+			<?php echo $description; ?>
+		</p>
+		<hr style="border: 1px solid #ddd; margin: 20px 0;">
+	<?php endif; ?>
 	<div id="error_container"></div>
 	<div class="fields-wrapper">
 		<div class="form-row validate-required">
